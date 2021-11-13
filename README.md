@@ -5,7 +5,8 @@
 
 ### 需要的直接下载或拷贝get.js，工程里面其他文件，是我为演示准备的一些文件，并没有其他用
 
-![image](https://github.com/majun2232/auto-generate-md/master/md.png)
+![image](https://github.com/majun2232/auto-generate-md/blob/master/md.png)
+
 
 本文就是一个node脚本，并不是什么插件，执行的时候放在想要生成目录文件下，然后执行就能自动生成相对路径下的文件夹和文件的名字，如果文件里面还有在头部写注释的话，那么会一并带过来自动生成md文件。对于工程比较大的开发来说，这个脚本或许会帮你省下些许时间。
 ## 背景
