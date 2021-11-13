@@ -22,7 +22,7 @@ function getFile(file) {
 
 const filterArr = ['img', 'styles', 'node_modules']
 
-function diguiNodes(nodes = [], dir = './', level = 0) {
+function getFileNodes(nodes = [], dir = './', level = 0) {
   let files = fs
     .readdirSync(dir)
     .map(item => {
@@ -34,7 +34,7 @@ function diguiNodes(nodes = [], dir = './', level = 0) {
         level
       }
     })
-    // 对文件夹进行排序
+    // 对文件夹和文件进行排序,要不然生成的和编辑器打开的顺序不对应
     .sort((a, b) => {
       if (!a.isDir && b.isDir) return 1
       if (a.isDir && !b.isDir) return -1
@@ -48,7 +48,8 @@ function diguiNodes(nodes = [], dir = './', level = 0) {
       const fullPath = path.join(dir, item.name)
       const isDir = fs.lstatSync(fullPath).isDirectory()
       if (isDir) {
-        diguiNodes((item.children = []), fullPath, level + 1)
+        // 递归
+        getFileNodes((item.children = []), fullPath, level + 1)
       } else {
         const index = fullPath.lastIndexOf('.')
         const lastName = fullPath.substring(index)
@@ -65,13 +66,12 @@ function diguiNodes(nodes = [], dir = './', level = 0) {
   return nodes
 }
 
+
 /**
- * @desc    : 递归得到单份报告所有的key值
- * @author  : mj
- * @date  : 2019/12/11
- * @param   {datas}  Array  待查的数组
- * @return  {Array}
- * @update   by
+ * @description: 递归得到文件名+note
+ * @param {*} datas
+ * @param {*} keys
+ * @return {*}
  */
 function getNote(datas, keys) {
   let nodes = keys ? keys : []
@@ -137,10 +137,10 @@ function wirteMd(data, filePath) {
   // 异步写入数据到文件
   fs.writeFile(file, pre + data + last, { encoding: 'utf8' }, err => {})
 }
-const a = diguiNodes()
-const note = getNote(a) // 得到所有note的数组
+const nodes = getFileNodes()
+const note = getNote(nodes) // 得到所有note的数组
 const md = note.join('') // 数组转字符串
 // 得到md对象
-wirteJs(JSON.stringify(a), './readme-file.js')
+wirteJs(JSON.stringify(nodes), './readme-file.js')
 // 得到md文档
 wirteMd(md, './readme-md.md')
