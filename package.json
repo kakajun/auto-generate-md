@@ -1,0 +1,22 @@
+{
+  "name": "agmd",
+  "version": "0.0.1",
+  "description": "auto generate md for node",
+  "keywords": [
+    "fs",
+    "auto",
+    "generate",
+    "md"
+  ],
+  "author": "kakajun <253495832@qq.com>",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:majun2232/auto-generate-md.git"
+  },
+  "devDependencies": {},
+  "main": "index",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/majun2232/auto-generate-md/issues"
+  }
+}

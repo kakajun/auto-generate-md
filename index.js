@@ -2,6 +2,7 @@
 const fs = require("fs");
 const path = require("path");
 
+exports = module.exports = agmd;
 /**
  * @description: 获取文件的头部注释
  * @param {*} file
@@ -147,10 +148,18 @@ function wirteMd(data, filePath) {
   // 异步写入数据到文件
   fs.writeFile(file, pre + data + last, { encoding: "utf8" }, (err) => {});
 }
-const nodes = getFileNodes();
-const note = getNote(nodes); // 得到所有note的数组
-const md = note.join(""); // 数组转字符串
-// 得到md对象
-wirteJs(JSON.stringify(nodes), "./readme-file.js");
-// 得到md文档
-wirteMd(md, "./readme-md.md");
+
+/**
+ * @description: 自动生成全流程
+ * @param {*}
+ * @return {*}
+ */
+function agmd() {
+  const nodes = getFileNodes();
+  const note = getNote(nodes); // 得到所有note的数组
+  const md = note.join(""); // 数组转字符串
+  // 得到md对象
+  wirteJs(JSON.stringify(nodes), "./readme-file.js");
+  // 得到md文档
+  wirteMd(md, "./readme-md.md");
+}
