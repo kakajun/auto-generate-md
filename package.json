@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "auto generate md for node",
   "keywords": [
     "fs",

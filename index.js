@@ -1,8 +1,6 @@
 // 获取文件的头部注释工具
 const fs = require("fs");
 const path = require("path");
-
-exports = module.exports = agmd;
 /**
  * @description: 获取文件的头部注释
  * @param {*} file
@@ -19,7 +17,7 @@ function getFile(file) {
       sarr[0].indexOf("//") > -1)
       ? sarr[0]
       : "";
-
+  // console.log(f);
   return f;
 }
 
@@ -34,7 +32,7 @@ const filterArr = [
   ".vscode",
 ];
 
-function getFileNodes(nodes = [], dir = "./", level = 0) {
+function getFileNodes(nodes = [], dir = __dirname, level = 0) {
   let files = fs
     .readdirSync(dir)
     .map((item) => {
@@ -156,10 +154,15 @@ function wirteMd(data, filePath) {
  */
 function agmd() {
   const nodes = getFileNodes();
+  // console.log(__dirname + "\\readme-file.js", "nodes");
   const note = getNote(nodes); // 得到所有note的数组
   const md = note.join(""); // 数组转字符串
+  if (md.length > 0) {
+    console.log("Automatic generation completed ! ");
+  }
   // 得到md对象
-  wirteJs(JSON.stringify(nodes), "./readme-file.js");
+  // wirteJs(JSON.stringify(nodes), __dirname + "\\readme-file.js");
   // 得到md文档
-  wirteMd(md, "./readme-md.md");
+  wirteMd(md, __dirname + "\\readme-md.md");
 }
+agmd();

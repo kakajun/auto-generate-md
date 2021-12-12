@@ -1,3 +1,4 @@
+/* 这是vue2.0写法 */
 <template>
   <div class="wrapper">
     <SketchRule
