@@ -22,7 +22,16 @@ function getFile(file) {
   return f;
 }
 
-const filterArr = ["img", "styles", "node_modules", "get"];
+const filterArr = [
+  "img",
+  "styles",
+  "node_modules",
+  ".git",
+  ".github",
+  "dist",
+  ".husky",
+  ".vscode",
+];
 
 function getFileNodes(nodes = [], dir = "./", level = 0) {
   let files = fs
