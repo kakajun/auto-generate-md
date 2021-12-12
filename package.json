@@ -9,7 +9,7 @@
     "md"
   ],
   "bin": {
-    "agmd": "./bin/agmd"
+    "agmd": "./bin/agmd.js"
   },
   "author": "kakajun <253495832@qq.com>",
   "repository": {
