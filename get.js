@@ -1,6 +1,6 @@
 // 获取文件的头部注释工具
-const fs = require('fs')
-const path = require('path')
+const fs = require("fs");
+const path = require("path");
 
 /**
  * @description: 获取文件的头部注释
@@ -8,64 +8,65 @@ const path = require('path')
  * @return {*}
  */
 function getFile(file) {
-  var str = fs.readFileSync(file, 'utf-8')
-  let sarr = str.split(/[\n,]/g)
+  var str = fs.readFileSync(file, "utf-8");
+  let sarr = str.split(/[\n,]/g);
+  // console.log(file);
   let f =
-    sarr[0].indexOf('-->') > -1 ||
-    sarr[0].indexOf('*/') > -1 ||
-    sarr[0].indexOf('//') > -1
+    sarr[0].indexOf("eslint") == -1 &&
+    (sarr[0].indexOf("-->") > -1 ||
+      sarr[0].indexOf("*/") > -1 ||
+      sarr[0].indexOf("//") > -1)
       ? sarr[0]
-      : ''
+      : "";
 
-  return f
+  return f;
 }
 
-const filterArr = ['img', 'styles', 'node_modules']
+const filterArr = ["img", "styles", "node_modules", "get"];
 
-function getFileNodes(nodes = [], dir = './', level = 0) {
+function getFileNodes(nodes = [], dir = "./", level = 0) {
   let files = fs
     .readdirSync(dir)
-    .map(item => {
-      const fullPath = path.join(dir, item)
-      const isDir = fs.lstatSync(fullPath).isDirectory()
+    .map((item) => {
+      const fullPath = path.join(dir, item);
+      const isDir = fs.lstatSync(fullPath).isDirectory();
       return {
         name: item,
         isDir: isDir,
-        level
-      }
+        level,
+      };
     })
     // 对文件夹和文件进行排序,要不然生成的和编辑器打开的顺序不对应
     .sort((a, b) => {
-      if (!a.isDir && b.isDir) return 1
-      if (a.isDir && !b.isDir) return -1
-      if ((a.isDir && b.isDir) || (!a.isDir && !b.isDir)) return 0
-    })
+      if (!a.isDir && b.isDir) return 1;
+      if (a.isDir && !b.isDir) return -1;
+      if ((a.isDir && b.isDir) || (!a.isDir && !b.isDir)) return 0;
+    });
   for (let index = 0; index < files.length; index++) {
-    const item = files[index]
-    let note = '' // 文件注释
-    let arr = filterArr.findIndex(obj => obj === item.name)
+    const item = files[index];
+    let note = ""; // 文件注释
+    let arr = filterArr.findIndex((obj) => obj === item.name);
     if (arr === -1) {
-      const fullPath = path.join(dir, item.name)
-      const isDir = fs.lstatSync(fullPath).isDirectory()
+      const fullPath = path.join(dir, item.name);
+      const isDir = fs.lstatSync(fullPath).isDirectory();
       if (isDir) {
         // 递归
-        getFileNodes((item.children = []), fullPath, level + 1)
+        getFileNodes((item.children = []), fullPath, level + 1);
       } else {
-        const index = fullPath.lastIndexOf('.')
-        const lastName = fullPath.substring(index)
-        // 这里只获取js和vue文件的注释
-        if (['.js', '.vue'].includes(lastName)) {
-          note = getFile(fullPath)
+        const index = fullPath.lastIndexOf(".");
+        const lastName = fullPath.substring(index);
+        // 这里只获取js和vue,ts文件的注释
+        if ([".js", ".vue", ".ts"].includes(lastName)) {
+          note = getFile(fullPath);
         }
-        item.note = note
+        item.note = note;
       }
-      nodes.push(item)
+      nodes.push(item);
     }
   }
   // 控制返回时间节点,不让提前返回
-  return nodes
+  return nodes;
 }
-
 
 /**
  * @description: 递归得到文件名+note
@@ -74,21 +75,21 @@ function getFileNodes(nodes = [], dir = './', level = 0) {
  * @return {*}
  */
 function getNote(datas, keys) {
-  let nodes = keys ? keys : []
-  datas.forEach(obj => {
+  let nodes = keys ? keys : [];
+  datas.forEach((obj) => {
     if (obj.children) {
       // 文件夹
-      let md = setMd(obj)
-      nodes.push(md)
-      getNote(obj.children, nodes)
+      let md = setMd(obj);
+      nodes.push(md);
+      getNote(obj.children, nodes);
     }
     // 文件
     else {
-      let md = setMd(obj)
-      nodes.push(md)
+      let md = setMd(obj);
+      nodes.push(md);
     }
-  })
-  return nodes
+  });
+  return nodes;
 }
 
 /**
@@ -97,20 +98,20 @@ function getNote(datas, keys) {
  * @return {*}
  */
 function setMd(obj) {
-  let filesString = ''
+  let filesString = "";
   // 把文件夹输出,并且level+1
-  const blank = '  '.repeat(obj.level) // 重复空白
+  const blank = "  ".repeat(obj.level); // 重复空白
   if (obj.isDir) {
-    filesString += `${blank}+ ${obj.name}\n`
+    filesString += `${blank}+ ${obj.name}\n`;
   } else {
-    var index = obj.name.lastIndexOf('.')
-    const lastName = obj.name.substring(index)
+    var index = obj.name.lastIndexOf(".");
+    const lastName = obj.name.substring(index);
     // 这里只获取js和vue文件的注释,需要其他这里加入
-    if (['.js', '.vue','.ts'].includes(lastName) || index === -1) {
-      filesString += `${blank}  ${obj.name}            ${obj.note}\n`
+    if ([".js", ".vue", ".ts"].includes(lastName) || index === -1) {
+      filesString += `${blank}  ${obj.name}            ${obj.note}\n`;
     }
   }
-  return filesString
+  return filesString;
 }
 
 /**
@@ -119,10 +120,10 @@ function setMd(obj) {
  * @return {fileName}  要写入文件地址
  */
 function wirteJs(data, filePath) {
-  let file = path.resolve(__dirname, filePath)
-  const pre = 'export default'
+  let file = path.resolve(__dirname, filePath);
+  const pre = "export default";
   // 异步写入数据到文件
-  fs.writeFile(file, pre + data, { encoding: 'utf8' }, err => {})
+  fs.writeFile(file, pre + data, { encoding: "utf8" }, (err) => {});
 }
 
 /**
@@ -131,16 +132,16 @@ function wirteJs(data, filePath) {
  * @return {fileName}  要写入文件地址
  */
 function wirteMd(data, filePath) {
-  let file = path.resolve(__dirname, filePath)
-  const pre = '```js\n'
-  const last = '```\n'
+  let file = path.resolve(__dirname, filePath);
+  const pre = "```js\n";
+  const last = "```\n";
   // 异步写入数据到文件
-  fs.writeFile(file, pre + data + last, { encoding: 'utf8' }, err => {})
+  fs.writeFile(file, pre + data + last, { encoding: "utf8" }, (err) => {});
 }
-const nodes = getFileNodes()
-const note = getNote(nodes) // 得到所有note的数组
-const md = note.join('') // 数组转字符串
+const nodes = getFileNodes();
+const note = getNote(nodes); // 得到所有note的数组
+const md = note.join(""); // 数组转字符串
 // 得到md对象
-wirteJs(JSON.stringify(nodes), './readme-file.js')
+wirteJs(JSON.stringify(nodes), "./readme-file.js");
 // 得到md文档
-wirteMd(md, './readme-md.md')
+wirteMd(md, "./readme-md.md");
