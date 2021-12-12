@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 // 获取文件的头部注释工具
 const fs = require("fs");
 const path = require("path");
@@ -32,7 +33,7 @@ const filterArr = [
   ".vscode",
 ];
 
-function getFileNodes(nodes = [], dir = __dirname, level = 0) {
+function getFileNodes(nodes = [], dir = path.resolve("./"), level = 0) {
   let files = fs
     .readdirSync(dir)
     .map((item) => {
@@ -153,6 +154,7 @@ function wirteMd(data, filePath) {
  * @return {*}
  */
 function agmd() {
+  console.log(path.resolve("./"), "执行位置");
   const nodes = getFileNodes();
   // console.log(__dirname + "\\readme-file.js", "nodes");
   const note = getNote(nodes); // 得到所有note的数组
@@ -163,6 +165,7 @@ function agmd() {
   // 得到md对象
   // wirteJs(JSON.stringify(nodes), __dirname + "\\readme-file.js");
   // 得到md文档
-  wirteMd(md, __dirname + "\\readme-md.md");
+  console.log("生成位置", path.resolve("./") + "\\readme-md.md");
+  wirteMd(md, path.resolve("./") + "\\readme-md.md");
 }
 agmd();

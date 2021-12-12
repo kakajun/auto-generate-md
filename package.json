@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "0.0.3",
+  "version": "0.0.6",
   "description": "auto generate md for node",
   "keywords": [
     "fs",
@@ -8,6 +8,7 @@
     "generate",
     "md"
   ],
+  "main": "module.js",
   "bin": {
     "agmd": "./bin/agmd.js"
   },
