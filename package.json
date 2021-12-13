@@ -2,6 +2,7 @@
   "name": "agmd",
   "version": "0.0.6",
   "description": "auto generate md for node",
+  "type": "module",
   "keywords": [
     "fs",
     "auto",
