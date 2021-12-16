@@ -8,5 +8,12 @@
       user-rulerts.vue            /* 这是ts写法 */
     App.vue            /* App主入口 */
     main.js            /* 入口 */
++ src
+    agmd.ts            
+    index.ts            
+  .eslintrc.js            
+  aa.js            // import { getFileNodes
+  builder.js            
+  LICENSE            
   module.js            
 ```
