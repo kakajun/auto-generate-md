@@ -23,7 +23,7 @@ const filterArr = ['img', 'styles', 'node_modules', 'LICENSE', '.git', '.github'
 // 这里只获取某后缀文件的注释,需要其他这里加入
 const includeArrs = ['.js', '.vue', '.ts']
 
-interface ItemType {
+export type ItemType ={
   name: string
   isDir: boolean
   level: number
@@ -38,7 +38,7 @@ interface ItemType {
  * @param {*} level
  * @return {*}
  */
-function getFileNodes(nodes: Array<ItemType> = [], dir = path.resolve('./'), level = 0): Array<ItemType> {
+ export function getFileNodes(nodes: Array<ItemType> = [], dir = path.resolve('./'), level = 0): Array<ItemType> {
   const files = fs
     .readdirSync(dir)
     .map((item) => {
@@ -130,7 +130,7 @@ function setMd(obj: ItemType): string {
   return filesString
 }
 
-function getMd() {
+export function getMd() {
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./'))
   const nodes = getFileNodes()
   const note = getNote(nodes) // 得到所有note的数组
@@ -140,5 +140,4 @@ function getMd() {
   }
   return md
 }
-/* 导出获取md的getMd方法 */
-export { getMd, getFileNodes }
+

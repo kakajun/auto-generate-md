@@ -4,7 +4,6 @@ import path from 'path'
 import fs from 'fs'
 import { getMd } from './index'
 
-// eslint-disable-next-line no-underscore-dangle
 const __dirname = path.resolve()
 /**
  * @description: 把结果写入到js文件
