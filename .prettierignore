@@ -1,0 +1,12 @@
+# Ignore artifacts:
+**/*es.js
+**/*.html
+**/*.txt
+**/*.md
+**/*.svg
+**/*.ttf
+**/*.woff
+**/*.eot
+readme-md.md
+package.json
+node_modules
