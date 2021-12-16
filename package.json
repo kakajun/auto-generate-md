@@ -39,6 +39,10 @@
     "prettier": "^2.5.1",
     "typescript": "^4.4.3"
   },
+    "lint-staged": {
+    "*.{ts,tsx,js}": "prettier --write",
+    "*.{ts,tsx}": "eslint --fix"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/majun2232/auto-generate-md/issues"

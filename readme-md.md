@@ -19,5 +19,6 @@
   .eslintrc.js            
   aa.js            // import { getFileNodes
   builder.js            
+  LICENSE            
   module.js            
 ```
