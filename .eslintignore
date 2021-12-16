@@ -1,0 +1,15 @@
+
+*.sh
+node_modules
+lib
+*.md
+*.scss
+*.woff
+*.ttf
+.vscode
+.idea
+/build/
+/dist/
+/public/
+index.d.ts
+.vscode

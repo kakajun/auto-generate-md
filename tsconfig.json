@@ -11,7 +11,7 @@
     ],
     "skipLibCheck": true,
     "sourceMap": true,
-    "outDir": "types",
+    "outDir": "lib",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": true,
@@ -35,6 +35,7 @@
     "node_modules"
   ],
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
+    "./lib/*.ts"
   ]
 }

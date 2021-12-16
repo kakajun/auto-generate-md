@@ -9,18 +9,8 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: [ '@typescript-eslint'],
+  plugins: ['@typescript-eslint'],
   rules: {
-    'import/extensions': [
-      'error',
-      'always',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never'
-      }
-    ],
     'no-console': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'no-use-before-define': 'off',
