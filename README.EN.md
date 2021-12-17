@@ -2,15 +2,12 @@
 
 
 
->Enter 'AGMD' in any folder where documents need to be generated, and the directory MD description can be automatically generated
+>If you need to generate documents, enter 'AGMD' in the console under the folder to automatically generate the directory MD description
 
 
 
 [![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667 )
 
-
-
-English| [中文](https://github.com/majun2232/vue3sketchRuler/blob/master/README.md)  
 
 
 
@@ -24,9 +21,9 @@ English| [中文](https://github.com/majun2232/vue3sketchRuler/blob/master/READM
 
 ### Method of use
 
+Node environment is required
 
-
-Global installation (Global installation is required, otherwise it will be reported that the "AGMD" item cannot be recognized as the name of cmdlet, function, script file or runnable program)
+1. Global installation (Global installation is required, otherwise it will be reported that the "AGMD" item cannot be recognized as the name of cmdlet, function, script file or runnable program)
 
 
 
@@ -39,6 +36,26 @@ After installation, enter 'AGMD' under the folder where MD needs to be recorded,
 
 
 Example is some of the files I prepared for the demonstration, which is of no other use
+
+
+
+2. Advanced usage
+
+Some need to insert automatically generated documents into an automatically generated MD. the plug-in exports the automatically generated MD data method, and 'getfilenodes' obtains the specific information of all files. You can DIY different documents
+
+>const { getFileNodes, getMd } = require('agmd')
+
+
+
+In es:
+
+>import {getFileNodes, getMd} from 'agmd'
+
+
+
+-Getfilenodes can obtain information related to specific files
+
+-Getmd gets the final output information
 
 
 
@@ -72,8 +89,20 @@ Example is some of the files I prepared for the demonstration, which is of no ot
 
 
 
-
-
 ### Related articles
 
-[Nuggets - auto generate directory MD file](https://juejin.cn/post/7030030599268073508)  
+
+
+[Nuggets - auto generate directory MD file]（ https://juejin.cn/post/7030030599268073508 )
+
+
+
+### Update record
+
+0.1. 0
+
+1. Package with esbuild
+
+2. It is written in eslint and preter specifications
+
+3. Rewrite with TS

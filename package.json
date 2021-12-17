@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "0.0.9",
+  "version": "0.1.0",
   "description": "auto generate markdown for node",
   "keywords": [
     "node",
