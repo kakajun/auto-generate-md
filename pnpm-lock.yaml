@@ -4,7 +4,7 @@ specifiers:
   '@types/node': ^17.0.0
   '@typescript-eslint/eslint-plugin': ^4.31.0
   '@typescript-eslint/parser': ^4.31.0
-  agmd: 0.1.0
+  agmd: 0.1.1
   esbuild: ^0.14.5
   esbuild-plugin-d.ts: ^1.1.0
   eslint: ^7.32.0
@@ -19,7 +19,7 @@ devDependencies:
   '@types/node': 17.0.0
   '@typescript-eslint/eslint-plugin': 4.33.0_3289a875d95a672b97ebf589745c66ef
   '@typescript-eslint/parser': 4.33.0_eslint@7.32.0+typescript@4.5.4
-  agmd: 0.1.0
+  agmd: 0.1.1
   esbuild: 0.14.5
   esbuild-plugin-d.ts: 1.1.0_typescript@4.5.4
   eslint: 7.32.0
@@ -252,8 +252,8 @@ packages:
       indent-string: 4.0.0
     dev: true
 
-  /agmd/0.1.0:
-    resolution: {integrity: sha512-UMO3RRJWRqRcBTN71kUT5w0bvR5x/FczNcdvSwt6fhuo7HwuqFCL6aHJeXtcOV3yFSUZgpt/xZ9WrPQoiSzhBA==}
+  /agmd/0.1.1:
+    resolution: {integrity: sha512-/ujiDCibZ5VdTLrOy+jJDyOJrssK7VGYU9cvUyhP+x4dRcM4s3oAfwkclJ+lGC/g506btnMQs/FXLm2jn24ASw==}
     hasBin: true
     requiresBuild: true
     dev: true
