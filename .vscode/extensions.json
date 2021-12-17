@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "johnsoncodehk.volar",
+    "johnsoncodehk.vscode-typescript-vue-plugin",
+    "dbaeumer.vscode-eslint",
+    "stylelint.vscode-stylelint",
+    "esbenp.prettier-vscode",
+    "christian-kohler.path-intellisense",
+    "formulahendry.auto-close-tag",
+    "formulahendry.auto-rename-tag"
+  ]
+}
