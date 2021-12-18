@@ -54,4 +54,4 @@ es中:
 1. 采用esbuild 进行打包
 2. 并且用eslint, preter规范写法, 规范
 3. 用ts进行改写
-4. 支持gitee一键同步test1
+4. 支持gitee一键同步test11
