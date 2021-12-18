@@ -17,7 +17,7 @@ jobs:
           persist-credentials: false
 
       - name: sync github -> gitee
-        uses: kakajun/auto-generate-md
+        uses: kakajun/auto-generate-md@master
         if: env.dst_key && env.dst_token && env.gitee_user
         with:
           # 必选，需要同步的 Github 用户（源）
