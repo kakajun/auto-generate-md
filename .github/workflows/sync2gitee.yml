@@ -1,11 +1,9 @@
 # 通过 Github actions， 在 Github 仓库的每一次 commit 后自动同步到 Gitee 上
 name: sync2gitee
 on:
-  workflow_dispatch:
-  watch:
-    types: started
-  repository_dispatch:
-    types: manual_sync2gitee
+  push:
+    branches:
+      - master
 jobs:
   repo-sync:
     env:
