@@ -15,7 +15,7 @@
 
 
 
-! [image]( https://github.com/majun2232/auto-generate-md/blob/master/md.png )
+! [image]( https://github.com/kakajun/auto-generate-md/blob/master/md.png )
 
 
 

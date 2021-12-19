@@ -25,7 +25,7 @@
   "author": "majun <253495832@qq.com>",
   "repository": {
     "type": "git",
-    "url": "git@github.com:majun2232/auto-generate-md.git"
+    "url": "git@github.com:kakajun/auto-generate-md.git"
   },
   "devDependencies": {
     "@types/node": "^17.0.0",
@@ -48,9 +48,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/majun2232/auto-generate-md/issues"
+    "url": "https://github.com/kakajun/auto-generate-md/issues"
   },
-  "homepage": "https://github.com/majun2232/auto-generate-md",
+  "homepage": "https://github.com/kakajun/auto-generate-md",
   "files": [
     "bin",
     "lib"
