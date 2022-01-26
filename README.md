@@ -6,6 +6,11 @@
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
+🚀 Features
+🔥 Written in TypeScript
+🔋 build with esbuild
+💡 easy get foldName and fileName.
+
 ### 案例
 
 ![image](https://github.com/kakajun/auto-generate-md/blob/master/md.png)
@@ -21,14 +26,14 @@
 example，是我为演示准备的一些文件，并没有其他用
 
 2. 高级用法
-有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档
->const { getFileNodes, getMd } = require('agmd')
+有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档( 方法名不用记忆, 由于是ts写的,所以会自动点出来)
+>const agmd = require('agmd')
 
 es中:
- >import {getFileNodes, getMd} from 'agmd'
+ >import agmd from 'agmd'
 
-- 其中 getFileNodes 可以获得具体文件相关的信息
-- getMd 得到最终输出的信息
+- 其中 agmd.getFileNodes() 可以获得具体文件相关的信息
+- agmd.getMd() 得到最终输出的信息
 
 ### 创作背景
 

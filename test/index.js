@@ -1,2 +1,2 @@
-const { getFileNodes, getMd } = require('agmd')
-console.log(getMd())
+const agmd = require('../src/agmd.ts')
+console.log(agmd.getFileNodes(), agmd.getMd())

@@ -1,14 +1,8 @@
 {
-
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "dom",
-      "es6",
-      "es2017",
-      "esnext.asynciterable"
-    ],
+    "lib": ["dom", "es6", "es2017", "esnext.asynciterable"],
     "skipLibCheck": true,
     "sourceMap": true,
     "outDir": "lib",
@@ -31,11 +25,6 @@
     "strict": true,
     "isolatedModules": true
   },
-  "exclude": [
-    "node_modules"
-  ],
-  "include": [
-    "./src/**/*.ts",
-    "./lib/*.ts"
-  ]
+  "exclude": ["node_modules"],
+  "include": ["./src/**/*.ts", "./lib/*.ts"]
 }

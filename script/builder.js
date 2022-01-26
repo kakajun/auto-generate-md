@@ -1,6 +1,6 @@
 const { build } = require('esbuild')
 const fs = require('fs-extra')
-const pkg = require('./package.json')
+const pkg = require('../package.json')
 const { dtsPlugin } = require('esbuild-plugin-d.ts')
 const banner = {
   js: `/*!
@@ -29,7 +29,7 @@ const binBuildParams = {
   incremental: true,
   plugins: []
 }
-let buildParams = {
+const buildParams = {
   platform: 'node',
   color: true,
   banner: banner,
@@ -41,7 +41,7 @@ let buildParams = {
   incremental: true,
   plugins: [dtsPlugin()]
 }
-;(async () => {
+async function builder() {
   fs.removeSync('dist')
   buildParams.format = 'esm'
   buildParams.outfile = './lib/index.esm.js'
@@ -51,4 +51,5 @@ let buildParams = {
   await build(buildParams)
   await build(binBuildParams)
   process.exit(0)
-})()
+}
+module.exports = builder

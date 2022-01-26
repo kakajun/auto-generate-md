@@ -10,6 +10,17 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint'],
+  settings: {
+    'import/resolver': [
+      'node',
+      {
+        webpack: {
+          config: './build/webpack.base.conf.js'
+        }
+      }
+    ]
+  },
+
   rules: {
     'no-console': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
