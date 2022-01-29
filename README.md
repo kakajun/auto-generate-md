@@ -66,12 +66,12 @@ note: 上面两个方法均可传一个option入参,其格式为:
 `Usage: agmd--include str--ignore str
 
   Options:
-  --include string  / --i string.......... include  file extension
-  --ignore string  / --in string........... ignore file or fold
+  --include string  / -i string.......... include  file extension
+  --ignore string  / -in string........... ignore file or fold
 
   Str deafult:
-  --ignore / --i  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
-  --include / --in  .js,.vue,.ts
+  --ignore / -i  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
+  --include / -in  .js,.vue,.ts
 
   Note:
   There should be no space between strings in a configuration
