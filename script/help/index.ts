@@ -1,8 +1,9 @@
-const st = `Usage: agmd--include str--ignore str
+const st =
+`Usage: agmd--include str--ignore str
 
   Options:
-  --include string .......... include  file extension
-  --ignore string ........... ignore file or fold
+  --include string  / -i string.......... include  file extension
+  --ignore string  / -in string........... ignore file or fold
 
   Str deafult:
   --ignore  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js

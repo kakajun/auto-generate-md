@@ -13,27 +13,39 @@
 
 ### 案例
 
-![image](https://github.com/kakajun/auto-generate-md/blob/master/md.png)
+![image](https://github.com/kakajun/auto-generate-md/blob/master/md2.png)
 
 ### 使用方法
 需要有node环境
-1. 全局安装(必须全局安装，否则会报`无法将“agmd”项识别为 cmdlet、函数、脚本文件或可运行程序的名称`)
-
+1. 全局安装
 > npm i agmd -g
 
 安装完成后，在需要记录 md 的文件夹下面输入`agmd`，会自动生成相对路径下的文件夹和文件的名字，如果文件里面还有在头部写注释的话，那么会一并带过来自动生成 md 文件。生成的文件名为`readme-md.md`， 路径为刚刚输入命名的路径同级别下，对于工程比较大的开发来说，这个脚本或许会帮你省下些许时间。
 
+2. 作为依赖安装
+> npm i agmd -D
+
+在package.json的scripts 中配置 agmd: npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue   可以在每次启动或打包时,带上命令行来自动更新文档
+
+
 example，是我为演示准备的一些文件，并没有其他用
 
-2. 高级用法
+3. 高级用法
 有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档( 方法名不用记忆, 由于是ts写的,所以会自动点出来)
 >const agmd = require('agmd')
 
 es中:
  >import agmd from 'agmd'
 
-- 其中 agmd.getFileNodes() 可以获得具体文件相关的信息
+- 其中 agmd.getFileNodes() 可以获得具体文件相关的信息, 该函数可传一个参数
+
 - agmd.getMd() 得到最终输出的信息
+note: 上面两个方法均可传一个option入参,其格式为:
+  option: { ignore: string[] | undefined; include: string[] | undefined }
+#### 命令行参数说明
+1. 使用agmd -h 来查看帮助
+2. 可以带上 --ignore 忽略输出文件或文件夹, 默认为: img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
+3. 可以带上 --include 要求只输出带此后缀文件, 默认只输出 .js,.vue,.ts, 可自己加jsx,json 等
 
 ### 创作背景
 
@@ -48,7 +60,24 @@ es中:
 2. 自动进行层级目录判断进行缩进
 3. 如果文件顶部有注释， 那么会自动进行判断
 4. 支持在任意文件目录下递归查找下级文件(不要在很大目录下执行啊!!!递归直到该级目录下没有文件为止)
-5. 目前支持记录 .js .vue .ts 和文件夹， 当然也支持其他， 这个版本我就写这么多， 后续有需要的可以提 pr
+5. 支持命令行参数配置, 可以自定义忽略文件和过滤后缀名文件
+6. 命令行解析
+
+`Usage: agmd--include str--ignore str
+
+  Options:
+  --include string  / --i string.......... include  file extension
+  --ignore string  / --in string........... ignore file or fold
+
+  Str deafult:
+  --ignore / --i  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
+  --include / --in  .js,.vue,.ts
+
+  Note:
+  There should be no space between strings in a configuration
+
+  Examples:
+  $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 
 ### 相关文章
 
@@ -60,3 +89,6 @@ es中:
 2. 并且用eslint, preter规范写法, 规范
 3. 用ts进行改写
 4. 支持gitee一键同步test11253123
+
+0.2.0
+支持命令行解析参数,可以动态传参
