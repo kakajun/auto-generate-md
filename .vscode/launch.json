@@ -6,7 +6,7 @@
       "request": "launch",
       "name": "Launch Chrome",
       "url": "http://localhost:3100",
-      "webRoot": "${workspaceFolder}/src",
+      "webRoot": "${workspaceFolder}/src/agmd",
       "sourceMaps": true
     }
   ]

@@ -1,0 +1,21 @@
+const st = `Usage: agmd--include str--ignore str
+
+  Options:
+  --include string .......... include  file extension
+  --ignore string ........... ignore file or fold
+
+  Str deafult:
+  --ignore  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
+  --include  .js,.vue,.ts
+
+  Note:
+  There should be no space between strings in a configuration
+
+  Examples:
+  $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
+
+function help() {
+  console.log(st)
+  process.exit()
+}
+export default help

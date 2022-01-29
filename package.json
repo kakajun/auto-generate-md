@@ -41,6 +41,7 @@
     "lint-staged": "^11.1.2",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
+    "arg":"5.0.1",
     "typescript": "^4.4.3"
   },
   "lint-staged": {

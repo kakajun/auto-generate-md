@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-var __dirname = path.resolve()
+// var __dirname = path.resolve()
 
 /**
  * @description: 获取文件的头部注释
@@ -20,22 +20,6 @@ function getFile(file: fs.PathOrFileDescriptor) {
   // console.log(f);
   return f
 }
-// 文件过滤--需要全称带后缀
-const filterArrs = [
-  'img',
-  'styles',
-  'node_modules',
-  'LICENSE',
-  '.git',
-  '.github',
-  'dist',
-  '.husky',
-  '.vscode',
-  'readme-file.js',
-  'readme-md.js'
-]
-// 文件后缀只包含
-const includeArrs = ['.js', '.vue', '.ts']
 
 export type ItemType = {
   name: string
@@ -52,7 +36,33 @@ export type ItemType = {
  * @param {Number} level
  * @return {*}
  */
-export function getFileNodes(nodes: Array<ItemType> = [], dir = path.resolve('./'), level = 0): Array<ItemType> {
+export function getFileNodes(
+  option: { ignore: string[] | undefined; include: string[] | undefined } | undefined,
+  nodes: Array<ItemType> = [],
+  dir = path.resolve('./'),
+  level = 0
+): Array<ItemType> {
+  // 文件过滤--需要全称带后缀
+  let ignore = [
+    'img',
+    'styles',
+    'node_modules',
+    'LICENSE',
+    '.git',
+    '.github',
+    'dist',
+    '.husky',
+    '.vscode',
+    'readme-file.js',
+    'readme-md.js'
+  ]
+  // 文件后缀只包含
+  let include = ['.js', '.vue', '.ts']
+
+  if (option) {
+    ignore = option.ignore ?? ignore
+    include = option.include ?? include
+  }
   const files = fs
     .readdirSync(dir)
     .map((item) => {
@@ -74,23 +84,22 @@ export function getFileNodes(nodes: Array<ItemType> = [], dir = path.resolve('./
     })
   for (let index = 0; index < files.length; index += 1) {
     const item = files[index]
-    console.log(item.name)
+
     let note = '' // 文件注释
     // 这里处理文件夹过滤
-    const foldFlag = filterArrs.findIndex((obj) => obj === item.name)
-    // const fileFlag = 1
+    const foldFlag = ignore.findIndex((obj: string) => obj === item.name)
     if (foldFlag === -1) {
       const fullPath = path.join(dir, item.name)
       const isDir = fs.lstatSync(fullPath).isDirectory()
       if (isDir) {
         // 递归
-        getFileNodes((item.children = []), fullPath, level + 1)
+        getFileNodes(option, (item.children = []), fullPath, level + 1)
         nodes.push(item)
       } else {
         const i = fullPath.lastIndexOf('.')
         const lastName = fullPath.substring(i)
         // 这里处理文件过滤
-        if (includeArrs.includes(lastName)) {
+        if (include.includes(lastName)) {
           note = getFile(fullPath)
           item.note = note
           nodes.push(item)
@@ -152,18 +161,23 @@ function setMd(obj: ItemType, last: Boolean): string {
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
-function wirteJs(data: string, filePath: string) {
-  const file = path.resolve(__dirname, filePath)
-  const pre = 'export default'
-  // 异步写入数据到文件
-  fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
-    console.error(err)
-  })
-}
+// function wirteJs(data: string, filePath: string) {
+//   const file = path.resolve(__dirname, filePath)
+//   const pre = 'export default'
+//   // 异步写入数据到文件
+//   fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
+//     console.error(err)
+//   })
+// }
 
-export function getMd() {
+/**
+ * @description: 生成md
+ * @param {object} option
+ * @return {*}
+ */
+export function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./'))
-  const nodes = getFileNodes()
+  const nodes = getFileNodes(option)
   // 得到md对象
   // wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
   const note = getNote(nodes) // 得到所有note的数组
