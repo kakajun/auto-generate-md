@@ -14,6 +14,7 @@ function handle(settings: parseType) {
   }
   if (settings.version) {
     console.log(`agmd version is: ` + '\x1B[36m%s\x1B[0m', pkg.version)
+    process.exit(0)
   }
   if (settings.ignore) {
     settings.ignores = settings.ignore.split(' ')

@@ -16,6 +16,6 @@ const st = `Usage: agmd--include str--ignore str
 
 function help() {
   console.log(st)
-  process.exit()
+  process.exit(0)
 }
 export default help
