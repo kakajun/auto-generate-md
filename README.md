@@ -6,9 +6,12 @@
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
-🚀 Features
+ ## 🚀  Features
+
 🔥 Written in TypeScript
+
 🔋 build with esbuild
+
 💡 easy get foldName and fileName.
 
 ### 案例

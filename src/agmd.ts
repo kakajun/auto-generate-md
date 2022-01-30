@@ -1,5 +1,3 @@
-// 获取文件的头部注释工具
-// ts-node agmd.ts --ignore lib,node_modules,dist --include .js,.ts,.vue
 import path from 'path'
 import fs from 'fs'
 import { getMd } from './index'
@@ -8,11 +6,10 @@ import handle from '../script/cli/handle'
 // console.log(process.argv)
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
-
-// console.log(, '6666')
 var __dirname = path.resolve()
+
 /**
- * @description: 把结果写入到js文件
+ * @description:Write the result to JS file 把结果写入到js文件
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
@@ -25,7 +22,7 @@ function wirteMd(data: string, filePath: string) {
 }
 
 /**
- * @description: 自动生成全流程
+ * @description:Automatic generation of the whole process  自动生成全流程
  * @param {*}
  * @return {*}
  */

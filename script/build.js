@@ -1,7 +1,7 @@
 const builder = require('./builder.js')
 try {
   builder()
-  console.log('打包完毕!已生成bin和lib文件')
+  console.log('Packed! Generated bin and lib files')
 } catch (error) {
-  console.log('打包失败!')
+  console.log('Packaging failed')
 }

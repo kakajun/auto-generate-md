@@ -1,10 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 
-// var __dirname = path.resolve()
-
 /**
- * @description: 获取文件的头部注释
+ * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} file
  * @return {*}
  */
@@ -30,7 +28,7 @@ export type ItemType = {
 }
 
 /**
- * @description:生成所有文件的node信息
+ * @description:Generate node information for all files 生成所有文件的node信息
  * @param {Array} nodes
  * @param {*} dir
  * @param {Number} level
@@ -42,7 +40,7 @@ export function getFileNodes(
   dir = path.resolve('./'),
   level = 0
 ): Array<ItemType> {
-  // 文件过滤--需要全称带后缀
+  //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
   let ignore = [
     'img',
     'styles',
@@ -56,12 +54,12 @@ export function getFileNodes(
     'readme-file.js',
     'readme-md.js'
   ]
-  // 文件后缀只包含
+  //File suffix contains only  文件后缀只包含
   let include = ['.js', '.vue', '.ts']
 
   if (option) {
-    ignore = option.ignore ?? ignore
-    include = option.include ?? include
+    ignore = option.ignore || ignore
+    include = option.include || include
   }
   const files = fs
     .readdirSync(dir)
@@ -75,7 +73,7 @@ export function getFileNodes(
         note: ''
       } as ItemType
     })
-    // 对文件夹和文件进行排序,要不然生成的和编辑器打开的顺序不对应
+    //Sort folders and files, otherwise the generated will not correspond to the opening order of the editor 对文件夹和文件进行排序,要不然生成的和编辑器打开的顺序不对应
     .sort((a, b) => {
       if (!a.isDir && b.isDir) return 1
       if (a.isDir && !b.isDir) return -1
@@ -84,21 +82,20 @@ export function getFileNodes(
     })
   for (let index = 0; index < files.length; index += 1) {
     const item = files[index]
-
-    let note = '' // 文件注释
-    // 这里处理文件夹过滤
+    let note = '' //File Comments  文件注释
+    //Folder filtering is handled here  这里处理文件夹过滤
     const foldFlag = ignore.findIndex((obj: string) => obj === item.name)
     if (foldFlag === -1) {
       const fullPath = path.join(dir, item.name)
       const isDir = fs.lstatSync(fullPath).isDirectory()
       if (isDir) {
-        // 递归
+        //recursion 递归
         getFileNodes(option, (item.children = []), fullPath, level + 1)
         nodes.push(item)
       } else {
         const i = fullPath.lastIndexOf('.')
         const lastName = fullPath.substring(i)
-        // 这里处理文件过滤
+        //File filtering is handled here 这里处理文件过滤
         if (include.includes(lastName)) {
           note = getFile(fullPath)
           item.note = note
@@ -107,12 +104,11 @@ export function getFileNodes(
       }
     }
   }
-  // 控制返回时间节点,不让提前返回
   return nodes
 }
 
 /**
- * @description:递归得到文件名+note
+ * @description:Recursive file name + note  递归得到文件名+note
  * @param {Array} datas
  * @param {string} keys
  * @return {*}
@@ -122,12 +118,12 @@ function getNote(datas: Array<ItemType>, keys?: string[]) {
   datas.forEach((obj: ItemType, index: Number) => {
     const last = index === datas.length - 1
     if (obj.children) {
-      // 文件夹
+      //fold
       const md = setMd(obj, last)
       nodes.push(md)
       getNote(obj.children, nodes)
     }
-    // 文件
+    // file
     else {
       const md = setMd(obj, last)
       nodes.push(md)
@@ -137,20 +133,18 @@ function getNote(datas: Array<ItemType>, keys?: string[]) {
 }
 
 /**
- * @description: 一个obj生成一个一行文字
+ * @description:One obj generates one line of text  一个obj生成一个一行文字
  * @param {ItemType} obj
- * @param {Boolean} last  是不是最后一个
+ * @param {Boolean} last  Is it the last one  是不是最后一个
  * @return {*}
  */
 function setMd(obj: ItemType, last: Boolean): string {
   let filesString = ''
-  // 把文件夹输出,并且level+1
   const blank = '│ '.repeat(obj.level) // 重复空白
   const pre = `${blank}${last ? '└──' : '├──'} ${obj.name}`
   if (obj.isDir) {
     filesString += `${pre}\n`
   } else {
-    // console.log(last, obj.name)
     filesString += `${pre}            ${obj.note}\n`
   }
   return filesString
@@ -171,7 +165,7 @@ function setMd(obj: ItemType, last: Boolean): string {
 // }
 
 /**
- * @description: 生成md
+ * @description: Generate MD 生成md
  * @param {object} option
  * @return {*}
  */

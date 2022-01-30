@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "0.2.0-bata3",
+  "version": "0.2.0",
   "description": "auto generate markdown for node",
   "keywords": [
     "node",
