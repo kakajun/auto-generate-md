@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+'use strict'
 import path from 'path'
 import fs from 'fs'
 import { getMd } from './index'
