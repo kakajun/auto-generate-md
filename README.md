@@ -66,21 +66,21 @@ note: 上面两个方法均可传一个option入参,其格式为:
 5. 支持命令行参数配置, 可以自定义忽略文件和过滤后缀名文件
 6. 命令行解析
 
-`Usage: agmd--include str--ignore str
+控制台命令: agmd--include str--ignore str
 
-  Options:
-  --include string  / -i string.......... include  file extension
-  --ignore string  / -in string........... ignore file or fold
+可选项:
+  --include string  / -i string.......... 包含解析的后缀
+  --ignore string  / -in string........... 忽略文件名
 
-  Str deafult:
+例子:
   --ignore / -i  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
   --include / -in  .js,.vue,.ts
 
-  Note:
-  There should be no space between strings in a configuration
+注意:
+配置中的字符串之间不应有空格
 
-  Examples:
-  $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
+命令行例子:
+$ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 
 ### 相关文章
 
@@ -91,10 +91,13 @@ note: 上面两个方法均可传一个option入参,其格式为:
 1. 采用esbuild 进行打包
 2. 并且用eslint, preter规范写法, 规范
 3. 用ts进行改写
-4. 支持gitee一键同步test11253123
+4. 支持gitee一键同步
 
 0.2.0
 支持命令行解析参数,可以动态传参
 
 0.2.6
 修复全局安装报错
+
+0.2.7
+新增文件统计功能

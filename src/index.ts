@@ -8,24 +8,29 @@ import path from 'path'
  */
 function getFile(file: fs.PathOrFileDescriptor) {
   const str = fs.readFileSync(file, 'utf-8')
+  const size = str.length
   const sarr = str.split(/[\n,]/g)
-  // console.log(file);
+  const rowSize = sarr.length
   const f =
     sarr[0].indexOf('eslint') === -1 &&
     (sarr[0].indexOf('-->') > -1 || sarr[0].indexOf('*/') > -1 || sarr[0].indexOf('//') > -1)
       ? sarr[0]
       : ''
-  // console.log(f);
-  return f
+  return { noteText: f, size, rowSize }
 }
 
-export type ItemType = {
+type ItemType = {
   name: string
   isDir: boolean
   level: number
   note: string
+  size: number
+  suffix: string
+  rowSize: number
   children?: ItemType[]
 }
+
+type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { [key: string]: number } }
 
 /**
  * @description:Generate node information for all files 生成所有文件的node信息
@@ -82,7 +87,6 @@ export function getFileNodes(
     })
   for (let index = 0; index < files.length; index += 1) {
     const item = files[index]
-    let note = '' //File Comments  文件注释
     //Folder filtering is handled here  这里处理文件夹过滤
     const foldFlag = ignore.findIndex((obj: string) => obj === item.name)
     if (foldFlag === -1) {
@@ -97,8 +101,9 @@ export function getFileNodes(
         const lastName = fullPath.substring(i)
         //File filtering is handled here 这里处理文件过滤
         if (include.includes(lastName)) {
-          note = getFile(fullPath)
-          item.note = note
+          const obj = getFile(fullPath)
+          Object.assign(item, obj)
+          item.suffix = lastName
           nodes.push(item)
         }
       }
@@ -151,18 +156,72 @@ function setMd(obj: ItemType, last: Boolean): string {
 }
 
 /**
- * @description: 把结果写入到js文件
+ * @description: Write the result to JS file 把结果写入到js文件
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
-// function wirteJs(data: string, filePath: string) {
-//   const file = path.resolve(__dirname, filePath)
-//   const pre = 'export default'
-//   // 异步写入数据到文件
-//   fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
-//     console.error(err)
-//   })
-// }
+function wirteJs(data: string, filePath: string) {
+  const file = path.resolve(__dirname, filePath)
+  const pre = 'export default'
+  // 异步写入数据到文件
+  fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
+    console.error(err)
+  })
+}
+/**
+ * @description:Thousands format 千分位格式化
+ * @param {num} To format a number 要格式化数字
+ * @return {string}
+ */
+function format(num: number) {
+  var reg = /\d{1,3}(?=(\d{3})+$)/g
+  return (num + '').replace(reg, '$&,')
+}
+/**
+ * @description: Generate statistics MD 生成统计md
+ * @param {object} option
+ * @return {*}
+ */
+function setCountMd(obj: secoutType) {
+  const { rowTotleNumber, sizeTotleNumber, coutObj } = obj
+  let countMd = ''
+  for (const key in coutObj) {
+    const ele = coutObj[key]
+    countMd += `The suffix if ${key} has ${ele} files\n`
+  }
+  let md = `Total number of file lines: ${format(rowTotleNumber)},
+Total number of codes: ${format(sizeTotleNumber)} \n`
+  md = countMd + md
+  return md
+  // wirteMd(md, `${path.resolve('./')}\\count-md.md`)
+}
+/**
+ * @description: Get statistics 得到统计
+ * @param {Array} nodes
+ * @return {*}
+ */
+function getCountMd(datas: Array<ItemType>) {
+  let rowTotleNumber = 0
+  let sizeTotleNumber = 0
+  const coutObj: { [key: string]: number } = {}
+  function getDeatle(nodes: Array<ItemType>) {
+    nodes.forEach((obj: ItemType) => {
+      if (obj.children) getDeatle(obj.children)
+      else {
+        if (!coutObj.hasOwnProperty(obj.suffix)) coutObj[obj.suffix] = 0
+        coutObj[obj.suffix]++
+        rowTotleNumber += obj.rowSize
+        sizeTotleNumber += obj.size
+      }
+    })
+  }
+  getDeatle(datas)
+  return {
+    rowTotleNumber,
+    sizeTotleNumber,
+    coutObj
+  }
+}
 
 /**
  * @description: Generate MD 生成md
@@ -173,11 +232,27 @@ export function getMd(option?: { ignore: string[] | undefined; include: string[]
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./'))
   const nodes = getFileNodes(option)
   // 得到md对象
-  // wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
+  wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
+  const countMdObj = getCountMd(nodes)
+ const coutMd= setCountMd(countMdObj)
   const note = getNote(nodes) // 得到所有note的数组
-  const md = note.join('') // 数组转字符串
+  const md = note.join('')+'\n' // 数组转字符串
   if (md.length > 0) {
     console.log('\x1B[36m%s\x1B[0m', '*** Automatic generation completed ! ')
   }
-  return md
+   console.log('\x1B[33m%s\x1b[0m:', coutMd)
+  return md + coutMd
+}
+
+/**
+ * @description:Write the result to JS file 把结果写入到js文件
+ * @param {data}  要写的数据
+ * @return {fileName}  要写入文件地址
+ */
+export function wirteMd(data: string, filePath: string) {
+  const file = path.resolve(__dirname, filePath)
+  // 异步写入数据到文件
+  fs.writeFile(file, data, { encoding: 'utf8' }, (err) => {
+    console.error(err)
+  })
 }
