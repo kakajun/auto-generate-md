@@ -26,8 +26,9 @@
 │ └── main.js            
 └── .eslintrc.js            
 
-The suffix if .js has 8 files
-The suffix if .ts has 6 files
-The suffix if .vue has 3 files
-Total number of file lines: 1,950,
-Total number of codes: 41,425 
+The suffix is .js has 8 files
+The suffix is .ts has 6 files
+The suffix is .vue has 3 files
+The totle  has 17 files
+Total number of file lines: 1,956,
+Total number of codes: 41,646 
