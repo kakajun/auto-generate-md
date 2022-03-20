@@ -16,7 +16,7 @@ function getFile(file: fs.PathOrFileDescriptor) {
     (sarr[0].indexOf('-->') > -1 || sarr[0].indexOf('*/') > -1 || sarr[0].indexOf('//') > -1)
       ? sarr[0]
       : ''
-  return { noteText: f, size, rowSize }
+  return { note: f, size, rowSize }
 }
 
 type ItemType = {
@@ -160,14 +160,14 @@ function setMd(obj: ItemType, last: Boolean): string {
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
-// function wirteJs(data: string, filePath: string) {
-//   const file = path.resolve(__dirname, filePath)
-//   const pre = 'export default'
-//   // 异步写入数据到文件
-//   fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
-//     console.error(err)
-//   })
-// }
+function wirteJs(data: string, filePath: string) {
+  const file = path.resolve(__dirname, filePath)
+  const pre = 'export default'
+  // 异步写入数据到文件
+  fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
+    console.error(err)
+  })
+}
 /**
  * @description:Thousands format 千分位格式化
  * @param {num} To format a number 要格式化数字
@@ -235,7 +235,7 @@ export function getMd(option?: { ignore: string[] | undefined; include: string[]
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./'))
   const nodes = getFileNodes(option)
   // 得到md对象
-  // wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
+  wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
   const countMdObj = getCountMd(nodes)
  const coutMd= setCountMd(countMdObj)
   const note = getNote(nodes) // 得到所有note的数组
