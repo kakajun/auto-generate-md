@@ -99,5 +99,5 @@ $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 0.2.6
 修复全局安装报错
 
-0.2.8
+0.2.9
 新增文件统计功能
