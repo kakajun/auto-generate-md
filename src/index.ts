@@ -160,14 +160,14 @@ function setMd(obj: ItemType, last: Boolean): string {
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
-function wirteJs(data: string, filePath: string) {
-  const file = path.resolve(__dirname, filePath)
-  const pre = 'export default'
-  // 异步写入数据到文件
-  fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
-    console.error(err)
-  })
-}
+// function wirteJs(data: string, filePath: string) {
+//   const file = path.resolve(__dirname, filePath)
+//   const pre = 'export default'
+//   // 异步写入数据到文件
+//   fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
+//     console.error(err)
+//   })
+// }
 /**
  * @description:Thousands format 千分位格式化
  * @param {num} To format a number 要格式化数字
@@ -232,18 +232,19 @@ function getCountMd(datas: Array<ItemType>) {
  * @return {*}
  */
 export function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
-  console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./'))
+  console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./')+'\n')
   const nodes = getFileNodes(option)
   // 得到md对象
-  wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
+  // wirteJs(JSON.stringify(nodes), __dirname + '\\readme-file.js')
   const countMdObj = getCountMd(nodes)
- const coutMd= setCountMd(countMdObj)
+  const coutMd = setCountMd(countMdObj)
+  console.log('\x1B[33m%s\x1b[0m', coutMd)
   const note = getNote(nodes) // 得到所有note的数组
   const md = note.join('')+'\n' // 数组转字符串
   if (md.length > 0) {
     console.log('\x1B[36m%s\x1B[0m', '*** Automatic generation completed ! ')
   }
-   console.log('\x1B[33m%s\x1b[0m:', coutMd)
+
   return md + coutMd
 }
 
@@ -255,7 +256,7 @@ export function getMd(option?: { ignore: string[] | undefined; include: string[]
 export function wirteMd(data: string, filePath: string) {
   const file = path.resolve(__dirname, filePath)
   // 异步写入数据到文件
-  fs.writeFile(file, data, { encoding: 'utf8' }, (err) => {
-    console.error(err)
+  fs.writeFile(file, data, { encoding: 'utf8' }, () => {
+    console.log('Write successful')
   })
 }
