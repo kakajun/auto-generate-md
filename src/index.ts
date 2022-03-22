@@ -47,7 +47,12 @@ export function getFileNodes(
 ): Array<ItemType> {
   //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
   let ignore = [
+    'public',
+    'build',
     'img',
+    'assets',
+    'mock',
+    'api',
     'styles',
     'node_modules',
     'LICENSE',
@@ -56,7 +61,12 @@ export function getFileNodes(
     'dist',
     '.husky',
     '.vscode',
+    'babel.config.js',
+    'prettier.config.js',
+    'commitlint.config.js',
     'readme-file.js',
+    'vue.config.js',
+    '.eslintrc.js',
     'readme-md.js'
   ]
   //File suffix contains only  文件后缀只包含
