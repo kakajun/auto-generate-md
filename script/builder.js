@@ -18,7 +18,7 @@ const isDev = process.env.NODE_ENV !== 'production'
 const binBuildParams = {
   platform: 'node',
   color: true,
-  entryPoints: ['src/agmd.ts'],
+  entryPoints: ['src/bin.ts'],
   outdir: 'bin',
   minify: true,
   format: 'cjs',

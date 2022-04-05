@@ -1,11 +1,4 @@
-/**
- *================================================
- *@date:2022/04/04
- *@author:mj
- *@desc:获取文件相关方法
- *
- *================================================
- */
+/* 获取文件相关方法 */
 import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'

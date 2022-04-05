@@ -1,11 +1,4 @@
-/**
- *================================================
- *@date:2022/04/04
- *@author:mj
- *@desc:对打上标记的文件进行分类写入, 分步骤写方法, 虽然对于性能有影响, 但一点点算什么, 能够分步骤调试最好, 不要这个步骤, 直接注释掉这个方法就行
- *
- *================================================
- */
+/* 对打上标记的文件进行分类写入, 分步骤写方法, 虽然对于性能有影响, 但一点点算什么, 能够分步骤调试最好, 不要这个步骤, 直接注释掉这个方法就行 */
 import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import { ItemType } from './get-file'
@@ -81,8 +74,6 @@ export function setFolder(path: string, name: string) {
   const latArr = foldNameArrs.pop()  // 最后一位和要创建的一位一样,那么就会无限创建文件夹
   if (path.indexOf('.') > -1 || latArr===name) {
     console.error('创建文件夹异常:')
-    // debug('name: ', name)
-    // debug('path: ', path)
     return
   }
   //路径最后一位有斜杆,那不处理,----------------- 这里给代码加点容错, 增加代码健壮性

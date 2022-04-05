@@ -1,11 +1,4 @@
-/**
- *================================================
- *@date:2022/04/05
- *@author:mj
- *@desc: 界面命令注册在这里
- *
- *================================================
- */
+/* 界面命令注册在这里 */
 import { ItemType } from './get-file'
 import prompts from 'prompts'
 import path from 'path'
@@ -88,7 +81,7 @@ function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string)
  */
 function getActions() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
-  let rootPath = path.resolve('.\\unuse')
+  let rootPath = path.resolve('.')
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd(rootPath, { ignore, include })
 

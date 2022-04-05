@@ -1,11 +1,4 @@
-/**
- *================================================
- *@date:2022/04/04
- *@author:mj
- *@desc:给路由文件打标记, 把标记打到最后,因为头部已经给了注释
- *
- *================================================
- */
+/* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
 import { ItemType } from './get-file'
 import { setFolder, markWriteFile } from './mark-write-file'

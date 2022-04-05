@@ -1,11 +1,4 @@
-/**
- *================================================
- *@date:2022/04/04
- *@author:mj
- *@desc: 生成md说明文档
- *
- *================================================
- */
+/* 生成md说明文档 */
 import fs from 'fs'
 import path from 'path'
 import { getFileNodes, getNote } from './get-file'
