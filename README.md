@@ -56,8 +56,45 @@ example，是我为演示准备的一些文件，并没有其他用
 - Wirte Json Nodes  把node树写出来
 - Wirte  Nodes With Import(may change path)  把node树写出来,包含依赖关系, 但会修改路径
 
+4. 代码结构说明(由本插件agmd生成)
+```
+├── bin
+│ └── bin.js
+├── lib
+│ ├── commands
+│ │ ├── get-file.d.ts
+│ │ └── wirte-md.d.ts
+│ ├── index.cjs.js
+│ ├── index.d.ts
+│ └── index.esm.js
+├── script
+│ ├── cli
+│ │ ├── handle.ts
+│ │ └── index.ts
+│ ├── help
+│ │ └── index.ts
+│ ├── build.js
+│ └── builder.js
+├── src
+│ ├── commands
+│ │ ├── agmd.ts
+│ │ ├── base.ts            /* 界面命令注册在这里 */
+│ │ ├── change-path.ts            /* 整个文件主要把绝对路径修改为相对路径 */
+│ │ ├── get-file.ts            /* 获取文件相关方法 */
+│ │ ├── mark-file.ts
+│ │ ├── mark-write-file.ts
+│ │ └── wirte-md.ts            /* 生成md说明文档 */
+│ ├── shared
+│ │ ├── constant.ts
+│ │ └── logger.ts
+│ ├── bin.ts
+│ └── index.ts            /* 这里抛出一些高级操作方法 */
+├── test
+│ └── index.js
+└── unuse
+```
 
-4. 高级用法
+5. 高级用法
 给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的绝对路径, 没有配置, 那么程序会自动退出
 
 
