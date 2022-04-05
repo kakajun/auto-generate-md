@@ -67,7 +67,7 @@ function wirteJsNodesAction(nodes: Array<ItemType>, rootPath: string) {
  * @param {string} rootPath
  * @param {string} md
  */
-function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string) {
+export function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string) {
   getMdAction(md, rootPath)
   getMdAction(md, rootPath)
   changePathAction(nodes, rootPath)
