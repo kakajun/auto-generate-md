@@ -84,7 +84,6 @@ function setCountMd(obj: secoutType) {
 Total number of codes: ${format(sizeTotleNumber)} \n`
   md = countMd + md
   return md
-  // wirteMd(md, `${path.resolve('./')}\\count-md.md`)
 }
 /**
  * @description: Generate MD 生成md
@@ -105,6 +104,5 @@ export function getMd(
   if (md.length > 0) {
     console.log('\x1B[36m%s\x1B[0m', '*** Automatic generation completed ! ')
   }
-
   return { md: md + coutMd, nodes }
 }
