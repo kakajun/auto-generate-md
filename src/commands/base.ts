@@ -48,7 +48,7 @@ function changePathAction(nodes: Array<ItemType>, rootPath: string) {
 function markFileAction(nodes: Array<ItemType>, rootPath: string) {
    let path = rootPath + '/classify.js'
   if (!fs.existsSync(path)) {
-    const routers = fs.readFileSync(path, 'utf-8')
+    const routers = require(path)
     markFile(nodes, rootPath, routers)
   } else {
     process.exit(1)
