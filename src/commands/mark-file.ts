@@ -13,15 +13,28 @@ import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
 debug.enabled = true
 //1. 整理要分类的路由,搞个数组对象分类
-const classifiedRouting = [
+// const classifiedRouting = [
+//   {
+//     name: '1工程',
+//     router: [
+//       {
+//         path: '/about',
+//         name: 'about',
+//         // 路由必须都是绝对路径
+//         component: '@/App.vue'
+//       }
+//     ]
+//   }
+// ]
+type classifyType  = [
   {
-    name: '1工程',
+    name: string
     router: [
       {
-        path: '/about',
-        name: 'about',
+        path: string
+        name: string
         // 路由必须都是绝对路径
-        component: '@/App.vue'
+        component: string
       }
     ]
   }
@@ -32,10 +45,9 @@ const classifiedRouting = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export default function markFile(nodes: ItemType[], rootPath: string) {
-
+export default function markFile(nodes: ItemType[], rootPath: string, routers: classifyType) {
   // 外层循环要分类的路由
-  classifiedRouting.forEach((ele) => {
+  routers.forEach((ele) => {
     // 这里循环打标记的路由
     ele.router.forEach((obj: { component: any }) => {
       const path = obj.component

@@ -15,6 +15,7 @@ import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import markFile from './mark-file'
+import fs from 'fs-extra'
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
 /**
@@ -45,7 +46,14 @@ function changePathAction(nodes: Array<ItemType>, rootPath: string) {
  * @param {string} rootPath
  */
 function markFileAction(nodes: Array<ItemType>, rootPath: string) {
-  markFile(nodes, rootPath)
+   let path = rootPath + '/classify.js'
+  if (!fs.existsSync(path)) {
+    const routers = fs.readFileSync(path, 'utf-8')
+    markFile(nodes, rootPath, routers)
+  } else {
+    process.exit(1)
+  }
+
 }
 
 /**

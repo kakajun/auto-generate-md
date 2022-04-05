@@ -2,7 +2,7 @@
 import { createApp } from 'vue'
 import App from './App.vue'
 // import '../lib/style.css'
-// import SketchRule from "../lib/index.es.js?4563452";
+import SketchRule from "./components/test2/HelloWorld.vue";
 const app = createApp(App)
 // app.use(SketchRule);
 
