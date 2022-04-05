@@ -11,7 +11,7 @@ import { ItemType } from './get-file'
 import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
-debug.enabled = false
+debug.enabled = true
 //1. 整理要分类的路由,搞个数组对象分类
 const classifiedRouting = [
   {

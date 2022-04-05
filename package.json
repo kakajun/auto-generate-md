@@ -16,6 +16,7 @@
     "agmd": "./bin/agmd.js"
   },
   "scripts": {
+    "cli": "ts-node src/bin.ts",
     "dev": "npx nodemon src/bin.ts",
     "agmd": "npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue",
     "lint": "eslint \"src/**/*.{ts}\" --max-warnings=0",
@@ -50,7 +51,7 @@
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "ts-node": "^10.7.0",
-        "@types/debug": "^4.1.7",
+    "@types/debug": "^4.1.7",
     "typescript": "^4.5.5"
   },
   "lint-staged": {

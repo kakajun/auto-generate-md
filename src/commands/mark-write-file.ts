@@ -56,15 +56,15 @@ export  function markWriteFile(nodes: ItemType[], name: string, path: string, ro
  * @param {string} rootPath
  */
 function setDispFileNew(path: string, name: string, rootPath: string) {
-  debug('copyFile入参: ', name, path, rootPath)
+  // debug('copyFile入参: ', name, path, rootPath)
    const relative = path.replace(rootPath, '')
    const originPath = path
    const writeFileName = rootPath + '\\' + name + relative
-   debug('originPath: ', originPath)
-   debug('写入文件: ', writeFileName)
+  //  debug('originPath: ', originPath)
+
    try {
      fs.copy(originPath, writeFileName)
-     console.log('success!')
+        debug('写入文件success! : ', writeFileName)
    } catch (err) {
      console.error(err)
    }
@@ -76,13 +76,13 @@ function setDispFileNew(path: string, name: string, rootPath: string) {
  * @param {type} params
  */
 export function setFolder(path: string, name: string) {
-  debug('setFolder入参: ', path, name)
+  // debug('setFolder入参: ', path, name)
   const foldNameArrs = path.split('\\')
   const latArr = foldNameArrs.pop()  // 最后一位和要创建的一位一样,那么就会无限创建文件夹
   if (path.indexOf('.') > -1 || latArr===name) {
     console.error('创建文件夹异常:')
-    debug('name: ', name)
-    debug('path: ', path)
+    // debug('name: ', name)
+    // debug('path: ', path)
     return
   }
   //路径最后一位有斜杆,那不处理,----------------- 这里给代码加点容错, 增加代码健壮性
