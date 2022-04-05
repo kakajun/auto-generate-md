@@ -56,8 +56,8 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
         if (isRelative) {
           if (filePath.indexOf('@') > -1) {
             // debug(filePath)
-            let relative = filePath.replace('@', rootPath)
-            let relatPath = absoluteTorelative(relative, fullPath)
+            let absolute = filePath.replace('@', rootPath)
+            let relatPath = absoluteTorelative(absolute, rootPath)
             // debug(relatPath)
             // 把改好的替换回去
             changeName = relatPath
@@ -126,12 +126,11 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
 /**
  * @desc: 绝对路径转相对路径
  * @author: majun
- * @param {*} relative
+ * @param {*} fileAbsolute 待处理的绝对路径
  * @param {*} absolute
  */
-function absoluteTorelative(relative: string, absolute: string) {
-  let rela = relative.split('/')
-  // debug(rela,relative, "5")
+function absoluteTorelative(fileAbsolute: string, absolute: string) {
+  let rela = fileAbsolute.split('/')
   rela.shift()
   let abso = absolute.split('/')
   //  debug(abso, '6')
