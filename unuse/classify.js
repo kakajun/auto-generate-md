@@ -17,7 +17,7 @@ module.exports = [
         path: '/about',
         name: 'about',
         // 路由必须都是绝对路径
-        component: '@/mian.js'
+        component: '@/main.js'
       }
     ]
   }
