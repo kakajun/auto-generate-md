@@ -43,7 +43,7 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
     // 注释的不转,其他公共也不转
     const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims']
     const flag = ignore.some((item) => ele.indexOf(item) < 0)
-    const reg = /import.*from [\"|\'](.*)[\'|\"]/
+    const reg = /import.*[\"|\'](.*)[\'|\"]/
     if (flag) {
       const impStr = ele.match(reg)
       // 没有import的不转
