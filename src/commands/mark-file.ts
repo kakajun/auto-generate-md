@@ -46,6 +46,7 @@ type classifyType  = [
  * @param {string} rootPath
  */
 export default function markFile(nodes: ItemType[], rootPath: string, routers: classifyType) {
+  // console.log(routers)
   // 外层循环要分类的路由
   routers.forEach((ele) => {
     // 这里循环打标记的路由

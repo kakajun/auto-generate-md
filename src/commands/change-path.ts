@@ -103,8 +103,8 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
             writeFlag = true
           }
         }
-        debug('sarr[index]222 ', sarr[index])
-        debug('后缀补齐文件: ', changeName)
+        // debug('sarr[index]222 ', sarr[index])
+        // debug('后缀补齐文件: ', changeName)
         imports.push(changeName)
         // 相对路径改绝对路径没有应用场景, 这里只是做测试
         // else {
@@ -123,7 +123,7 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
   if (writeFlag) {
     fileStr = sarr.join('\n')
     // 异步写入数据到文件
-    debug(fileStr)
+    // debug(fileStr)
     fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
       console.log('Write successful-------' + fullPath)
     })
@@ -173,7 +173,7 @@ function absoluteTorelative(relative: string, absolute: string) {
  * @param {string} absolute
  */
 export function relativeToabsolute(relative: string, absolute: string) {
-  debug(absolute, '00')
+  // debug(absolute, '00')
   const reg = /\\|\//g //用 \或者 / 进行分割
   let rela = relative.split(reg)
   let abso = absolute.split(reg)
