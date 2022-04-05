@@ -119,7 +119,7 @@ function getActions() {
     value: 'Wirte Json Nodes',
     action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
   })
-  actionMap.set('Wirte Json Nodes', {
+  actionMap.set('Wirte  Nodes With Import(may change path)', {
     title: 'Wirte  Nodes With Import(may change path)',
     value: 'Wirte  Nodes With Import(may change path)',
     action: () => wirteJsNodesAction(nodes, rootPath)

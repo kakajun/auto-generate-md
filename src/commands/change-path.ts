@@ -11,7 +11,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = true
+debug.enabled = false
 /**
  * @desc: 递归循环所有文件
  * @author: majun
@@ -105,7 +105,7 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
         }
         // debug('sarr[index]222 ', sarr[index])
         // debug('后缀补齐文件: ', changeName)
-        imports.push(changeName)   
+        imports.push(changeName)
         // 相对路径改绝对路径没有应用场景, 这里只是做测试
         // else {
         //   if (filePath.indexOf('@') === -1 && (filePath.indexOf('./') > -1 || filePath.indexOf('../') > -1)) {

@@ -12,7 +12,7 @@ import { ItemType } from './get-file'
 import fs from 'fs-extra';
 
 const debug = createDebugger('mark-write-file')
-debug.enabled = true
+debug.enabled = false
 
 /**
  * @desc:  递归文件子依赖创建文件- 文件外递归

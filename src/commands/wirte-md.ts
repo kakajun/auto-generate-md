@@ -12,7 +12,7 @@ import { getFileNodes, getNote } from './get-file'
 import { ItemType } from './get-file'
 import createDebugger from 'debug'
 const debug = createDebugger('wirte-md')
-debug.enabled = true
+debug.enabled = false
 type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { [key: string]: number } }
 /**
  * @description:Write the result to JS file 把结果写入到js文件
