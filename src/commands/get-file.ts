@@ -10,6 +10,7 @@ import fs from 'fs'
 import path from 'path'
 // import { relativeToabsolute } from './change-path'
 import createDebugger from 'debug'
+import { relativeToabsolute } from './change-path';
 const debug = createDebugger('get-file')
 debug.enabled = true
 /**
@@ -22,13 +23,42 @@ function getFile(file: string) {
   const size = str.length
   const sarr = str.split(/[\n]/g)
   const rowSize = sarr.length
+  // const imports = getImport(sarr, file)
   const f =
     sarr[0].indexOf('eslint') === -1 &&
     (sarr[0].indexOf('-->') > -1 || sarr[0].indexOf('*/') > -1 || sarr[0].indexOf('//') > -1)
       ? sarr[0]
       : ''
-  return { note: f, size, rowSize }
+  return {
+    note: f, size, rowSize,
+    // imports
+  }
 }
+
+/**
+ * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵
+ * @author: majun
+ * @param {any} sarr
+ * @param {string} file
+ */
+// function getImport(sarr: any[], file:string) {
+//   // 这里获取每个文件的import路径
+//   const imports: string[] = []
+//   sarr.forEach((ele: string) => {
+//     const str = ele.match(/import.*from [\"|\'](.*)[\'|\"]/)
+//     if (str && str[1]) {
+//       // 这里存绝对路径
+//       let absolutetPath = ''
+//       if (str[1].indexOf('@') === -1 && (str[1].indexOf('./') > -1 || str[1].indexOf('../') > -1)) {
+//         // 只有相对路径才会保存,那么首先得把绝对路径都转为相对路径
+//         absolutetPath = relativeToabsolute(str[1], file)
+//         // console.log(absolutetPath)
+//         imports.push(absolutetPath)
+//       }
+//     }
+//   })
+//   return imports
+// }
 
 export type ItemType = {
   name: string

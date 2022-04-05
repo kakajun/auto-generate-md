@@ -1,11 +1,11 @@
 /**
-*================================================
-*@date:2022/04/05
-*@author:mj
-*@desc: 界面命令注册在这里
-*
-*================================================
-*/
+ *================================================
+ *@date:2022/04/05
+ *@author:mj
+ *@desc: 界面命令注册在这里
+ *
+ *================================================
+ */
 import { ItemType } from './get-file'
 import prompts from 'prompts'
 import path from 'path'
@@ -46,14 +46,14 @@ function changePathAction(nodes: Array<ItemType>, rootPath: string) {
  * @param {string} rootPath
  */
 function markFileAction(nodes: Array<ItemType>, rootPath: string) {
-   let path = rootPath + '/classify.js'
-  if (!fs.existsSync(path)) {
+  let path = rootPath + '/classify.js'
+  if (fs.existsSync(path)) {
     const routers = require(path)
     markFile(nodes, rootPath, routers)
   } else {
+    console.log('退出')
     process.exit(1)
   }
-
 }
 
 /**
@@ -62,15 +62,24 @@ function markFileAction(nodes: Array<ItemType>, rootPath: string) {
  * @param {type} params
  */
 function wirteJsNodesAction(nodes: Array<ItemType>, rootPath: string) {
+  // 要先改路径后缀,否则依赖收集不到
+  changePathAction(nodes, rootPath)
   wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
 }
 
+/**
+ * @desc: 执行所有操作
+ * @author: majun
+ * @param {Array} nodes
+ * @param {string} rootPath
+ * @param {string} md
+ */
 function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string) {
   getMdAction(md, rootPath)
   getMdAction(md, rootPath)
   changePathAction(nodes, rootPath)
   markFileAction(nodes, rootPath)
-  wirteJsNodesAction(nodes, rootPath)
+  wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
 }
 
 /**
@@ -108,6 +117,11 @@ function getActions() {
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',
     value: 'Wirte Json Nodes',
+    action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
+  })
+  actionMap.set('Wirte Json Nodes', {
+    title: 'Wirte  Nodes With Import(may change path)',
+    value: 'Wirte  Nodes With Import(may change path)',
     action: () => wirteJsNodesAction(nodes, rootPath)
   })
   return actionMap
