@@ -1,19 +1,21 @@
 {
   "name": "agmd",
-  "version": "0.2.9",
-  "description": "auto generate markdown for node",
+  "version": "0.3.0",
+  "description": "auto generate markdown for node, Classification of engineering documents, Absolute path to relative path",
   "keywords": [
     "node",
     "auto",
     "generate",
+    "relative path",
     "md",
+    "classification",
     "markdown"
   ],
   "main": "lib/index.cjs.js",
   "module": "lib/index.esm.js",
   "typings": "lib/index.d.ts",
   "bin": {
-    "agmd": "./bin/agmd.js"
+    "agmd": "./bin/bin.js"
   },
   "scripts": {
     "cli": "ts-node src/bin.ts",
