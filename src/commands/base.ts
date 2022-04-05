@@ -69,9 +69,8 @@ function wirteJsNodesAction(nodes: Array<ItemType>, rootPath: string) {
  */
 export function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string) {
   getMdAction(md, rootPath)
-  getMdAction(md, rootPath)
   changePathAction(nodes, rootPath)
-  markFileAction(nodes, rootPath)
+  // markFileAction(nodes, rootPath)
   wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
 }
 
@@ -81,7 +80,8 @@ export function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: 
  */
 function getActions() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
-  let rootPath = path.resolve('.')
+  let rootPath = path.resolve('./')
+  console.log(rootPath, 'rootPath')
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd(rootPath, { ignore, include })
 

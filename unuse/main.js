@@ -5,7 +5,7 @@ import App from './App.vue'
 import SketchRule from "./components/test2/HelloWorld.vue";
 const app = createApp(App)
 // app.use(SketchRule);
-import './mixins'
+import './mixins.js'
 // const MyComponent = app.component('SketchRule')
 // console.log(MyComponent, 'MyComponentMyComponent')
 app.mount('#app')
