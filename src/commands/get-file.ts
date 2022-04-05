@@ -8,9 +8,7 @@
  */
 import fs from 'fs'
 import path from 'path'
-// import { relativeToabsolute } from './change-path'
 import createDebugger from 'debug'
-import { relativeToabsolute } from './change-path';
 const debug = createDebugger('get-file')
 debug.enabled = true
 /**
