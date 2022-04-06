@@ -78,6 +78,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             writeFlag = true
           }
           let absolutetPath = relativeToabsolute(changeName, fullPath)
+           debug('absolutetPath: ', absolutetPath)
           changeName = absolutetPath
           const i = absolutetPath.lastIndexOf('.')
           const lastName = absolutetPath.substring(i)
@@ -185,7 +186,8 @@ function absoluteTorelative(fileAbsolute: string, absolute: string) {
  * @param {string} absolute
  */
 export function relativeToabsolute(relative: string, absolute: string) {
-  // debug(absolute, '00')
+  debug('relativeToabsolute:----relative:', relative)
+    debug('relativeToabsolute:----absolute:', absolute)
   const reg = /\\|\//g //用 \或者 / 进行分割
   let rela = relative.split(reg)
   let abso = absolute.split(reg)

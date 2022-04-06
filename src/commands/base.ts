@@ -70,7 +70,7 @@ function wirteJsNodesAction(nodes: Array<ItemType>, rootPath: string) {
 export function generateAllAction(nodes: Array<ItemType>, rootPath: string, md: string) {
   getMdAction(md, rootPath)
   changePathAction(nodes, rootPath)
-  markFileAction(nodes, rootPath)
+  // markFileAction(nodes, rootPath)
   wirteJsNodes(JSON.stringify(nodes), rootPath + '\\readme-file.js')
 }
 
