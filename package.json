@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "0.3.0-alpha0.1",
+  "version": "0.3.0-alpha0.2",
   "description": "auto generate markdown for node, Classification of engineering documents, Absolute path to relative path",
   "keywords": [
     "node",
