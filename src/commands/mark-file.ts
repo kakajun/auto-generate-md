@@ -24,7 +24,7 @@ type classifyType  = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export default function markFile(nodes: ItemType[], rootPath: string, routers: classifyType) {
+export default function markFile(nodes: ItemType[], routers: classifyType) {
   // console.log(routers)
   // 外层循环要分类的路由
   for (let index = 0; index < routers.length; index++) {

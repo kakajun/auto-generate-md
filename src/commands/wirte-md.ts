@@ -84,11 +84,10 @@ Total number of codes: ${format(sizeTotleNumber)} \n`
  * @return {*}
  */
 export function getMd(
-  rootPath: string,
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined
 ) {
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./') + '\n')
-  const nodes = getFileNodes(rootPath, option)
+  const nodes = getFileNodes(path.resolve(),option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   console.log('\x1B[33m%s\x1b[0m', coutMd)
