@@ -6,7 +6,7 @@ module.exports = [
         path: '/about',
         name: 'about',
         // 路由必须都是绝对路径
-        component: '@/App.vue'
+        component: '@/unuse/App.vue'
       }
     ]
   },
@@ -17,7 +17,7 @@ module.exports = [
         path: '/about',
         name: 'about',
         // 路由必须都是绝对路径
-        component: '@/main.js'
+        component: '@/unuse/main.js'
       }
     ]
   }

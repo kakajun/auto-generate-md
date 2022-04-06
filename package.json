@@ -19,7 +19,7 @@
   },
   "scripts": {
     "cli": "cd unuse &&  ts-node ../src/bin.ts",
-    "dev": "cd unuse && npx nodemon ../src/commands/agmd.ts",
+    "dev": "npx nodemon src/commands/agmd.ts",
     "agmd": "npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue",
     "lint": "eslint \"src/**/*.{ts}\" --max-warnings=0",
     "build": "node script/build.js",
