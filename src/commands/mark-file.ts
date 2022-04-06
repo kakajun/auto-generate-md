@@ -41,23 +41,41 @@ type classifyType  = [
 export default function markFile(nodes: ItemType[], rootPath: string, routers: classifyType) {
   // console.log(routers)
   // 外层循环要分类的路由
-  routers.forEach((ele) => {
-    // 这里循环打标记的路由
-    ele.router.forEach((obj: { component: any }) => {
-      const path = obj.component
-      const renamePath = path.replace(/\//g, '\\')
-      // 路径转绝对路径
-      let absolutePath = renamePath.replace('@', rootPath)
-      // 打标记
-      setmark(absolutePath, ele.name)
-      // 递归打上子集所有
-      setNodeMark(nodes, ele.name, absolutePath)
-      // 建分类包
-      setFolder(rootPath, ele.name)
-      // 对打上标记的文件进行分类写入
-      markWriteFile(nodes, ele.name, absolutePath, rootPath)
-    })
-  })
+  for (let index = 0; index < routers.length; index++) {
+    const ele = routers[index]
+    for (let index = 0; index < ele.router.length; index++) {
+      const obj = ele.router[index]
+       const path = obj.component
+       const renamePath = path.replace(/\//g, '\\')
+       // 路径转绝对路径
+       let absolutePath = renamePath.replace('@', rootPath)
+       // 打标记
+       setmark(absolutePath, ele.name)
+       // 递归打上子集所有
+       setNodeMark(nodes, ele.name, absolutePath)
+       // 建分类包
+       setFolder(rootPath, ele.name)
+       // 对打上标记的文件进行分类写入
+       markWriteFile(nodes, ele.name, absolutePath, rootPath)
+    }
+  }
+  // routers.forEach((ele) => {
+  //   // 这里循环打标记的路由
+  //   ele.router.forEach((obj: { component: any }) => {
+  //     const path = obj.component
+  //     const renamePath = path.replace(/\//g, '\\')
+  //     // 路径转绝对路径
+  //     let absolutePath = renamePath.replace('@', rootPath)
+  //     // 打标记
+  //     setmark(absolutePath, ele.name)
+  //     // 递归打上子集所有
+  //     setNodeMark(nodes, ele.name, absolutePath)
+  //     // 建分类包
+  //     setFolder(rootPath, ele.name)
+  //     // 对打上标记的文件进行分类写入
+  //     markWriteFile(nodes, ele.name, absolutePath, rootPath)
+  //   })
+  // })
 }
 
 /**

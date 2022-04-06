@@ -1,5 +1,5 @@
-
-<template>
+//2工程
+e>
   <div class="top">缩放比例:{{ state.scale }}</div>
   <div class="wrapper">
     <SketchRule
@@ -197,3 +197,11 @@ body * {
 }
 </style>
 
+//1工程
+//1工程
+//1工程
+//1工程
+//1工程
+//1工程
+//1工程
+//1工程

@@ -13,14 +13,23 @@ debug.enabled = true
  */
 export function changePath(nodes: Array<ItemType>, rootPath: string) {
   function getNode(nodes: Array<ItemType>) {
-    nodes.forEach((ele) => {
-      if (ele.children) {
-        getNode(ele.children)
-      } else {
-        // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        witeFile(rootPath, ele, true)
-      }
-    })
+    for (let index = 0; index < nodes.length; index++) {
+      const ele = nodes[index]
+        if (ele.children) {
+          getNode(ele.children)
+        } else {
+          // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
+          witeFile(rootPath, ele, true)
+        }
+    }
+    // nodes.forEach((ele) => {
+    //   if (ele.children) {
+    //     getNode(ele.children)
+    //   } else {
+    //     // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
+    //     witeFile(rootPath, ele, true)
+    //   }
+    // })
   }
   getNode(nodes)
 }
@@ -75,7 +84,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
           debug('lastName: ', lastName)
           debug('changeName: ', changeName)
           // 假如没有后缀,补上--后缀名不可能大于10
-          if (lastName.length > 10) {
+          // if (lastName.length > 10) {
             debug('待补全的文件: ', changeName)
             // 获取绝对路径
             const suffix = ['.js', '.vue', '/index.js', '/index.vue']
@@ -98,7 +107,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             }
             debug('sarr[index] 333', sarr[index])
             writeFlag = true
-          }
+          // }
         }
         // debug('sarr[index]222 ', sarr[index])
         debug('收集依赖: ', changeName, fullPath)
