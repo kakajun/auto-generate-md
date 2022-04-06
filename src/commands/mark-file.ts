@@ -34,7 +34,8 @@ export default function markFile(nodes: ItemType[], rootPath: string, routers: c
        const path = obj.component
        const renamePath = path.replace(/\//g, '\\')
        // 路径转绝对路径
-       let absolutePath = renamePath.replace('@', rootPath)
+      let absolutePath = renamePath.replace('@', rootPath)
+       debug('renamePath: ', absolutePath)
        // 打标记
        setmark(absolutePath, ele.name)
        // 递归打上子集所有
@@ -69,7 +70,7 @@ export default function markFile(nodes: ItemType[], rootPath: string, routers: c
  * @author: majun
  */
 function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
-  debug('入参: ', name, path)
+  debug('setNodeMark入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   debug('查找的node: ', node)
