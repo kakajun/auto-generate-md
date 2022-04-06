@@ -15,12 +15,12 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
   function getNode(nodes: Array<ItemType>) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
-        if (ele.children) {
-          getNode(ele.children)
-        } else {
-          // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-          witeFile(rootPath, ele, true)
-        }
+      if (ele.children) {
+        getNode(ele.children)
+      } else {
+        // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
+        witeFile(rootPath, ele, true)
+      }
     }
     // nodes.forEach((ele) => {
     //   if (ele.children) {
@@ -40,7 +40,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
  * @param {string} rootPath  根地址
  * @param {string} file  目标地址
  */
- function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
+function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
   const { fullPath, imports = [] } = node
   let fileStr = fs.readFileSync(fullPath, 'utf-8')
   let writeFlag = false // 如果啥都没改, 不更新文件
@@ -63,71 +63,65 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
         let changeName = filePath // 假定是相对路径
         // 如果有@符号的
         if (isRelative) {
+          let absolutetPath = ''
           if (filePath.indexOf('@') > -1) {
             // 这里转换绝对路径为相对路径
             let absolute = filePath.replace('@', rootPath)
-            // 下面统一路径格式,否则求位置不灵
-            let relatPath = path.relative(absolute, fullPath); // 转回相对路径
+            // 下面统一路径格式,否则求位置不灵, 注意文件本身在后面--to
+            let relatPath = path.relative(fullPath, absolute) // 转回相对路径
+            // debug('absolute, fullPath: ', absolute, fullPath)
             relatPath = relatPath.replace(/\\/g, '/')
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
+            debug('!!!!!!!!!修改@符号: ', sarr[index])
             writeFlag = true
+            // absolutetPath = path.resolve(path.dirname(), changeName)
           }
-          let absolutetPath = path.resolve(path.dirname(fullPath), changeName)
-          // debug('absolutetPath: ', absolutetPath)
-          changeName = absolutetPath
-          const lastName = path.extname(absolutetPath)
-          // debug('lastName: ', lastName)
-          // debug('changeName: ', changeName)
+          absolutetPath = path.resolve(fullPath, changeName)
+          const lastName = path.extname(changeName)
           // 假如没有后缀,补上
           if (!lastName) {
-            debug('待补全的文件: ', changeName)
+            debug('!!!!!!!!!!!!!!缺后缀文件: ', changeName)
             // 获取绝对路径
             const suffix = ['.js', '.vue', '/index.js', '/index.vue']
             for (let j = 0; j < suffix.length; j++) {
               const fixStr = suffix[j]
+              console.log('absolutetPath + fixStr', absolutetPath + fixStr)
               if (fs.existsSync(absolutetPath + fixStr)) {
                 // 把改好的替换回去
                 debug('补全的文件: ', absolutetPath + fixStr)
-                changeName = absolutetPath + fixStr
+                absolutetPath = absolutetPath + fixStr
                 // 写进去
-                let relat = ele.match(reg)
-                if (relat && relat[1]) {
-                  let p = relat[1]
-                  // debug('relat[1]: ', relat[1], ele)
-                  // 重新把相对路径写进代码去
-                  // 所有要赋值前都做一个转换
-                  p = p.replace(/\\/g, '/')
-                  sarr[index] = sarr[index].replace(p, p + fixStr)
-                  debug('相对路径修改: ', sarr[index])
-                }
+                // 所有要赋值前都做一个转换
+                sarr[index] = sarr[index].replace(/\\/g, '/')
+                debug('相对路径修改前: ', sarr[index])
+                sarr[index] = sarr[index].replace(changeName, changeName + fixStr)
+                console.log('p + fixStr', changeName + fixStr)
+                debug('相对路径修改: ', sarr[index])
+                writeFlag = true
                 break
               }
             }
-            debug('sarr[index] 333', sarr[index])
-            writeFlag = true
           }
         }
-        // debug('sarr[index]222 ', sarr[index])
         debug('收集依赖: ', changeName, fullPath)
         // 所有要赋值前都做一个转换
         let changeNameP = changeName.replace(/\//g, '\\')
         imports.push(changeNameP)
-        // 相对路径改绝对路径没有应用场景, 这里只是做测试
-        // else {
-        //   if (filePath.indexOf('@') === -1 && (filePath.indexOf('./') > -1 || filePath.indexOf('../') > -1)) {
-        //     let absolutetPath = relativeToabsolute(filePath, fullPath)
-        //     debug(absolutetPath)
-        //     // 把改好的替换回去
-        //     sarr[index] = absolutetPath
-        //     // writeFlag = true
-        //   }
-        // }
       }
+      // 相对路径改绝对路径没有应用场景, 这里只是做测试
+      // else {
+      //   if (filePath.indexOf('@') === -1 && (filePath.indexOf('./') > -1 || filePath.indexOf('../') > -1)) {
+      //     let absolutetPath = relativeToabsolute(filePath, fullPath)
+      //     debug(absolutetPath)
+      //     // 把改好的替换回去
+      //     sarr[index] = absolutetPath
+      //     // writeFlag = true
+      //   }
+      // }
     }
   }
-
   if (writeFlag) {
     fileStr = sarr.join('\n')
     // 异步写入数据到文件
