@@ -67,9 +67,8 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             // 这里转换绝对路径为相对路径
             let absolute = filePath.replace('@', rootPath)
             // 下面统一路径格式,否则求位置不灵
-            absolute = absolute.replace(/\\/g, '/')
-            const fullpathNew = fullPath.replace(/\\/g, '/')
-            let relatPath = path.relative(absolute, fullpathNew) // 转回相对路径
+            let relatPath = path.relative(absolute, fullPath); // 转回相对路径
+            relatPath = relatPath.replace(/\\/g, '/')
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
