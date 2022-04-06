@@ -60,32 +60,29 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
         // 依赖的具体名字
         let filePath = impStr[1]
         // 准备修改的名字
-        let changeName = filePath
+        let changeName = filePath // 假定是相对路径
         // 如果有@符号的
         if (isRelative) {
           if (filePath.indexOf('@') > -1) {
-            // debug(filePath)
+            // 这里转换绝对路径为相对路径
             let absolute = filePath.replace('@', rootPath)
             // 下面统一路径格式,否则求位置不灵
             absolute = absolute.replace(/\\/g, '/')
             const fullpathNew = fullPath.replace(/\\/g, '/')
-            let relatPath = absoluteTorelative(absolute, fullpathNew)
-            debug('路径转换: ', absolute, fullpathNew)
-            debug('relatPath: ', relatPath)
+            let relatPath = path.relative(absolute, fullpathNew)  // 转回相对路径
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
             writeFlag = true
           }
-          let absolutetPath = relativeToabsolute(changeName, fullPath)
-           debug('absolutetPath: ', absolutetPath)
+          let absolutetPath = path.resolve(path.dirname(fullPath), changeName)
+          debug('absolutetPath: ', absolutetPath)
           changeName = absolutetPath
-          const i = absolutetPath.lastIndexOf('.')
-          const lastName = absolutetPath.substring(i)
+          const lastName = path.extname(absolutetPath)
           debug('lastName: ', lastName)
           debug('changeName: ', changeName)
-          // 假如没有后缀,补上--后缀名不可能大于10
-          // if (lastName.length > 10) {
+          // 假如没有后缀,补上
+          if (!lastName) {
             debug('待补全的文件: ', changeName)
             // 获取绝对路径
             const suffix = ['.js', '.vue', '/index.js', '/index.vue']
@@ -98,17 +95,17 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
                 // 写进去
                 let relat = ele.match(reg)
                 if (relat && relat[1]) {
-                  debug('relat[1]: ', relat[1], ele)
+                  // debug('relat[1]: ', relat[1], ele)
                   // 重新把相对路径写进代码去
-                  sarr[index] = ele.replace(relat[1], relat[1] + fixStr)
-                  debug('sarr[index] 11', sarr[index])
+                  sarr[index] = sarr[index].replace(relat[1], relat[1] + fixStr)
+                  debug('相对路径修改: ', sarr[index])
                 }
                 break
               }
             }
             debug('sarr[index] 333', sarr[index])
             writeFlag = true
-          // }
+          }
         }
         // debug('sarr[index]222 ', sarr[index])
         debug('收集依赖: ', changeName, fullPath)
@@ -135,77 +132,6 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
       console.log('Write successful-------' + fullPath)
     })
   }
-}
-
-/**
- * @desc: 绝对路径转相对路径
- * @author: majun
- * @param {*} fileAbsolute 待处理的绝对路径
- * @param {*} absolute
- */
-function absoluteTorelative(fileAbsolute: string, absolute: string) {
-  var rela = fileAbsolute.split('/')
-  rela.shift()
-  var abso = absolute.split('/')
-  abso.shift()
-
-  var num = 0
-
-  for (var i = 0; i < rela.length; i++) {
-    if (rela[i] === abso[i]) {
-      num++
-    } else {
-      break
-    }
-  }
-
-  rela.splice(0, num)
-  abso.splice(0, num)
-
-  var str = ''
-
-  for (var j = 0; j < abso.length - 1; j++) {
-    str += '../'
-  }
-
-  if (!str) {
-    str += './'
-  }
-
-  str += rela.join('/')
-
-  return str
-}
-
-/**
- * @desc: 相对路径转绝对路径
- * @author: majun
- *     let a = '../c/d/main.js'
-    let b = '/a/b/zhangjing/index.js'
- * @param {string} relative
- * @param {string} absolute
- */
-export function relativeToabsolute(relative: string, absolute: string) {
-  debug('relativeToabsolute:----relative:', relative)
-    debug('relativeToabsolute:----absolute:', absolute)
-  const reg = /\\|\//g //用 \或者 / 进行分割
-  let rela = relative.split(reg)
-  let abso = absolute.split(reg)
-  // debug(rela, 'rela')
-  // debug(abso, 'abso')
-  for (let j = 0; j < rela.length - 1; j++) {
-    if (rela[j] === '..') {
-      abso.pop()
-      abso.pop()
-      rela.shift()
-    } else if (rela[j] === '.') {
-      abso.pop()
-      rela.shift()
-      break
-    }
-  }
-  let str = abso.join('\\') + '\\' + rela.join('\\')
-  return str
 }
 
 /**
