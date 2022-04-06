@@ -43,7 +43,8 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
     const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims']
     const flag = ignore.some((item) => ele.indexOf(item) > -1)
     const reg = /import.*[\"|\'](.*)[\'|\"]/
-    if (!flag) {
+    // 这里只收集组件依赖, 插件依赖排除掉
+    if (!flag && ele.indexOf('/') > -1) {
       const impStr = ele.match(reg)
       // 没有import的不转
       if (impStr && impStr[1]) {
@@ -61,7 +62,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             const fullpathNew = fullPath.replace(/\\/g, '/')
             let relatPath = absoluteTorelative(absolute, fullpathNew)
             debug('路径转换: ', absolute, fullpathNew)
-             debug('relatPath: ', relatPath)
+            debug('relatPath: ', relatPath)
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
