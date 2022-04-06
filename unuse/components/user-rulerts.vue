@@ -1,31 +1,4 @@
-//2工程
-e>
-  <div class="top">缩放比例:{{ state.scale }}</div>
-  <div class="wrapper">
-    <SketchRule
-      :thick="state.thick"
-      :scale="state.scale"
-      :width="1380"
-      :height="780"
-      :start-x="state.startX"
-      :start-y="state.startY"
-      :shadow="shadow"
-      :corner-active="true"
-      :lines="state.lines"
-    >
-    </SketchRule>
-    <div
-      id="screens"
-      ref="screensRef"
-      @wheel="handleWheel"
-      @scroll="handleScroll"
-    >
-      <div ref="containerRef" class="screen-container">
-        <div id="canvas" :style="canvasStyle" />
-      </div>
-    </div>
-  </div>
-</template>
+
 <script lang="ts">
 // import { SketchRule } from 'vue3-sketch-ruler'
 // import 'vue3-sketch-ruler/lib/style.css'
