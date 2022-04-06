@@ -76,11 +76,11 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             writeFlag = true
           }
           let absolutetPath = path.resolve(path.dirname(fullPath), changeName)
-          debug('absolutetPath: ', absolutetPath)
+          // debug('absolutetPath: ', absolutetPath)
           changeName = absolutetPath
           const lastName = path.extname(absolutetPath)
-          debug('lastName: ', lastName)
-          debug('changeName: ', changeName)
+          // debug('lastName: ', lastName)
+          // debug('changeName: ', changeName)
           // 假如没有后缀,补上
           if (!lastName) {
             debug('待补全的文件: ', changeName)

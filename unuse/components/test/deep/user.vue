@@ -30,7 +30,7 @@ ue2.0写法 */
   </div>
 </template>
 <script>
-import { businessUserInfo, updataUserInfo, addUserInfo } from '../../../../api/user'
+import { businessUserInfo, updataUserInfo, addUserInfo } from '../../../../api/user.js'
 export default {
   components: { SketchRule },
 }

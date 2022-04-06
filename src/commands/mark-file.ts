@@ -137,9 +137,9 @@ export function findNodes(nodes: Array<ItemType>, path: string): ItemType | null
  */
 function setmark(file: string, name: string) {
   debug('给文件标记:', file, name)
-  let fileStr = fs.readFileSync(file, 'utf-8')
-  fileStr = fileStr + '//' + name + '\n'
-  fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
-    debug('mark successful-------' + file)
-  })
+  // let fileStr = fs.readFileSync(file, 'utf-8')
+  // fileStr = fileStr + '//' + name + '\n'
+  // fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
+  //   debug('mark successful-------' + file)
+  // })
 }
