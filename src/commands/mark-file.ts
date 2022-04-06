@@ -72,7 +72,7 @@ function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
   debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
-  // debug('查找的node: ', node)
+  debug('查找的node: ', node)
   if (node && node.imports) {
     // 标记归属设置
     node.belongTo.push(name)

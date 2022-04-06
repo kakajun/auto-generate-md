@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = true
+debug.enabled = false
 /**
  * @desc: 递归循环所有文件
  * @author: majun
@@ -76,14 +76,13 @@ function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
             sarr[index] = ele.replace(filePath, relatPath)
             debug('!!!!!!!!!修改@符号: ', sarr[index])
             writeFlag = true
-              absolutetPath = path.resolve(fullPath, changeName)
+            absolutetPath = path.resolve(fullPath, changeName)
           } else {
             absolutetPath = path.resolve(path.dirname(fullPath), changeName)
           }
-
-          debug('----fullPath: ', fullPath)
-          debug('----changeName: ', changeName)
-             debug('----absolutetPath: ', absolutetPath)
+          // debug('----fullPath: ', fullPath)
+          // debug('----changeName: ', changeName)
+          // debug('----absolutetPath: ', absolutetPath)
           const lastName = path.extname(changeName)
           // 假如没有后缀,补上
           if (!lastName) {
@@ -92,12 +91,10 @@ function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
             const suffix = ['.js', '.vue', '/index.js', '/index.vue']
             for (let j = 0; j < suffix.length; j++) {
               const fixStr = suffix[j]
-              console.log('absolutetPath + fixStr', absolutetPath + fixStr)
               if (fs.existsSync(absolutetPath + fixStr)) {
                 // 把改好的替换回去
                 debug('补全的文件: ', absolutetPath + fixStr)
                 absolutetPath = absolutetPath + fixStr
-                // 写进去
                 // 所有要赋值前都做一个转换
                 sarr[index] = sarr[index].replace(/\\/g, '/')
                 debug('相对路径修改前: ', sarr[index])
@@ -109,11 +106,11 @@ function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
               }
             }
           }
+          debug('收集依赖: ', changeName, fullPath)
+          // 所有要赋值前都做一个转换
+          let changeNameP = absolutetPath.replace(/\//g, '\\')
+          imports.push(changeNameP)
         }
-        debug('收集依赖: ', changeName, fullPath)
-        // 所有要赋值前都做一个转换
-        let changeNameP = changeName.replace(/\//g, '\\')
-        imports.push(changeNameP)
       }
       // 相对路径改绝对路径没有应用场景, 这里只是做测试
       // else {
