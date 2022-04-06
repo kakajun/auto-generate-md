@@ -40,7 +40,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
     // 注释的不转,其他公共也不转
-    const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims']
+    const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
     const flag = ignore.some((item) => ele.indexOf(item) > -1)
     const reg = /import.*[\"|\'](.*)[\'|\"]/
     // 这里只收集组件依赖, 插件依赖排除掉
