@@ -1,4 +1,4 @@
-/* App主入口 */
+
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
@@ -25,7 +25,3 @@ import UserRuler from './components/user-rulerts.vue'
   text-align: center;
 }
 </style>
-//1工程
-��程
-//1工程
-//1工程

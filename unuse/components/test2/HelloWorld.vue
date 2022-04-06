@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import user from '../test/deep/user.vue';
 export default {
   name: 'HelloWorld',
   props: {
@@ -58,3 +59,4 @@ a {
 </style>
 //1工程
 //1工程
+//2工程

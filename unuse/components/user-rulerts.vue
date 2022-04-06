@@ -1,4 +1,4 @@
-/* 这是ts写法 */
+
 <template>
   <div class="top">缩放比例:{{ state.scale }}</div>
   <div class="wrapper">
@@ -196,4 +196,4 @@ body * {
   transform-origin: 50% 0;
 }
 </style>
-//1工程
+
