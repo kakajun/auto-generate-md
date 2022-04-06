@@ -4,7 +4,7 @@ import { ItemType } from './get-file'
 import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
-debug.enabled = false
+debug.enabled = true
 //1. 整理要分类的路由,搞个数组对象分类
 // const classifiedRouting = [
 //   {
@@ -118,7 +118,7 @@ export function findNodes(nodes: Array<ItemType>, path: string): ItemType | null
  * @param {string} name
  */
 function setmark(file: string, name: string) {
-  debug(file, name)
+  debug('给文件标记:', file, name)
   let fileStr = fs.readFileSync(file, 'utf-8')
   fileStr = fileStr + '//' + name + '\n'
   fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {

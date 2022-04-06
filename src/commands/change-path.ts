@@ -22,7 +22,6 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
       }
     })
   }
-
   getNode(nodes)
 }
 
@@ -101,7 +100,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
           }
         }
         // debug('sarr[index]222 ', sarr[index])
-        // debug('后缀补齐文件: ', changeName)
+        debug('收集依赖: ', changeName, fullPath)
         imports.push(changeName)
         // 相对路径改绝对路径没有应用场景, 这里只是做测试
         // else {
