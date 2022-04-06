@@ -69,7 +69,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
             // 下面统一路径格式,否则求位置不灵
             absolute = absolute.replace(/\\/g, '/')
             const fullpathNew = fullPath.replace(/\\/g, '/')
-            let relatPath = path.relative(absolute, fullpathNew)  // 转回相对路径
+            let relatPath = path.relative(absolute, fullpathNew) // 转回相对路径
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
@@ -95,9 +95,12 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
                 // 写进去
                 let relat = ele.match(reg)
                 if (relat && relat[1]) {
+                  let p = relat[1]
                   // debug('relat[1]: ', relat[1], ele)
                   // 重新把相对路径写进代码去
-                  sarr[index] = sarr[index].replace(relat[1], relat[1] + fixStr)
+                  // 所有要赋值前都做一个转换
+                  p = p.replace(/\\/g, '/')
+                  sarr[index] = sarr[index].replace(p, p + fixStr)
                   debug('相对路径修改: ', sarr[index])
                 }
                 break
@@ -109,7 +112,9 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
         }
         // debug('sarr[index]222 ', sarr[index])
         debug('收集依赖: ', changeName, fullPath)
-        imports.push(changeName)
+        // 所有要赋值前都做一个转换
+        let changeNameP = changeName.replace(/\//g, '\\')
+        imports.push(changeNameP)
         // 相对路径改绝对路径没有应用场景, 这里只是做测试
         // else {
         //   if (filePath.indexOf('@') === -1 && (filePath.indexOf('./') > -1 || filePath.indexOf('../') > -1)) {
