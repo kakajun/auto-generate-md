@@ -5,20 +5,6 @@ import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
 debug.enabled = true
-//1. 整理要分类的路由,搞个数组对象分类
-// const classifiedRouting = [
-//   {
-//     name: '1工程',
-//     router: [
-//       {
-//         path: '/about',
-//         name: 'about',
-//         // 路由必须都是绝对路径
-//         component: '@/App.vue'
-//       }
-//     ]
-//   }
-// ]
 type classifyType  = [
   {
     name: string
