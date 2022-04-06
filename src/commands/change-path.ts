@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = false
+debug.enabled = true
 /**
  * @desc: 递归循环所有文件
  * @author: majun
@@ -32,7 +32,7 @@ export function changePath(nodes: Array<ItemType>, rootPath: string) {
  * @param {string} rootPath  根地址
  * @param {string} file  目标地址
  */
-async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
+ function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
   const { fullPath, imports = [] } = node
   let fileStr = fs.readFileSync(fullPath, 'utf-8')
   let writeFlag = false // 如果啥都没改, 不更新文件
@@ -52,13 +52,17 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
         let filePath = impStr[1]
         // 准备修改的名字
         let changeName = filePath
-        // 如果有@符号的, 并且忽略文件的
+        // 如果有@符号的
         if (isRelative) {
           if (filePath.indexOf('@') > -1) {
             // debug(filePath)
             let absolute = filePath.replace('@', rootPath)
-            let relatPath = absoluteTorelative(absolute, rootPath)
-            // debug(relatPath)
+            // 下面统一路径格式,否则求位置不灵
+            absolute = absolute.replace(/\\/g, '/')
+            const fullpathNew = fullPath.replace(/\\/g, '/')
+            let relatPath = absoluteTorelative(absolute, fullpathNew)
+            debug('路径转换: ', absolute, fullpathNew)
+             debug('relatPath: ', relatPath)
             // 把改好的替换回去
             changeName = relatPath
             sarr[index] = ele.replace(filePath, relatPath)
@@ -77,7 +81,7 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
             const suffix = ['.js', '.vue', '/index.js', '/index.vue']
             for (let j = 0; j < suffix.length; j++) {
               const fixStr = suffix[j]
-              if (await fs.existsSync(absolutetPath + fixStr)) {
+              if (fs.existsSync(absolutetPath + fixStr)) {
                 // 把改好的替换回去
                 debug('补全的文件: ', absolutetPath + fixStr)
                 changeName = absolutetPath + fixStr
@@ -130,29 +134,36 @@ async function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) 
  * @param {*} absolute
  */
 function absoluteTorelative(fileAbsolute: string, absolute: string) {
-  let rela = fileAbsolute.split('/')
+  var rela = fileAbsolute.split('/')
   rela.shift()
-  let abso = absolute.split('/')
-  //  debug(abso, '6')
+  var abso = absolute.split('/')
   abso.shift()
-  let num = 0
-  for (let i = 0; i < rela.length; i++) {
+
+  var num = 0
+
+  for (var i = 0; i < rela.length; i++) {
     if (rela[i] === abso[i]) {
       num++
     } else {
       break
     }
   }
+
   rela.splice(0, num)
   abso.splice(0, num)
-  let str = ''
-  for (let j = 0; j < abso.length - 1; j++) {
+
+  var str = ''
+
+  for (var j = 0; j < abso.length - 1; j++) {
     str += '../'
   }
+
   if (!str) {
     str += './'
   }
+
   str += rela.join('/')
+
   return str
 }
 
