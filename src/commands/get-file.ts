@@ -90,6 +90,7 @@ export function getFileNodes(
     'dist',
     '.husky',
     '.vscode',
+    '.eslintrc.js',
     'readme-file.js',
     'readme-md.js'
   ]
