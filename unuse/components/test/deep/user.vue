@@ -30,85 +30,9 @@ ue2.0写法 */
   </div>
 </template>
 <script>
-const rectWidth = 200
-const rectHeight = 200
+import { businessUserInfo, updataUserInfo, addUserInfo } from '../../../../api/user'
 export default {
   components: { SketchRule },
-  data() {
-    return {
-      scale: 2, //658813476562495, //1,
-      startX: 0,
-      startY: 0,
-      lines: {
-        h: [100, 200],
-        v: [100, 200]
-      },
-      thick: 20,
-      isShowRuler: true, // 显示标尺
-      isShowReferLine: true // 显示参考线
-    }
-  },
-  computed: {
-    shadow() {
-      return {
-        x: 0,
-        y: 0,
-        width: rectWidth,
-        height: rectHeight
-      }
-    },
-    canvasStyle() {
-      return {
-        width: rectWidth,
-        height: rectHeight,
-        transform: `scale(${this.scale})`
-      }
-    }
-  },
-  mounted() {
-    // console.log(SketchRule, "666666");
-    // 滚动居中
-    this.$refs.screensRef.scrollLeft =
-      this.$refs.containerRef.getBoundingClientRect().width / 2 - 300 // 300 = #screens.width / 2
-  },
-  methods: {
-    handleLine(lines) {
-      this.lines = lines
-    },
-    handleCornerClick() {
-      return
-    },
-    handleScroll() {
-      const screensRect = document
-        .querySelector('#screens')
-        .getBoundingClientRect()
-      const canvasRect = document
-        .querySelector('#canvas')
-        .getBoundingClientRect()
-
-      // 标尺开始的刻度
-      const startX =
-        (screensRect.left + this.thick - canvasRect.left) / this.scale
-      const startY =
-        (screensRect.top + this.thick - canvasRect.top) / this.scale
-
-      this.startX = startX
-      this.startY = startY
-    },
-    // 控制缩放值
-    handleWheel(e) {
-      if (e.ctrlKey || e.metaKey) {
-        e.preventDefault()
-        const nextScale = parseFloat(
-          Math.max(0.2, this.scale - e.deltaY / 500).toFixed(2)
-        )
-        this.scale = nextScale
-      }
-      this.$nextTick(() => {
-        this.handleScroll()
-      })
-    }
-  }
 }
 </script>
 <style lang="scss">
