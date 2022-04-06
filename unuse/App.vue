@@ -1,6 +1,6 @@
  <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import UserRuler from '@/unuse/components/user-rulerts'
+import UserRuler from './components/user-rulerts'
 </script>
 
 <template>
