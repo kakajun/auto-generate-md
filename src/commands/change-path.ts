@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = false
+debug.enabled = true
 /**
  * @desc: 递归循环所有文件
  * @author: majun
@@ -76,9 +76,14 @@ function witeFile(rootPath: string, node: ItemType, isRelative?: Boolean) {
             sarr[index] = ele.replace(filePath, relatPath)
             debug('!!!!!!!!!修改@符号: ', sarr[index])
             writeFlag = true
-            // absolutetPath = path.resolve(path.dirname(), changeName)
+              absolutetPath = path.resolve(fullPath, changeName)
+          } else {
+            absolutetPath = path.resolve(path.dirname(fullPath), changeName)
           }
-          absolutetPath = path.resolve(fullPath, changeName)
+
+          debug('----fullPath: ', fullPath)
+          debug('----changeName: ', changeName)
+             debug('----absolutetPath: ', absolutetPath)
           const lastName = path.extname(changeName)
           // 假如没有后缀,补上
           if (!lastName) {
