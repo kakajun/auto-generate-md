@@ -55,7 +55,7 @@ function setDispFileNew(pathN: string, name: string) {
    const writeFileName = path.resolve() + '\\' + name + relative
   //  debug('originPath: ', originPath)
    try {
-     fs.copy(originPath, writeFileName)
+     fs.copySync(originPath, writeFileName)
         debug('写入文件success! : ', writeFileName)
    } catch (err) {
      console.error(err)
