@@ -4,7 +4,7 @@ module.exports = [
     router: [
       {
         path: '/spc/list',
-        component: '@/unuse/App',
+        component: '@/unuse/App.vue',
       }
     ]
   }

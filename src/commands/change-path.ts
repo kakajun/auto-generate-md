@@ -87,7 +87,8 @@ export function changeImport(ele: string, fullPath: string) {
   debug('changeImport入参: ',  fullPath)
   let obj = {
     impName: '',
-    filePath: ''
+    filePath: '',
+    absoluteImport:''
   }
   // 注释的不转,其他公共也不转
   const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
@@ -102,10 +103,10 @@ export function changeImport(ele: string, fullPath: string) {
       obj.filePath = impStr[1]
       // debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
-      const absoluteImport = makeSuffix(obj.filePath, fullPath)
-      console.log('补过后', absoluteImport)
+     obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
+      console.log('补过后', obj.absoluteImport)
       // 后改相对路径
-      obj.impName = getRelatPath(absoluteImport, fullPath)
+      obj.impName = getRelatPath(obj.absoluteImport, fullPath)
     }
   }
   return obj
@@ -133,8 +134,7 @@ export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean>
             writeFlag = true
             debug('收集依赖: ', obj.impName, fullPath)
             // 所有要赋值前都做一个转换
-            let changeNameP = path.resolve(fullPath, obj.impName)
-            changeNameP = changeNameP.replace(/\//g, '\\')
+            let changeNameP = obj.absoluteImport
             imports.push(changeNameP)
           }
         }
