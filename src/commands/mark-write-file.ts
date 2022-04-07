@@ -54,7 +54,8 @@ async function setDispFileNew(pathN: string, name: string) {
    const originPath = pathN
    const writeFileName = path.resolve() + '\\' + name + relative
   //  debug('originPath: ', originPath)
-   try {
+  try {
+    if (fs.existsSync(writeFileName)) return  // 如果文件都存在那算了
     await fs.copy(originPath, writeFileName)
         debug('写入文件success! : ', writeFileName)
    } catch (err) {
