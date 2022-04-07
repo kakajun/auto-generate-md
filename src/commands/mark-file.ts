@@ -6,7 +6,8 @@ import createDebugger from 'debug'
 import path from 'path';
 const debug = createDebugger('mark-file')
 debug.enabled = true
-type classifyType  = [
+
+type classifyType = [
   {
     name: string
     router: [
@@ -26,25 +27,27 @@ type classifyType  = [
  * @param {string} rootPath
  */
 export default async function markFile(nodes: ItemType[], routers: classifyType) {
-  // console.log(routers)
+  console.log(routers)
   // 外层循环要分类的路由
   for (let index = 0; index < routers.length; index++) {
     const ele = routers[index]
-    for (let index = 0; index < ele.router.length; index++) {
-      const obj = ele.router[index]
-       const pathN = obj.component
-       const renamePath = pathN.replace(/\//g, '\\')
-       // 路径转绝对路径
+    debug(ele.router, ele.router.length, '+++++++++++++++++++++++++++++++---pathN')
+    for (let j = 0; j < ele.router.length; j++) {
+      const obj = ele.router[j]
+      const pathN = obj.component
+      debug(pathN, ele.router.length, '-------------------------------------------------------pathN')
+      const renamePath = pathN.replace(/\//g, '\\')
+      // 路径转绝对路径
       let absolutePath = renamePath.replace('@', path.resolve())
-       debug('renamePath: ', absolutePath)
-       // 打标记
-       setmark(absolutePath, ele.name)
-       // 递归打上子集所有
+      debug('renamePath: ', absolutePath)
+      // 打标记
+      setmark(absolutePath, ele.name)
+      // 递归打上子集所有
       await setNodeMark(nodes, ele.name, absolutePath)
-       // 建分类包
-       setFolder( ele.name)
-       // 对打上标记的文件进行分类写入
-       markWriteFile(nodes, ele.name, absolutePath)
+      // 建分类包
+      setFolder(ele.name)
+      // 对打上标记的文件进行分类写入
+      await markWriteFile(nodes, ele.name, absolutePath)
     }
   }
   // routers.forEach((ele) => {
