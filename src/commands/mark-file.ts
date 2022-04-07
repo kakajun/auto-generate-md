@@ -77,7 +77,8 @@ async function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
   debug('查找的node: ', node)
   if (node && node.imports) {
     // 标记归属设置
-    node.belongTo.push(name)
+    if (node.belongTo.indexOf(name)>-1) return  // 已经分析过该文件了, 就不再分析,否则会死循环
+      node.belongTo.push(name)
     // 找到有子文件了,循环它
     for (let index = 0; index < node.imports.length; index++) {
       const element = node.imports[index]
