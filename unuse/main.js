@@ -2,7 +2,7 @@
 import { createApp } from 'vue'
 // import '../lib/style.css'
 import SketchRule from "./components/test2/HelloWorld.vue";
-import moduleName from '../api/aa.js';
+// import moduleName from '../api/aa.js';
 const app = createApp(App)
 // app.use(SketchRule);
 import './mixins.js'
