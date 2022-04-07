@@ -25,7 +25,7 @@ type classifyType  = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export default function markFile(nodes: ItemType[], routers: classifyType) {
+export default async function markFile(nodes: ItemType[], routers: classifyType) {
   // console.log(routers)
   // 外层循环要分类的路由
   for (let index = 0; index < routers.length; index++) {
@@ -40,7 +40,7 @@ export default function markFile(nodes: ItemType[], routers: classifyType) {
        // 打标记
        setmark(absolutePath, ele.name)
        // 递归打上子集所有
-       setNodeMark(nodes, ele.name, absolutePath)
+      await setNodeMark(nodes, ele.name, absolutePath)
        // 建分类包
        setFolder( ele.name)
        // 对打上标记的文件进行分类写入
@@ -70,7 +70,7 @@ export default function markFile(nodes: ItemType[], routers: classifyType) {
  * @desc: 分离一个递归调用的mark函数
  * @author: majun
  */
-function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
+async function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
   debug('setNodeMark入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
@@ -85,7 +85,7 @@ function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
       // 如果文件存在
       if (fs.existsSync(path)) {
         // 打标记
-        setmark(element, name)
+       await  setmark(element, name)
         // 继续递归,直到子文件没有子文件
         setNodeMark(nodes, name, element)
       } else {
@@ -125,9 +125,18 @@ export function findNodes(nodes: Array<ItemType>, path: string): ItemType | null
  */
 function setmark(file: string, name: string) {
   debug('给文件标记:', file, name)
-  // let fileStr = fs.readFileSync(file, 'utf-8')
-  // fileStr = fileStr + '//' + name + '\n'
-  // fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
-  //   debug('mark successful-------' + file)
-  // })
+  return new Promise<boolean>((resolve, reject) => {
+    try {
+      let fileStr = fs.readFileSync(file, 'utf-8')
+      // 直接打上标记
+      fileStr = fileStr + '//' + name + '\n'
+      fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
+        debug('mark successful-------' + file)
+        resolve(true)
+      })
+    } catch (error) {
+      console.error('给文件打标记的文件不存在: ', file)
+      reject(false)
+    }
+  })
 }

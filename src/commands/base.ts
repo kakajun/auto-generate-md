@@ -35,11 +35,11 @@ async function changePathAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {Array} nodes
  */
-function markFileAction(nodes: Array<ItemType>) {
+async function markFileAction(nodes: Array<ItemType>) {
   let pathName = path.resolve() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
-    markFile(nodes, routers)
+  await  markFile(nodes, routers)
   } else {
     console.log('退出')
     process.exit(1)
@@ -66,7 +66,7 @@ await  changePathAction(nodes)
 export async function generateAllAction(nodes: Array<ItemType>, md: string) {
   getMdAction(md)
  await changePathAction(nodes)
-  markFileAction(nodes)
+ await markFileAction(nodes)
   wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
 }
 

@@ -62,7 +62,7 @@ export type ItemType = {
   fullPath: string
   belongTo: Array<string> // 标记归属设置 分类用
   imports: Array<string> // 依赖收集
-  children?: ItemType[]
+  children?: Array<ItemType>
 }
 
 /**
@@ -159,16 +159,6 @@ export function getFileNodes(
  */
 export function getNote(datas: Array<ItemType>, keys?: string[]) {
   const nodes = keys || []
-  // for (let index = 0; index < datas.length; index++) {
-  //   const obj = datas[index]
-  //     const last = index === datas.length - 1
-  //     if (obj.children) {
-  //       //fold
-  //       getNote(obj.children, nodes)
-  //     }
-  //     const md = setMd(obj, last)
-  //     nodes.push(md)
-  // }
   datas.forEach((obj: ItemType, index: Number) => {
     const last = index === datas.length - 1
     if (obj.children) {
