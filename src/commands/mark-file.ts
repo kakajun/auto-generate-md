@@ -87,7 +87,7 @@ async function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
         // 打标记
        await  setmark(element, name)
         // 继续递归,直到子文件没有子文件
-        setNodeMark(nodes, name, element)
+       await setNodeMark(nodes, name, element)
       } else {
         console.error('文件不存在', path)
       }
