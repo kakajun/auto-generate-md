@@ -4,7 +4,7 @@ module.exports = [
     router: [
       {
         path: '/spc/list',
-        component: '@/App',
+        component: '@/App.vue',
         name: 'spc-list',
         meta: {
           title: 'SPC分析管理',

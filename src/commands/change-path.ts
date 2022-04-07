@@ -92,22 +92,20 @@ export function changeImport(ele: string, fullPath: string) {
 
   // 注释的不转,其他公共也不转
   const ignore = [
-    '@xiwicloud/components',
-    '@xiwicloud/lims',
-    '@handsontable/vue',
+    'xiwicloud',
     'bpmn-js',
     'element-ui',
     'lodash',
     'handsontable',
-    'vue',
     'nprogress',
     'quill'
   ]
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
-  const reg = /import .*[\"|\'](.*)[\'|\"]/
-       if (fullPath == '**') {
-         debug(!flag, ele.indexOf('/') > -1)
-       }
+  const reg = /import.*[\"|\'](.*)[\'|\"]/
+      //  if (fullPath == 'D:\\gitwork\\auto-generate-md\\unuse\\App.vue') {
+      //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
+      //      debug(ele.match(reg), '11111111111111')
+      //  }
   // 这里只收集组件依赖, 插件依赖排除掉
   if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !== 0) {
     debug('changeImport入参: ', fullPath)
