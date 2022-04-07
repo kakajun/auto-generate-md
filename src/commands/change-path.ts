@@ -18,7 +18,7 @@ export function changePath(nodes: Array<ItemType>) {
         getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        witeFile( ele, true)
+        // witeFile(ele, true)
       }
     }
     // nodes.forEach((ele) => {
@@ -38,7 +38,7 @@ export function changePath(nodes: Array<ItemType>) {
  * @param {string} absoluteImport  依赖本身名字
  * @param {string} fullPath  文件本身绝对地址
  */
-export function getRelatPath(absoluteImport: string,fullPath: string) {
+export function getRelatPath(absoluteImport: string, fullPath: string) {
   let relatPath = path.relative(path.dirname(fullPath), absoluteImport) // 转回相对路径
   relatPath = relatPath.replace(/\\/g, '/')
   if (relatPath.indexOf('.') !== 0) {
@@ -54,11 +54,11 @@ export function getRelatPath(absoluteImport: string,fullPath: string) {
  * @param {string} fullPath  本身文件名路径
  * @param {string} impName   正确的名字
  */
-export function makeSuffix(filePath: string,fullPath:string) {
+export function makeSuffix(filePath: string, fullPath: string) {
   let absoluteImport = ''
   // 如果有@符号的
   if (filePath.indexOf('@') > -1) {
-        debug('!!!!!!!!!filePath: ', filePath)
+    debug('!!!!!!!!!filePath: ', filePath)
     absoluteImport = filePath.replace('@', path.resolve('./'))
   } else {
     absoluteImport = path.resolve(path.dirname(fullPath), filePath)
@@ -92,10 +92,10 @@ export function makeSuffix(filePath: string,fullPath:string) {
  * @param {string} fullPath  文件的全路径
  */
 export function changeImport(ele: string, fullPath: string) {
-   debug('changeImport入参: ', ele, fullPath)
+  debug('changeImport入参: ', ele, fullPath)
   let obj = {
     impName: '',
-    filePath:''
+    filePath: ''
   }
   // 注释的不转,其他公共也不转
   const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
@@ -108,9 +108,9 @@ export function changeImport(ele: string, fullPath: string) {
     if (impStr && impStr[1]) {
       // 依赖的具体名字
       obj.filePath = impStr[1]
-        // debug('!!!!!!!!!匹配imp: ', impStr[1])
+      // debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
-      const  absoluteImport = makeSuffix(obj.filePath, fullPath)
+      const absoluteImport = makeSuffix(obj.filePath, fullPath)
       console.log('补过后', absoluteImport)
       // 后改相对路径
       obj.impName = getRelatPath(absoluteImport, fullPath)
@@ -118,23 +118,24 @@ export function changeImport(ele: string, fullPath: string) {
   }
   return obj
 }
-  /**
+/**
    * @desc:  写文件
    * @author: majun
 
    * @param {string} file  目标地址
    */
-  export function witeFile( node: ItemType, isRelative?: Boolean) {
-    const { fullPath, imports = [] } = node
-    let fileStr = fs.readFileSync(fullPath, 'utf-8')
-    let writeFlag = false // 如果啥都没改, 不更新文件
-    // fileStr = '// 我加注释 \n' + fileStr
-    const sarr = fileStr.split(/[\n]/g)
-    for (let index = 0; index < sarr.length; index++) {
-      const ele = sarr[index]
-      if (ele.indexOf('import')>-1&& isRelative) {
-        const obj = changeImport(ele, fullPath)
-        if (obj.impName) {
+export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean> {
+  const { fullPath, imports = [] } = node
+  const p = new Promise<boolean>((resolve, reject) => {
+    try {
+      let writeFlag = false // 如果啥都没改, 不更新文件
+      let fileStr = fs.readFileSync(fullPath, 'utf-8')
+      const sarr = fileStr.split(/[\n]/g)
+      for (let index = 0; index < sarr.length; index++) {
+        const ele = sarr[index]
+        if (ele.indexOf('import') > -1 && isRelative) {
+          const obj = changeImport(ele, fullPath)
+          if (obj.impName) {
             sarr[index] = ele.replace(obj.filePath, obj.impName)
             debug('!!!!!!!!!修改@符号: ', sarr[index])
             writeFlag = true
@@ -142,17 +143,25 @@ export function changeImport(ele: string, fullPath: string) {
             // 所有要赋值前都做一个转换
             let changeNameP = obj.impName.replace(/\//g, '\\')
             imports.push(changeNameP)
+          }
         }
       }
+      if (writeFlag) {
+        fileStr = sarr.join('\n')
+        // 异步写入数据到文件
+        fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
+          console.log('Write successful-------' + fullPath)
+          resolve(true)
+        })
+      } else {
+          resolve(true)
+      }
+    } catch (error) {
+      reject(false)
+      console.error('读取文件失败,文件名: ', fullPath)
     }
-
-  if (writeFlag) {
-    fileStr = sarr.join('\n')
-    // 异步写入数据到文件
-    fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
-      console.log('Write successful-------' + fullPath)
-    })
-  }
+  })
+  return p
 }
 
 /**
