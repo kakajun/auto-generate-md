@@ -15,10 +15,10 @@ export async function changePath(nodes: Array<ItemType>) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
       if (ele.children) {
-        getNode(ele.children)
+       await getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-      await  witeFile(ele, true)
+        await  witeFile(ele, true)
       }
     }
   }
@@ -130,12 +130,12 @@ export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean>
           const obj = changeImport(ele, fullPath)
           if (obj.impName) {
             sarr[index] = ele.replace(obj.filePath, obj.impName)
-            debug('!!!!!!!!!修改@符号: ', sarr[index])
-            writeFlag = true
+            // debug('!!!!!!!!!修改@符号: ', sarr[index])
             debug('收集依赖: ', obj.impName, fullPath)
-            // 所有要赋值前都做一个转换
-            let changeNameP = obj.absoluteImport
-            imports.push(changeNameP)
+             debug('依赖绝对路径: ', obj.absoluteImport)
+            imports.push(obj.absoluteImport)
+              debug('node: ', node)
+             writeFlag = true
           }
         }
       }
