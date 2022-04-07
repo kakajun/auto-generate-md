@@ -27,7 +27,7 @@ export function getFile(file: string) {
 }
 
 /**
- * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵  
+ * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵
  * @author: majun
  * @param {any} sarr
  * @param {string} file
@@ -159,25 +159,25 @@ export function getFileNodes(
  */
 export function getNote(datas: Array<ItemType>, keys?: string[]) {
   const nodes = keys || []
-  for (let index = 0; index < datas.length; index++) {
-    const obj = datas[index]
-      const last = index === datas.length - 1
-      if (obj.children) {
-        //fold
-        getNote(obj.children, nodes)
-      }
-      const md = setMd(obj, last)
-      nodes.push(md)
-  }
-  // datas.forEach((obj: ItemType, index: Number) => {
-  //   const last = index === datas.length - 1
-  //   if (obj.children) {
-  //     //fold
-  //     getNote(obj.children, nodes)
-  //   }
-  //   const md = setMd(obj, last)
-  //   nodes.push(md)
-  // })
+  // for (let index = 0; index < datas.length; index++) {
+  //   const obj = datas[index]
+  //     const last = index === datas.length - 1
+  //     if (obj.children) {
+  //       //fold
+  //       getNote(obj.children, nodes)
+  //     }
+  //     const md = setMd(obj, last)
+  //     nodes.push(md)
+  // }
+  datas.forEach((obj: ItemType, index: Number) => {
+    const last = index === datas.length - 1
+    if (obj.children) {
+      //fold
+      getNote(obj.children, nodes)
+    }
+    const md = setMd(obj, last)
+    nodes.push(md)
+  })
   return nodes
 }
 
@@ -187,7 +187,7 @@ export function getNote(datas: Array<ItemType>, keys?: string[]) {
  * @param {Boolean} last  Is it the last one  是不是最后一个
  * @return {*}
  */
-function setMd(obj: ItemType, last: Boolean): string {
+ function setMd(obj: ItemType, last: Boolean): string {
   let filesString = ''
   const blank = '│ '.repeat(obj.level) // 重复空白
   const pre = `${blank}${last ? '└──' : '├──'} ${obj.name}`
