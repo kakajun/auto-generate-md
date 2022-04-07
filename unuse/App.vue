@@ -23,3 +23,4 @@ import UserRuler from './components/user-rulerts.vue'
   text-align: center;
 }
 </style>
+//2工程

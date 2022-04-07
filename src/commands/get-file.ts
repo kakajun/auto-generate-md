@@ -80,6 +80,8 @@ export function getFileNodes(
 ): Array<ItemType> {
   //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
   let ignore = [
+    'bin',
+    'lib',
     'jest.config.js',
     'router',
     'img',
