@@ -91,7 +91,16 @@ export function changeImport(ele: string, fullPath: string) {
   }
 
   // 注释的不转,其他公共也不转
-  const ignore = ['@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
+  const ignore = [
+    '@xiwicloud/components',
+    '@xiwicloud/lims',
+    '@handsontable/vue',
+    'bpmn-js',
+    'element-ui',
+    'lodash',
+    'handsontable',
+    'vue'
+  ]
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   const reg = /import .*[\"|\'](.*)[\'|\"]/
        if (fullPath == '**') {
