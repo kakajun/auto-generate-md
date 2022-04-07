@@ -18,7 +18,7 @@ export async function changePath(nodes: Array<ItemType>) {
        await getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        await  witeFile(ele, true)
+        await witeFile(ele, true)
       }
     }
   }
@@ -89,21 +89,26 @@ export function changeImport(ele: string, fullPath: string) {
     filePath: '',
     absoluteImport:''
   }
+
   // 注释的不转,其他公共也不转
-  const ignore = ['//', '@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
+  const ignore = ['@xiwicloud/components', '@xiwicloud/lims', '@handsontable/vue']
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   const reg = /import.*[\"|\'](.*)[\'|\"]/
+       if (fullPath == '**') {
+         debug(!flag, ele.indexOf('/') > -1)
+       }
   // 这里只收集组件依赖, 插件依赖排除掉
-  if (!flag && ele.indexOf('/') > -1) {
-      debug('changeImport入参: ', fullPath)
+  if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !==0) {
+    debug('changeImport入参: ', fullPath)
     const impStr = ele.match(reg)
     // 没有import的不转
     if (impStr && impStr[1]) {
       // 依赖的具体名字
       obj.filePath = impStr[1]
-      // debug('!!!!!!!!!匹配imp: ', impStr[1])
+
+      debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
-     obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
+      obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
       console.log('补过后', obj.absoluteImport)
       // 后改相对路径
       obj.impName = getRelatPath(obj.absoluteImport, fullPath)
@@ -119,7 +124,8 @@ export function changeImport(ele: string, fullPath: string) {
    */
 export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean> {
   const { fullPath, imports = [] } = node
- return new Promise<boolean>((resolve, reject) => {
+  return new Promise<boolean>((resolve, reject) => {
+
    try {
      let writeFlag = false // 如果啥都没改, 不更新文件
      let fileStr = fs.readFileSync(fullPath, 'utf-8')
@@ -127,7 +133,11 @@ export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean>
      for (let index = 0; index < sarr.length; index++) {
        const ele = sarr[index]
        if (ele.indexOf('import') > -1 && isRelative) {
+
          const obj = changeImport(ele, fullPath)
+             if (node.name === '***') {
+              debug(obj,"bbbnnn")
+             }
          if (obj.impName) {
            sarr[index] = ele.replace(obj.filePath, obj.impName)
            // debug('!!!!!!!!!修改@符号: ', sarr[index])
