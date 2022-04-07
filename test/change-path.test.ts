@@ -22,7 +22,11 @@ test('changeImport--更改不规范path', () => {
       "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts.vue'",
       path.resolve('unuse/App.vue')
     )
-  ).toEqual({ filePath: '@/unuse/components/user-rulerts.vue', impName: './components/user-rulerts.vue' })
+  ).toEqual({
+    filePath: '@/unuse/components/user-rulerts.vue',
+    impName: './components/user-rulerts.vue',
+    absoluteImport: path.resolve() + '\\unuse\\components\\user-rulerts.vue'
+  })
 })
 
 test('witeFile--更改不规范path', (done) => {
