@@ -133,7 +133,8 @@ export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean>
             writeFlag = true
             debug('收集依赖: ', obj.impName, fullPath)
             // 所有要赋值前都做一个转换
-            let changeNameP = obj.impName.replace(/\//g, '\\')
+            let changeNameP = path.resolve(fullPath, obj.impName)
+            changeNameP = changeNameP.replace(/\//g, '\\')
             imports.push(changeNameP)
           }
         }
