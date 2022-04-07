@@ -4,33 +4,25 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = false
+debug.enabled = true
 /**
  * @desc: 递归循环所有文件
  * @author: majun
  * @param {Array} nodes      整个文件的nodes
  */
-export function changePath(nodes: Array<ItemType>) {
-  function getNode(nodes: Array<ItemType>) {
+export async function changePath(nodes: Array<ItemType>) {
+  async function getNode(nodes: Array<ItemType>) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
       if (ele.children) {
         getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        // witeFile(ele, true)
+      await  witeFile(ele, true)
       }
     }
-    // nodes.forEach((ele) => {
-    //   if (ele.children) {
-    //     getNode(ele.children)
-    //   } else {
-    //     // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-    //     witeFile(ele, true)
-    //   }
-    // })
   }
-  getNode(nodes)
+ await getNode(nodes)
 }
 /**
  * @desc: 这里返回没有@ 符号的路径
@@ -92,7 +84,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
  * @param {string} fullPath  文件的全路径
  */
 export function changeImport(ele: string, fullPath: string) {
-  debug('changeImport入参: ', ele, fullPath)
+  debug('changeImport入参: ',  fullPath)
   let obj = {
     impName: '',
     filePath: ''

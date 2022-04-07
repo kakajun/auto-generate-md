@@ -26,8 +26,8 @@ function getMdAction(md: string) {
  * @author: majun
  * @param {Array} nodes
  */
-function changePathAction(nodes: Array<ItemType>) {
-  changePath(nodes)
+async function changePathAction(nodes: Array<ItemType>) {
+ await changePath(nodes)
 }
 
 /**
@@ -51,9 +51,9 @@ function markFileAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {type} params
  */
-function wirteJsNodesAction(nodes: Array<ItemType>) {
+async function wirteJsNodesAction(nodes: Array<ItemType>) {
   // 要先改路径后缀,否则依赖收集不到
-  changePathAction(nodes)
+await  changePathAction(nodes)
   wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
 }
 
@@ -63,9 +63,9 @@ function wirteJsNodesAction(nodes: Array<ItemType>) {
  * @param {Array} nodes
  * @param {string} md
  */
-export function generateAllAction(nodes: Array<ItemType>, md: string) {
+export async function generateAllAction(nodes: Array<ItemType>, md: string) {
   getMdAction(md)
-  changePathAction(nodes)
+ await changePathAction(nodes)
   markFileAction(nodes)
   wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
 }
