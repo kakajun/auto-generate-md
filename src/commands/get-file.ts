@@ -3,13 +3,13 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('get-file')
-debug.enabled = false
+debug.enabled = true
 /**
  * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} file
  * @return {*}
  */
-function getFile(file: string) {
+export function getFile(file: string) {
   const str = fs.readFileSync(file, 'utf-8')
   const size = str.length
   const sarr = str.split(/[\n]/g)
@@ -27,7 +27,7 @@ function getFile(file: string) {
 }
 
 /**
- * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵
+ * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵  
  * @author: majun
  * @param {any} sarr
  * @param {string} file

@@ -37,7 +37,7 @@ test('witeFile--更改不规范path', (done) => {
       size: 367,
       rowSize: 12,
       suffix: '.js',
-      fullPath: 'D:\\gitwork\\auto-generate-md\\unuse\\AppTest.vue'
+      fullPath: path.resolve(__dirname,'\\unuse\\AppTest.vue')
     }
     // 1. 随机创建一个文件
     const str = `<script setup>
@@ -54,6 +54,7 @@ import UserRuler from './components/user-rulerts.vue'
       await witeFile(node, true)
       done()
       const getStr = fs.readFileSync(file, 'utf-8')
+       fs.unlinkSync(path.resolve(__dirname, '\\unuse\\AppTest.vue'))
       expect(getStr).toEqual(finalStr)
     })
   } catch (error) {
