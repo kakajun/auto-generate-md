@@ -1,7 +1,8 @@
 import path from 'path';
 import {
   getRelatPath,
-  // makeSuffix, changeImport
+  makeSuffix,
+  changeImport
 } from '../src/commands/change-path';
 test('getRelatPath--获取相对地址', () => {
   expect(
@@ -12,18 +13,17 @@ test('getRelatPath--获取相对地址', () => {
   ).toEqual('./components/user-rulerts.vue')
 })
 
-// test('makeSuffix--补全后缀和@替换', () => {
-//   expect(
-//     makeSuffix(path.resolve('@/src/commands/change-path'), '@/src/commands/change-path',
-//   )).toEqual(path.resolve('src/commands/change-path.ts'))
-// })
+test('makeSuffix--补全后缀和@替换', () => {
+  expect(
+    makeSuffix('@/src/commands/change-path', '@/src/commands/change-path',
+  )).toEqual(path.resolve('src/commands/change-path.ts'))
+})
 
-// test('changeImport--更改不规范path', () => {
-
-//   expect(
-//     changeImport(
-//       "import { getRelatPath, makeSuffix, changeImport } from '@/src/commands/change-path'",
-//       path.resolve('src/commands/change-path')
-//     )
-//   ).toEqual('src/commands/change-path.ts')
-// })
+test('changeImport--更改不规范path', () => {
+  expect(
+    changeImport(
+      "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts.vue'",
+      path.resolve('unuse/App.vue')
+    )
+  ).toEqual({ filePath: '@/unuse/components/user-rulerts.vue', impName: './components/user-rulerts.vue' })
+})

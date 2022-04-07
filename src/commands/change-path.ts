@@ -48,7 +48,7 @@ export function getRelatPath(absoluteImport: string,fullPath: string) {
 }
 
 /**
- * @desc: 补后缀的方法
+ * @desc: 补后缀的方法+替换前缀
  * @author: majun
  * @param {string} filePath  正则匹配到的依赖路径
  * @param {string} fullPath  本身文件名路径
@@ -81,7 +81,8 @@ export function makeSuffix(filePath: string,fullPath:string) {
       }
     }
   }
-  return absoluteImport
+  const nomoreImport = path.normalize(absoluteImport)
+  return nomoreImport
 }
 
 /**
@@ -91,6 +92,7 @@ export function makeSuffix(filePath: string,fullPath:string) {
  * @param {string} fullPath  文件的全路径
  */
 export function changeImport(ele: string, fullPath: string) {
+   debug('changeImport入参: ', ele, fullPath)
   let obj = {
     impName: '',
     filePath:''
@@ -106,12 +108,12 @@ export function changeImport(ele: string, fullPath: string) {
     if (impStr && impStr[1]) {
       // 依赖的具体名字
       obj.filePath = impStr[1]
-        debug('!!!!!!!!!匹配imp: ', impStr[1])
+        // debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
       const  absoluteImport = makeSuffix(obj.filePath, fullPath)
       console.log('补过后', absoluteImport)
       // 后改相对路径
-      obj.impName = getRelatPath(absoluteImport, absoluteImport)
+      obj.impName = getRelatPath(absoluteImport, fullPath)
     }
   }
   return obj
