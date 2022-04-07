@@ -36,7 +36,7 @@ function changePathAction(nodes: Array<ItemType>) {
  * @param {Array} nodes
  */
 function markFileAction(nodes: Array<ItemType>) {
-  let pathName = path.resolve('/classify.js')
+  let pathName = path.resolve() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
     markFile(nodes, routers)
