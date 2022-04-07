@@ -98,14 +98,18 @@ export function changeImport(ele: string, fullPath: string) {
          debug(!flag, ele.indexOf('/') > -1)
        }
   // 这里只收集组件依赖, 插件依赖排除掉
-  if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !==0) {
+  if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !== 0) {
     debug('changeImport入参: ', fullPath)
     const impStr = ele.match(reg)
     // 没有import的不转
     if (impStr && impStr[1]) {
+      // import NProgress from 'nprogress'
+      const reg2 = /import.*from [\"|\'](.*)[\'|\"]/
+      // 如上的匹配会被误伤,再写个正则
+      const regStr = ele.match(reg2)
+      if (regStr && impStr[1] && impStr[1].indexOf('/')===-1) return obj  // 进一步判断如果是插件,直接返回空
       // 依赖的具体名字
       obj.filePath = impStr[1]
-
       debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
       obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
