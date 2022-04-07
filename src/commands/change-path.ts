@@ -101,7 +101,8 @@ export function changeImport(ele: string, fullPath: string) {
     'quill'
   ]
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
-  const reg = /import.*[\"|\'](.*)[\'|\"]/
+  // const reg = /import.*[\"|\'](.*)[\'|\"]/
+  const reg = /import.*from [\"|\'](.*)[\'|\"]/
       //  if (fullPath == 'D:\\gitwork\\auto-generate-md\\unuse\\App.vue') {
       //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
       //      debug(ele.match(reg), '11111111111111')
@@ -113,10 +114,10 @@ export function changeImport(ele: string, fullPath: string) {
     // 没有import的不转
     if (impStr && impStr[1]) {
       // import NProgress from 'nprogress'
-      const reg2 = /import.*from [\"|\'](.*)[\'|\"]/
-      // 如上的匹配会被误伤,再写个正则
-      const regStr = ele.match(reg2)
-      if (regStr && impStr[1] && impStr[1].indexOf('/')===-1) return obj  // 进一步判断如果是插件,直接返回空
+      // const reg2 = /import.*from [\"|\'](.*)[\'|\"]/
+      // // 如上的匹配会被误伤,再写个正则
+      // const regStr = ele.match(reg2)
+      // if (regStr && impStr[1] && impStr[1].indexOf('/')===-1) return obj  // 进一步判断如果是插件,直接返回空
       // 依赖的具体名字
       obj.filePath = impStr[1]
       debug('!!!!!!!!!匹配imp: ', impStr[1])
