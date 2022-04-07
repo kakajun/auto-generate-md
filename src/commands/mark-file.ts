@@ -45,9 +45,9 @@ export default async function markFile(nodes: ItemType[], routers: classifyType)
       // 递归打上子集所有
       await setNodeMark(nodes, ele.name, absolutePath)
       // 建分类包
-      setFolder(ele.name)
+      // setFolder(ele.name)
       // 对打上标记的文件进行分类写入
-      await markWriteFile(nodes, ele.name, absolutePath)
+      // await markWriteFile(nodes, ele.name, absolutePath)
     }
   }
   // routers.forEach((ele) => {

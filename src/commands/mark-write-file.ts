@@ -24,7 +24,7 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
     // 得到标记
     const belongTo = node.belongTo
     if (belongTo.length > 0) {
-   await   setDispFileNew(path, name)
+      await   setDispFileNew(path, name)
     }
     // 找到有子文件了,循环它
     for (let index = 0; index < node.imports.length; index++) {
@@ -33,7 +33,7 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
       // 如果文件存在
       if (fs.existsSync(path)) {
         // 继续递归,直到子文件没有子文件
-     await markWriteFile(nodes, name, element)
+         await markWriteFile(nodes, name, element)
       } else {
         console.error('文件不存在', path)
       }
