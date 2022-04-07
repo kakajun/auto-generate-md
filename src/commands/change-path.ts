@@ -99,7 +99,9 @@ export function changeImport(ele: string, fullPath: string) {
     'element-ui',
     'lodash',
     'handsontable',
-    'vue'
+    'vue',
+    'nprogress',
+    'quill'
   ]
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   const reg = /import .*[\"|\'](.*)[\'|\"]/
