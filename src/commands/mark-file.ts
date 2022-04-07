@@ -3,6 +3,7 @@ import fs from 'fs'
 import { ItemType } from './get-file'
 import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
+import path from 'path';
 const debug = createDebugger('mark-file')
 debug.enabled = true
 type classifyType  = [
@@ -31,19 +32,19 @@ export default function markFile(nodes: ItemType[], routers: classifyType) {
     const ele = routers[index]
     for (let index = 0; index < ele.router.length; index++) {
       const obj = ele.router[index]
-       const path = obj.component
-       const renamePath = path.replace(/\//g, '\\')
+       const pathN = obj.component
+       const renamePath = pathN.replace(/\//g, '\\')
        // 路径转绝对路径
-      let absolutePath = renamePath.replace('@', rootPath)
+      let absolutePath = renamePath.replace('@', path.resolve())
        debug('renamePath: ', absolutePath)
        // 打标记
        setmark(absolutePath, ele.name)
        // 递归打上子集所有
        setNodeMark(nodes, ele.name, absolutePath)
        // 建分类包
-       setFolder(rootPath, ele.name)
+       setFolder( ele.name)
        // 对打上标记的文件进行分类写入
-       markWriteFile(nodes, ele.name, absolutePath, rootPath)
+       markWriteFile(nodes, ele.name, absolutePath)
     }
   }
   // routers.forEach((ele) => {

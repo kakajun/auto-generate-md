@@ -3,7 +3,7 @@ import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import { ItemType } from './get-file'
 import fs from 'fs-extra';
-
+import path from 'path';
 const debug = createDebugger('mark-write-file')
 debug.enabled = false
 
@@ -15,7 +15,7 @@ debug.enabled = false
  * @param {string} path  绝对路径
  * @param {string} rootPath   确定哪一级开始创建文件夹
  */
-export  function markWriteFile(nodes: ItemType[], name: string, path: string, rootPath: string) {
+export  function markWriteFile(nodes: ItemType[], name: string, path: string) {
   // debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
@@ -24,7 +24,7 @@ export  function markWriteFile(nodes: ItemType[], name: string, path: string, ro
     // 得到标记
     const belongTo = node.belongTo
     if (belongTo.length > 0) {
-      setDispFileNew(path, name, rootPath)
+      setDispFileNew(path, name)
     }
     // 找到有子文件了,循环它
     for (let index = 0; index < node.imports.length; index++) {
@@ -33,7 +33,7 @@ export  function markWriteFile(nodes: ItemType[], name: string, path: string, ro
       // 如果文件存在
       if (fs.existsSync(path)) {
         // 继续递归,直到子文件没有子文件
-        markWriteFile(nodes, name, element, rootPath)
+        markWriteFile(nodes, name, element)
       } else {
         console.error('文件不存在', path)
       }
@@ -44,17 +44,16 @@ export  function markWriteFile(nodes: ItemType[], name: string, path: string, ro
 /**
  * @desc: 功能就是找到文件然后copy文件,
  * @author: majun
- * @param {string} path
+ * @param {string} pathN
  * @param {string} name
  * @param {string} rootPath
  */
-function setDispFileNew(path: string, name: string, rootPath: string) {
+function setDispFileNew(pathN: string, name: string) {
   // debug('copyFile入参: ', name, path, rootPath)
-   const relative = path.replace(rootPath, '')
-   const originPath = path
-   const writeFileName = rootPath + '\\' + name + relative
+   const relative = pathN.replace(path.resolve(), '')
+   const originPath = pathN
+   const writeFileName = path.resolve() + '\\' + name + relative
   //  debug('originPath: ', originPath)
-
    try {
      fs.copy(originPath, writeFileName)
         debug('写入文件success! : ', writeFileName)
@@ -68,17 +67,15 @@ function setDispFileNew(path: string, name: string, rootPath: string) {
  * @author: majun
  * @param {type} params
  */
-export function setFolder(path: string, name: string) {
+export function setFolder(name: string) {
   // debug('setFolder入参: ', path, name)
-  const foldNameArrs = path.split('\\')
+  const foldNameArrs = __dirname.split('\\')
   const latArr = foldNameArrs.pop()  // 最后一位和要创建的一位一样,那么就会无限创建文件夹
-  if (path.indexOf('.') > -1 || latArr===name) {
+  if ( latArr===name) {
     console.error('创建文件夹异常:')
     return
   }
-  //路径最后一位有斜杆,那不处理,----------------- 这里给代码加点容错, 增加代码健壮性
-  let newPath = path.substring(path.length - 1) === '\\' ? path : path + '\\'
-  if (!fs.existsSync(newPath + name)) {
-    fs.mkdirSync(newPath + name)
+  if (!fs.existsSync(__dirname + name)) {
+    fs.mkdirSync(__dirname + name)
   }
 }

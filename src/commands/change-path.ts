@@ -85,7 +85,7 @@ export function makeSuffix(filePath: string,fullPath:string) {
 }
 
 /**
- * @desc:
+ * @desc: 找到import并返回全路径和原始路径
  * @author: majun
  * @param {string} ele    找到的行引入
  * @param {string} fullPath  文件的全路径
@@ -147,7 +147,6 @@ export function changeImport(ele: string, fullPath: string) {
   if (writeFlag) {
     fileStr = sarr.join('\n')
     // 异步写入数据到文件
-    // debug(fileStr)
     fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
       console.log('Write successful-------' + fullPath)
     })
