@@ -25,7 +25,7 @@ type classifyType = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export default  function markFile(nodes: ItemType[], routers: classifyType) {
+export  function markFile(nodes: ItemType[], routers: classifyType) {
   routers.forEach( (ele) => {
     // 这里循环打标记的路由
     ele.router.forEach(async (obj: { component: any }) => {
@@ -118,6 +118,22 @@ function setmark(file: string, name: string) {
      reject()
    }
  })
+}
+
+/**
+ * @desc: 递归所有文件
+ * @author: majun
+ * @param {Array} nodes
+ */
+export function deletMarkAll(nodes: Array<ItemType>, name: string) {
+  function find(nodes: Array<ItemType>) {
+    for (let index = 0; index < nodes.length; index++) {
+      const element = nodes[index]
+      if (element.children) find(element.children)
+      else deletMark(element.fullPath, name)
+    }
+  }
+  find(nodes)
 }
 
 /**

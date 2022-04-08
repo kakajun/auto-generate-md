@@ -7,7 +7,7 @@ import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
-import markFile from './mark-file'
+import { markFile, deletMarkAll } from './mark-file'
 import fs from 'fs-extra'
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
@@ -39,22 +39,30 @@ async function markFileAction(nodes: Array<ItemType>) {
   let pathName = path.resolve() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
-  await  markFile(nodes, routers)
+    markFile(nodes, routers)
   } else {
     console.log('退出')
     process.exit(1)
   }
 }
-
 /**
- * @desc: //6. 得到md对象(只生成一个md)
+ * @desc://6. 得到md对象(只生成一个md)
  * @author: majun
- * @param {type} params
+ * @param {Array} nodes
  */
 async function wirteJsNodesAction(nodes: Array<ItemType>) {
   // 要先改路径后缀,否则依赖收集不到
 await  changePathAction(nodes)
   wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
+}
+
+/**
+ * @desc://7. 删除标记
+ * @author: majun
+ * @param {Array} nodes
+ */
+async function deletMarkAction(nodes: Array<ItemType>) {
+  deletMarkAll(nodes,'base')
 }
 
 /**
@@ -101,6 +109,12 @@ function getActions() {
     value: 'Mark File',
     action: () => markFileAction(nodes)
   })
+  actionMap.set('Mark File', {
+    title: 'Mark File',
+    value: 'Mark File',
+    action: () => deletMarkAction(nodes)
+  })
+
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',
     value: 'Wirte Json Nodes',
