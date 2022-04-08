@@ -71,7 +71,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     try {
       fs.writeFile(file, str, { encoding: 'utf8' },async () => {
-        const receive =await  deletMark(file, 'base')
+        const receive =await deletMark(file, 'base')
         done()
         fs.unlinkSync(file)
         expect(receive).toEqual(finalStr)

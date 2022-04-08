@@ -138,7 +138,7 @@ export function changeImport(ele: string, fullPath: string) {
    */
 export  function witeFile(node: ItemType, isRelative?: Boolean) {
   const { fullPath} = node
-new Promise<void>((resolve, reject) => {
+return new Promise<void>((resolve, reject) => {
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')

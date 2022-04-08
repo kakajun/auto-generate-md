@@ -104,20 +104,20 @@ export function findNodes(nodes: Array<ItemType>, path: string): ItemType | null
  * @param {string} name
  */
 function setmark(file: string, name: string) {
-   new Promise<void>((resolve, reject) => {
-    try {
-      let fileStr = fs.readFileSync(file, 'utf-8')
-      // 直接打上标记
-      fileStr ='//' + name + '\n' +fileStr
-      fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
-        debug('mark successful-------' + file)
-        resolve()
-      })
-    } catch (error) {
-      console.error('给文件打标记的文件不存在: ', file)
-      reject()
-    }
-  })
+ return new Promise<void>((resolve, reject) => {
+   try {
+     let fileStr = fs.readFileSync(file, 'utf-8')
+     // 直接打上标记
+     fileStr = '//' + name + '\n' + fileStr
+     fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
+       debug('mark successful-------' + file)
+       resolve()
+     })
+   } catch (error) {
+     console.error('给文件打标记的文件不存在: ', file)
+     reject()
+   }
+ })
 }
 
 /**
@@ -127,7 +127,7 @@ function setmark(file: string, name: string) {
  * @param {string} name
  */
 export function deletMark(file: string, name: string) {
-  new Promise<string>((resolve, reject) => {
+ return new Promise<string>((resolve, reject) => {
      let fileStr=''
     try {
        fileStr = fs.readFileSync(file, 'utf-8')
