@@ -1,6 +1,8 @@
 
-import { findNodes } from '../src/commands/mark-file'
+import { findNodes, deletMark } from '../src/commands/mark-file'
 import { ItemType } from '../src/commands/get-file'
+import path from 'path';
+import fs from 'fs'
 test('findNodes--查node', () => {
   const nodes = [
     {
@@ -56,4 +58,26 @@ test('findNodes--查node', () => {
     fullPath: 'D:\\gitwork\\auto-generate-md\\unuse\\components\\test\\deep\\user2.vue'
   }
    expect(node).toMatchObject(finalObj)
+})
+
+test('deletMark--测试删除标记', (done) => {
+    const str = `//base
+<script setup>
+import UserRuler from '@/unuse/components/user-rulerts'
+</script>`
+    const file = path.resolve() + '\\unuse\\AppDeletMarTest.vue'
+    const finalStr = `<script setup>
+import UserRuler from '@/unuse/components/user-rulerts'
+</script>`
+    try {
+      fs.writeFile(file, str, { encoding: 'utf8' },async () => {
+        const receive =await  deletMark(file, 'base')
+        done()
+        fs.unlinkSync(file)
+        expect(receive).toEqual(finalStr)
+      })
+    } catch (error) {
+      done(error)
+    }
+
 })

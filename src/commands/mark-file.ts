@@ -127,9 +127,10 @@ function setmark(file: string, name: string) {
  * @param {string} name
  */
 export function deletMark(file: string, name: string) {
-   new Promise<void>((resolve, reject) => {
+  new Promise<string>((resolve, reject) => {
+     let fileStr=''
     try {
-      let fileStr = fs.readFileSync(file, 'utf-8')
+       fileStr = fs.readFileSync(file, 'utf-8')
       let sarr = fileStr.split(/[\n]/g)
      for (let index = 0; index < sarr.length; index++) {
        const ele = sarr[index]
@@ -140,7 +141,7 @@ export function deletMark(file: string, name: string) {
       fileStr = sarr.join('\n')
       fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
         debug('delete mark successful-------' + file)
-        resolve()
+        resolve(fileStr)
       })
     } catch (error) {
       console.error('删除标记的文件不存在: ', file)

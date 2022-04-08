@@ -26,7 +26,6 @@
     "prepare": "husky install",
     "test": "jest",
     "testdev": "jest --watch ",
-     "unit": "npx nodemon test/unit-test.ts",
     "lint-fix": "eslint --fix  --ext .js,.ts"
   },
   "author": "kakajun <253495832@qq.com>",
