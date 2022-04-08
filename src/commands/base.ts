@@ -109,9 +109,9 @@ function getActions() {
     value: 'Mark File',
     action: () => markFileAction(nodes)
   })
-  actionMap.set('Mark File', {
-    title: 'Mark File',
-    value: 'Mark File',
+  actionMap.set('Delete Mark', {
+    title: 'Delete Mark',
+    value: 'Delete Mark',
     action: () => deletMarkAction(nodes)
   })
 
