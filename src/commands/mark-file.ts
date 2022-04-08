@@ -3,7 +3,6 @@ import fs from 'fs'
 import { ItemType } from './get-file'
 // import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
-import path from 'path';
 const debug = createDebugger('mark-file')
 debug.enabled = true
 type classifyType = [
@@ -32,7 +31,7 @@ export  function markFile(nodes: ItemType[], routers: classifyType) {
       const pathN = obj.component
       const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
-      let absolutePath = renamePath.replace('@', path.resolve())
+      let absolutePath = renamePath.replace('@', process.cwd())
       // 打标记
       await setmark(absolutePath, ele.name)
       // 递归打上子集所有

@@ -1,7 +1,6 @@
 /* 界面命令注册在这里 */
 import { ItemType } from './get-file'
 import prompts from 'prompts'
-import path from 'path'
 import { wirteMd, getMd } from './wirte-md'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
@@ -17,8 +16,8 @@ const { ignores: ignore, includes: include } = handle(options)
  * @param {string} md
  */
 function getMdAction(md: string) {
-  console.log('\x1B[36m%s\x1B[0m', '*** location: ', `${path.resolve()}\\readme-md.md`)
-  wirteMd(md, `${path.resolve()}\\readme-md.md`)
+  console.log('\x1B[36m%s\x1B[0m', '*** location: ', `${process.cwd()}\\readme-md.md`)
+  wirteMd(md, `${process.cwd()}\\readme-md.md`)
 }
 
 /**
@@ -36,7 +35,7 @@ async function changePathAction(nodes: Array<ItemType>) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: Array<ItemType>) {
-  let pathName = path.resolve() + '/classify.js'
+  let pathName = process.cwd() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
     markFile(nodes, routers)
@@ -53,7 +52,7 @@ async function markFileAction(nodes: Array<ItemType>) {
 async function wirteJsNodesAction(nodes: Array<ItemType>) {
   // 要先改路径后缀,否则依赖收集不到
 await  changePathAction(nodes)
-  wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
+  wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
 }
 
 /**
@@ -75,7 +74,7 @@ export async function generateAllAction(nodes: Array<ItemType>, md: string) {
   getMdAction(md)
  await changePathAction(nodes)
  await markFileAction(nodes)
-  wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
+  wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
 }
 
 /**
@@ -118,7 +117,7 @@ function getActions() {
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',
     value: 'Wirte Json Nodes',
-    action: () => wirteJsNodes(JSON.stringify(nodes), path.resolve() + '\\readme-file.js')
+    action: () => wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
   })
   actionMap.set('Wirte  Nodes With Import(may change path)', {
     title: 'Wirte  Nodes With Import(may change path)',

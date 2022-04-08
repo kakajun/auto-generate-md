@@ -1,7 +1,12 @@
 import path from 'path'
 import fs from 'fs'
 import { getRelatPath, makeSuffix, changeImport, witeFile } from '../src/commands/change-path'
+import createDebugger from 'debug'
+const debug = createDebugger('change-path.test')
+debug.enabled = true
+
 test('getRelatPath--获取相对地址', () => {
+  debug('process.cwd()', process.cwd())
   expect(
     getRelatPath(
       'D:\\worker\\auto-generate-md\\unuse\\components\\user-rulerts.vue',
@@ -25,7 +30,7 @@ test('changeImport--更改不规范path', () => {
   ).toEqual({
     filePath: '@/unuse/components/user-rulerts.vue',
     impName: './components/user-rulerts.vue',
-    absoluteImport: path.resolve() + '\\unuse\\components\\user-rulerts.vue'
+    absoluteImport: process.cwd() + '\\unuse\\components\\user-rulerts.vue'
   })
 })
 
@@ -42,7 +47,7 @@ test('witeFile--更改不规范path', (done) => {
       size: 367,
       rowSize: 12,
       suffix: '.js',
-      fullPath: path.resolve() + '\\test\\temp\\AppTest.vue'
+      fullPath: process.cwd() + '\\test\\temp\\AppTest.vue'
     }
     // 1. 随机创建一个文件
     const str = `<script setup>
@@ -50,16 +55,16 @@ import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     //2. 预期得到内容
     const finalStr = `<script setup>
-import UserRuler from './components/user-rulerts.vue'
+import UserRuler from '../../unuse/components/user-rulerts.vue'
 </script>`
-    const file = path.resolve(__dirname, node.fullPath)
+    const file = path.resolve(process.cwd(), node.fullPath)
     // 异步写入数据到文件
     fs.writeFile(file, str, { encoding: 'utf8' }, async () => {
       console.log('Write successful')
       await witeFile(node, true)
       done()
       const getStr = fs.readFileSync(file, 'utf-8')
-      //  fs.unlinkSync(path.resolve() + '\\unuse\\AppTest.vue')
+      //  fs.unlinkSync(process.cwd() + '\\unuse\\AppTest.vue')
       expect(getStr).toEqual(finalStr)
     })
   } catch (error) {

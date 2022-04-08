@@ -10,10 +10,6 @@ module.exports = [
         path: '/spc/list',
         component: '@/unuse/main.js'
       },
-      {
-        path: '/spc/list',
-        component: '@/unuse/App.vue'
-      }
     ]
   }
 ]
