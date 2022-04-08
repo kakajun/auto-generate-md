@@ -137,7 +137,7 @@ export function changeImport(ele: string, fullPath: string) {
    * @param {string} file  目标地址
    */
 export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean> {
-  const { fullPath, imports = [] } = node
+  const { fullPath} = node
   return new Promise<boolean>((resolve, reject) => {
 
    try {
@@ -147,17 +147,16 @@ export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean>
      for (let index = 0; index < sarr.length; index++) {
        const ele = sarr[index]
        if (ele.indexOf('import') > -1 && isRelative) {
-
          const obj = changeImport(ele, fullPath)
-             if (node.name === '***') {
-              debug(obj,"bbbnnn")
-             }
+            //  if (node.name === '***') {
+            //   debug(obj,"bbbnnn")
+            //  }
          if (obj.impName) {
            sarr[index] = ele.replace(obj.filePath, obj.impName)
            // debug('!!!!!!!!!修改@符号: ', sarr[index])
-           debug('收集依赖: ', obj.impName, fullPath)
-           debug('依赖绝对路径: ', obj.absoluteImport)
-           imports.push(obj.absoluteImport)
+          //  debug('收集依赖: ', obj.impName, fullPath)
+          //  debug('依赖绝对路径: ', obj.absoluteImport)
+          //  imports.push(obj.absoluteImport)
            debug('node: ', node)
            writeFlag = true
          }

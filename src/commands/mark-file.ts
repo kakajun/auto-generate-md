@@ -1,12 +1,11 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
 import { ItemType } from './get-file'
-import { setFolder, markWriteFile } from './mark-write-file'
+// import { setFolder, markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 import path from 'path';
 const debug = createDebugger('mark-file')
 debug.enabled = true
-
 type classifyType = [
   {
     name: string
@@ -26,47 +25,24 @@ type classifyType = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export default async function markFile(nodes: ItemType[], routers: classifyType) {
-  console.log(routers)
-  // 外层循环要分类的路由
-  for (let index = 0; index < routers.length; index++) {
-    const ele = routers[index]
-    debug(ele.router, ele.router.length, '+++++++++++++++++++++++++++++++---pathN')
-    for (let j = 0; j < ele.router.length; j++) {
-      const obj = ele.router[j]
+export default  function markFile(nodes: ItemType[], routers: classifyType) {
+  routers.forEach( (ele) => {
+    // 这里循环打标记的路由
+    ele.router.forEach(async (obj: { component: any }) => {
       const pathN = obj.component
-      debug(pathN, ele.router.length, '-------------------------------------------------------pathN')
       const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
       let absolutePath = renamePath.replace('@', path.resolve())
-      debug('renamePath: ', absolutePath)
       // 打标记
       setmark(absolutePath, ele.name)
       // 递归打上子集所有
       await setNodeMark(nodes, ele.name, absolutePath)
       // 建分类包
-      // setFolder(ele.name)
-      // 对打上标记的文件进行分类写入
-      // await markWriteFile(nodes, ele.name, absolutePath)
-    }
-  }
-  // routers.forEach((ele) => {
-  //   // 这里循环打标记的路由
-  //   ele.router.forEach((obj: { component: any }) => {
-  //     const path = obj.component
-  //     const renamePath = path.replace(/\//g, '\\')
-  //     // 路径转绝对路径
-  //     let absolutePath = renamePath.replace('@', rootPath)
-  //     // 打标记
-  //     setmark(absolutePath, ele.name)
-  //     // 递归打上子集所有
-  //     setNodeMark(nodes, ele.name, absolutePath)
-  //     // 建分类包
-  //     setFolder(rootPath, ele.name)
-  //     // 对打上标记的文件进行分类写入
-  //     markWriteFile(nodes, ele.name, absolutePath, rootPath)
-  //   })
-  // })
+      // setFolder(rootPath, ele.name)
+      // // 对打上标记的文件进行分类写入
+      // markWriteFile(nodes, ele.name, absolutePath, rootPath)
+    })
+  })
 }
 
 /**
@@ -133,7 +109,7 @@ function setmark(file: string, name: string) {
     try {
       let fileStr = fs.readFileSync(file, 'utf-8')
       // 直接打上标记
-      fileStr = fileStr + '//' + name + '\n'
+      fileStr ='//' + name + '\n' +fileStr
       fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
         debug('mark successful-------' + file)
         resolve(true)
