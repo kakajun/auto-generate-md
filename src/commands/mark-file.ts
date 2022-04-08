@@ -34,7 +34,7 @@ export  function markFile(nodes: ItemType[], routers: classifyType) {
       // 路径转绝对路径
       let absolutePath = renamePath.replace('@', path.resolve())
       // 打标记
-      setmark(absolutePath, ele.name)
+      await setmark(absolutePath, ele.name)
       // 递归打上子集所有
       await setNodeMark(nodes, ele.name, absolutePath)
       // 建分类包
