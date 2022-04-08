@@ -6,9 +6,6 @@ import {
 import { ItemType } from '../src/commands/get-file'
 
 import fs from 'fs'
-import createDebugger from 'debug'
-const debug = createDebugger('mark-file.test')
-debug.enabled = true
 test('findNodes--查node', () => {
   const nodes = [
     {
@@ -72,7 +69,7 @@ test('deletMark--测试删除标记', (done) => {
 <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
-    const file = process.cwd() + '\\unuse\\AppDeletMarTest.vue'
+    const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
     const finalStr = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
@@ -95,7 +92,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 // <script setup>
 // import UserRuler from '@/unuse/components/user-rulerts'
 // </script>`
-//   const file = process.cwd() + '\\unuse\\AppDeletMarTest.vue'
+//   const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
 //   const finalStr = `<script setup>
 // import UserRuler from '@/unuse/components/user-rulerts'
 // </script>`
