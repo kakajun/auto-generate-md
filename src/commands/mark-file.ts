@@ -49,7 +49,7 @@ export  function markFile(nodes: ItemType[], routers: classifyType) {
  * @desc: 分离一个递归调用的mark函数
  * @author: majun
  */
-async function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
+export async function setNodeMark(nodes: Array<ItemType>, name: string, path: string) {
   debug('setNodeMark入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)

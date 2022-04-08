@@ -7,12 +7,12 @@ test('getFile--获取注释', (done) => {
   <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
-  const file = path.resolve() + '\\unuse\\AppFileTest.vue'
+  const file = path.resolve() + '\\unuse\\test\\temp\\AppFileTest.vue'
   try {
   fs.writeFile(file, str, { encoding: 'utf8' }, () => {
     const obj = getFile(file)
     done()
-    fs.unlinkSync(file)
+    // fs.unlinkSync(file)
     expect(obj).toEqual({ note: ' // 我就是个注释', rowSize: 4, size: 93 ,    "imports":   ["D:\\gitwork\\auto-generate-md\\unuse\\components\\user-rulerts.vue",
      ]})
   })

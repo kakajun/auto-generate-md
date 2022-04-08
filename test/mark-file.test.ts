@@ -1,5 +1,5 @@
 
-import { findNodes, deletMark } from '../src/commands/mark-file'
+import { findNodes, deletMark, setNodeMark } from '../src/commands/mark-file'
 import { ItemType } from '../src/commands/get-file'
 import path from 'path';
 import fs from 'fs'
@@ -74,7 +74,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
       fs.writeFile(file, str, { encoding: 'utf8' },async () => {
         const receive =await deletMark(file, 'base')
         done()
-        fs.unlinkSync(file)
+        // fs.unlinkSync(file)
         expect(receive).toEqual(finalStr)
       })
     } catch (error) {
@@ -82,3 +82,21 @@ import UserRuler from '@/unuse/components/user-rulerts'
     }
 
 })
+
+// test('setNodeMark--给节点标记',async (done) => {
+//   const str = `//base
+//   //base
+// <script setup>
+// import UserRuler from '@/unuse/components/user-rulerts'
+// </script>`
+//   const file = path.resolve() + '\\unuse\\AppDeletMarTest.vue'
+//   const finalStr = `<script setup>
+// import UserRuler from '@/unuse/components/user-rulerts'
+// </script>`
+//   await setNodeMark(nodes, ele.name, absolutePath)
+//   try {
+
+//   } catch (error) {
+//     done(error)
+//   }
+// })
