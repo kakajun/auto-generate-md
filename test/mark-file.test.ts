@@ -61,7 +61,8 @@ test('findNodes--查node', () => {
 })
 
 test('deletMark--测试删除标记', (done) => {
-    const str = `//base
+  const str = `//base
+  //base
 <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
