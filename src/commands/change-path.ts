@@ -136,47 +136,42 @@ export function changeImport(ele: string, fullPath: string) {
 
    * @param {string} file  目标地址
    */
-export  function witeFile(node: ItemType, isRelative?: Boolean):Promise<boolean> {
+export  function witeFile(node: ItemType, isRelative?: Boolean) {
   const { fullPath} = node
-  return new Promise<boolean>((resolve, reject) => {
-
-   try {
-     let writeFlag = false // 如果啥都没改, 不更新文件
-     let fileStr = fs.readFileSync(fullPath, 'utf-8')
-     const sarr = fileStr.split(/[\n]/g)
-     for (let index = 0; index < sarr.length; index++) {
-       const ele = sarr[index]
-       if (ele.indexOf('import') > -1 && isRelative) {
-         const obj = changeImport(ele, fullPath)
-            //  if (node.name === '***') {
-            //   debug(obj,"bbbnnn")
-            //  }
-         if (obj.impName) {
-           sarr[index] = ele.replace(obj.filePath, obj.impName)
-           // debug('!!!!!!!!!修改@符号: ', sarr[index])
-          //  debug('收集依赖: ', obj.impName, fullPath)
-          //  debug('依赖绝对路径: ', obj.absoluteImport)
-          //  imports.push(obj.absoluteImport)
-           debug('node: ', node)
-           writeFlag = true
-         }
-       }
-     }
-     if (writeFlag) {
-       fileStr = sarr.join('\n')
-       // 异步写入数据到文件
-       fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
-         console.log('Write successful-------' + fullPath)
-         resolve(true)
-       })
-     } else {
-       resolve(true)
-     }
-   } catch (error) {
-     reject(false)
-     console.error('读取文件失败,文件名: ', fullPath)
-   }
- })
+new Promise<void>((resolve, reject) => {
+  try {
+    let writeFlag = false // 如果啥都没改, 不更新文件
+    let fileStr = fs.readFileSync(fullPath, 'utf-8')
+    const sarr = fileStr.split(/[\n]/g)
+    for (let index = 0; index < sarr.length; index++) {
+      const ele = sarr[index]
+      if (ele.indexOf('import') > -1 && isRelative) {
+        const obj = changeImport(ele, fullPath)
+        //  if (node.name === '***') {
+        //   debug(obj,"bbbnnn")
+        //  }
+        if (obj.impName) {
+          sarr[index] = ele.replace(obj.filePath, obj.impName)
+          debug('node: ', node)
+          writeFlag = true
+        }
+      }
+    }
+    if (writeFlag) {
+      fileStr = sarr.join('\n')
+      // 异步写入数据到文件
+      fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
+        console.log('Write successful-------' + fullPath)
+        resolve()
+      })
+    } else {
+      resolve()
+    }
+  } catch (error) {
+    reject(false)
+    console.error('读取文件失败,文件名: ', fullPath)
+  }
+})
 }
 
 /**

@@ -104,19 +104,47 @@ export function findNodes(nodes: Array<ItemType>, path: string): ItemType | null
  * @param {string} name
  */
 function setmark(file: string, name: string) {
-  debug('给文件标记:', file, name)
-  return new Promise<boolean>((resolve, reject) => {
+   new Promise<void>((resolve, reject) => {
     try {
       let fileStr = fs.readFileSync(file, 'utf-8')
       // 直接打上标记
       fileStr ='//' + name + '\n' +fileStr
       fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
         debug('mark successful-------' + file)
-        resolve(true)
+        resolve()
       })
     } catch (error) {
       console.error('给文件打标记的文件不存在: ', file)
-      reject(false)
+      reject()
+    }
+  })
+}
+
+/**
+ * @desc: 给文件标记
+ * @author: majun
+ * @param {string} file
+ * @param {string} name
+ */
+export function deletMark(file: string, name: string) {
+   new Promise<void>((resolve, reject) => {
+    try {
+      let fileStr = fs.readFileSync(file, 'utf-8')
+      let sarr = fileStr.split(/[\n]/g)
+     for (let index = 0; index < sarr.length; index++) {
+       const ele = sarr[index]
+       if (ele.indexOf('//' + name)>-1) {
+        delete sarr[index]
+       }
+      }
+      fileStr = sarr.join('\n')
+      fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
+        debug('delete mark successful-------' + file)
+        resolve()
+      })
+    } catch (error) {
+      console.error('删除标记的文件不存在: ', file)
+      reject()
     }
   })
 }

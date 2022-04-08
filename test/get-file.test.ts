@@ -13,7 +13,8 @@ import UserRuler from '@/unuse/components/user-rulerts'
     const obj = getFile(file)
     done()
     fs.unlinkSync(file)
-    expect(obj).toEqual({ note: ' // 我就是个注释', rowSize: 4, size: 93 })
+    expect(obj).toEqual({ note: ' // 我就是个注释', rowSize: 4, size: 93 ,    "imports":   ["D:\\gitwork\\auto-generate-md\\unuse\\components\\user-rulerts.vue",
+     ]})
   })
   } catch (error) {
   done(error)

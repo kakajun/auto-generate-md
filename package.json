@@ -25,6 +25,7 @@
     "build": "node script/build.js",
     "prepare": "husky install",
     "test": "jest",
+    "testdev": "jest --watch ",
      "unit": "npx nodemon test/unit-test.ts",
     "lint-fix": "eslint --fix  --ext .js,.ts"
   },
