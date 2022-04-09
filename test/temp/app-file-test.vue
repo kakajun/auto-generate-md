@@ -1,5 +1,3 @@
-//base
-// 我就是个注释
 <script setup>
-import UserRuler from './aa'
+import UserRuler from '../../unuse/components/user-rulerts.vue'
 </script>

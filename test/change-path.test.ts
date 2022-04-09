@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { getRelatPath, makeSuffix, changeImport, witeFile } from '../src/commands/change-path'
+import nodes from './nodes'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = true
@@ -37,18 +38,7 @@ test('changeImport--更改不规范path', () => {
 test('witeFile--更改不规范path', (done) => {
 
   try {
-    const node = {
-      name: 'app-test.vue',
-      isDir: false,
-      level: 0,
-      note: '',
-      imports: new Array(),
-      belongTo: new Array(),
-      size: 367,
-      rowSize: 12,
-      suffix: '.js',
-      fullPath: process.cwd() + '\\test\\temp\\app-test.vue'
-    }
+    const node = nodes[0]
     // 1. 随机创建一个文件
     const str = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
