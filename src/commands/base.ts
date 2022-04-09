@@ -40,7 +40,7 @@ async function markFileAction(nodes: Array<ItemType>) {
     const routers = require(pathName)
     markFile(nodes, routers)
   } else {
-    console.log('退出')
+    console.error('跟路径没发现有classify.js, 现在退出')
     process.exit(1)
   }
 }
