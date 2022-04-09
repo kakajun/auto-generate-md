@@ -14,7 +14,7 @@ debug.enabled = true
  * @param {string} path  绝对路径
  * @param {string} rootPath   确定哪一级开始创建文件夹
  */
-export async function markWriteFile(nodes:  Array<ItemType>, name: string, path: string) {
+export async function markWriteFile(nodes:  ItemType[], name: string, path: string) {
   // debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)

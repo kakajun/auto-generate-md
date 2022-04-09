@@ -10,8 +10,8 @@ debug.enabled = false
  * @author: majun
  * @param {Array} nodes      整个文件的nodes
  */
-export async function changePath(nodes: Array<ItemType>) {
-  async function getNode(nodes: Array<ItemType>) {
+export async function changePath(nodes: ItemType[]) {
+  async function getNode(nodes: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
       if (ele.children) {

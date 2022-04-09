@@ -20,7 +20,7 @@ test('mark-write-file.test--找到文件然后copy文件', (done) => {
   const file = process.cwd() + '\\test\\temp\\app-file-test.vue'
   try {
     async function get() {
-      await markWriteFile(nodes, 'base', file)
+      await markWriteFile(nodes , 'base', file)
       done()
     }
     get()

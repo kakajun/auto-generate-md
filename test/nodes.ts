@@ -7,6 +7,7 @@ export default [
     imports: [process.cwd() + '\\test\\temp\\aa.vue'],
     belongTo: ['base'],
     size: 96,
+    copyed: false,
     rowSize: 4,
     suffix: '.vue',
     fullPath: process.cwd() + '\\test\\temp\\app-file-test.vue'
@@ -14,6 +15,7 @@ export default [
   {
     name: 'aa.vue',
     isDir: false,
+    copyed: false,
     level: 2,
     note: ' // 我就是个注释',
     imports: [],

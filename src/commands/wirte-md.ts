@@ -25,11 +25,11 @@ export function wirteMd(data: string, filePath: string) {
  * @param {Array} nodes
  * @return {*}
  */
-function getCountMd(datas: Array<ItemType>) {
+function getCountMd(datas: ItemType[]) {
   let rowTotleNumber = 0
   let sizeTotleNumber = 0
   const coutObj: { [key: string]: number } = {}
-  function getDeatle(nodes: Array<ItemType>) {
+  function getDeatle(nodes: ItemType[]) {
     nodes.forEach((obj: ItemType) => {
       if (obj.children) getDeatle(obj.children)
       else {

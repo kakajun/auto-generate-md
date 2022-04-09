@@ -49,7 +49,7 @@ function getImport(sarr: any[], fullPath: string) {
 
 export type ItemType = {
   name: string
-  copyed:boolean
+  copyed: boolean
   isDir: boolean
   level: number
   note: string
@@ -57,9 +57,9 @@ export type ItemType = {
   suffix: string
   rowSize: number
   fullPath: string
-  belongTo: Array<string> // 标记归属设置 分类用
-  imports: Array<string> // 依赖收集
-  children?: Array<ItemType>
+  belongTo: string[] // 标记归属设置 分类用
+  imports: string[] // 依赖收集
+  children?: ItemType[]
 }
 
 /**
@@ -72,9 +72,9 @@ export type ItemType = {
 export function getFileNodes(
   dir = path.resolve('./'),
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined,
-  nodes: Array<ItemType> = [],
+  nodes: ItemType[] = [],
   level = 0
-): Array<ItemType> {
+): ItemType[] {
   //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
   let ignore = [
     // 'api',
@@ -158,7 +158,7 @@ export function getFileNodes(
  * @param {string} keys
  * @return {*}
  */
-export function getNote(datas: Array<ItemType>, keys?: string[]) {
+export function getNote(datas: ItemType[], keys?: string[]) {
   const nodes = keys || []
   datas.forEach((obj: ItemType, index: Number) => {
     const last = index === datas.length - 1

@@ -25,7 +25,7 @@ function getMdAction(md: string) {
  * @author: majun
  * @param {Array} nodes
  */
-async function changePathAction(nodes: Array<ItemType>) {
+async function changePathAction(nodes: ItemType[]) {
  await changePath(nodes)
 }
 
@@ -34,7 +34,7 @@ async function changePathAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {Array} nodes
  */
-async  function markFileAction(nodes: Array<ItemType>) {
+async  function markFileAction(nodes: ItemType[]) {
   let pathName = process.cwd() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
@@ -51,7 +51,7 @@ async  function markFileAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {Array} nodes
  */
-async function witeFileAction(nodes: Array<ItemType>) {
+async function witeFileAction(nodes: ItemType[]) {
   let pathName = process.cwd() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
@@ -68,7 +68,7 @@ async function witeFileAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {Array} nodes
  */
-async function wirteJsNodesAction(nodes: Array<ItemType>) {
+async function wirteJsNodesAction(nodes: ItemType[]) {
   // 要先改路径后缀,否则依赖收集不到
 await  changePathAction(nodes)
   wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
@@ -79,7 +79,7 @@ await  changePathAction(nodes)
  * @author: majun
  * @param {Array} nodes
  */
-async function deletMarkAction(nodes: Array<ItemType>) {
+async function deletMarkAction(nodes: ItemType[]) {
   deletMarkAll(nodes,'base')
 }
 
@@ -89,7 +89,7 @@ async function deletMarkAction(nodes: Array<ItemType>) {
  * @param {Array} nodes
  * @param {string} md
  */
-export async function generateAllAction(nodes: Array<ItemType>, md: string) {
+export async function generateAllAction(nodes: ItemType[], md: string) {
     let pathName = process.cwd() + '/classify.js'
     const routers = require(pathName)
   getMdAction(md)
