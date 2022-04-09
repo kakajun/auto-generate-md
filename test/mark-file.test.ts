@@ -1,7 +1,7 @@
 
 import {
   findNodes, deletMark,
-  // setNodeMark
+  setNodeMark
 } from '../src/commands/mark-file';
 import { ItemType } from '../src/commands/get-file'
 
@@ -86,20 +86,46 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
 })
 
-// test('setNodeMark--给节点标记',async (done) => {
-//   const str = `//base
-//   //base
-// <script setup>
-// import UserRuler from '@/unuse/components/user-rulerts'
-// </script>`
-//   const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
-//   const finalStr = `<script setup>
-// import UserRuler from '@/unuse/components/user-rulerts'
-// </script>`
-//   await setNodeMark(nodes, ele.name, absolutePath)
-//   try {
+test('setNodeMark--给节点标记', async (done) => {
+  const nodes = [
+    {
+      name: 'app-file-test.vue',
+      isDir: false,
+      level: 2,
+      note: ' // 我就是个注释\r',
+      imports: [],
+      belongTo: [],
+      size: 96,
+      rowSize: 4,
+      suffix: '.vue',
+      fullPath: 'D:\\worker\\auto-generate-md\\test\\temp\\app-file-test.vue'
+    },
+    {
+      name: 'aa.vue',
+      isDir: false,
+      level: 2,
+      note: ' // 我就是个注释\r',
+      imports: [],
+      belongTo: [],
+      size: 96,
+      rowSize: 4,
+      suffix: '.vue',
+      fullPath: 'D:\\worker\\auto-generate-md\\test\\temp\\aa.vue'
+    }
+  ]
+  const str = `//base
+  //base
+<script setup>
+import UserRuler from './unuse/components/user-rulerts'
+</script>`
+  const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
+  const finalStr = `<script setup>
+import UserRuler from './unuse/components/user-rulerts'
+</script>`
+  await setNodeMark(nodes, ele.name, absolutePath)
+  try {
 
-//   } catch (error) {
-//     done(error)
-//   }
-// })
+  } catch (error) {
+    done(error)
+  }
+})
