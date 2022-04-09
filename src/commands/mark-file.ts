@@ -24,7 +24,7 @@ type classifyType = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export async function markFile(nodes: ItemType[], routers: classifyType) {
+export async function markFile(nodes:  Array<ItemType>, routers: classifyType) {
   for (let i = 0; i < routers.length; i++) {
     const ele = routers[i]
     for (let j = 0; j < ele.router.length; j++) {
@@ -45,7 +45,7 @@ export async function markFile(nodes: ItemType[], routers: classifyType) {
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export  function witeFile(nodes: ItemType[], routers: classifyType) {
+export  function witeFile(nodes:  Array<ItemType>, routers: classifyType) {
   routers.forEach( (ele) => {
     // 这里循环打标记的路由
     ele.router.forEach(async (obj: { component: any }) => {
