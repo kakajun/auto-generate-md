@@ -123,6 +123,7 @@ function setmark(file: string, name: string) {
  return new Promise<void>((resolve, reject) => {
    try {
      let fileStr = fs.readFileSync(file, 'utf-8')
+     if (fileStr.indexOf('//' + name + '\n')===0) return  // 打过标记了,就不打了
      // 直接打上标记
      fileStr = '//' + name + '\n' + fileStr
      fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
