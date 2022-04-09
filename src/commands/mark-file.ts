@@ -52,6 +52,10 @@ export async function setNodeMark(nodes: Array<ItemType>, name: string, path: st
   debug('setNodeMark入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
+  if (node) {
+    // 打标记
+    await setmark(path, name)
+  }
   debug('查找的node: ', node)
   if (node && node.imports) {
     // 标记归属设置
@@ -63,8 +67,6 @@ export async function setNodeMark(nodes: Array<ItemType>, name: string, path: st
       debug('依赖文件: ', element)
       // 如果文件存在
       if (fs.existsSync(path)) {
-        // 打标记
-       await  setmark(element, name)
         // 继续递归,直到子文件没有子文件
        await setNodeMark(nodes, name, element)
       } else {
@@ -149,8 +151,9 @@ export function deletMark(file: string, name: string) {
       let sarr = fileStr.split(/[\n]/g)
      for (let index = 0; index < sarr.length; index++) {
        const ele = sarr[index]
-       if (ele.indexOf('//' + name)>-1) {
-        delete sarr[index]
+       if (ele.indexOf('//' + name) > -1) {
+         sarr.splice(index, 1)
+         index-- //i需要自减，否则每次删除都会讲原数组索引发生变化
        }
       }
       fileStr = sarr.join('\n')
