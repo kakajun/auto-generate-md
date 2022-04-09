@@ -4,63 +4,11 @@ import {
   setNodeMark
 } from '../src/commands/mark-file';
 import { ItemType } from '../src/commands/get-file'
-
+import nodes from './nodes'
 import fs from 'fs'
 test('findNodes--查node', () => {
-  const nodes = [
-    {
-      name: 'deep',
-      isDir: true,
-      level: 3,
-      note: '',
-      imports: [''],
-      belongTo: [''],
-      children: [
-        {
-          name: 'user.vue',
-          isDir: false,
-          level: 4,
-          note: '//2工程\r',
-          imports: [process.cwd() + '\\unuse\\api\\user.js'],
-          belongTo: [''],
-          size: 1784,
-          rowSize: 108,
-          suffix: '.vue',
-          fullPath: process.cwd() + '\\unuse\\components\\test\\deep\\user.vue'
-        },
-        {
-          name: 'user2.vue',
-          isDir: false,
-          level: 4,
-          note: '//2工程\r',
-          imports: [process.cwd() + '\\unuse\\api\\user2.js'],
-          belongTo: [''],
-          size: 1784,
-          rowSize: 108,
-          suffix: '.vue',
-          fullPath: process.cwd() + '\\unuse\\components\\test\\deep\\user2.vue'
-        }
-      ]
-    }
-  ]
-
-  const node = findNodes(
-    nodes as Array<ItemType>,
-    process.cwd() + '\\unuse\\components\\test\\deep\\user2.vue'
-  )
-  const finalObj = {
-    name: 'user2.vue',
-    isDir: false,
-    level: 4,
-    note: '//2工程\r',
-    imports: [process.cwd() + '\\unuse\\api\\user2.js'],
-    belongTo: [''],
-    size: 1784,
-    rowSize: 108,
-    suffix: '.vue',
-    fullPath: process.cwd() + '\\unuse\\components\\test\\deep\\user2.vue'
-  }
-   expect(node).toMatchObject(finalObj)
+  const node = findNodes(nodes as Array<ItemType>, process.cwd() + '\\test\\temp\\app-file-test.vue')
+   expect(node).toMatchObject(nodes[0])
 })
 
 test('deletMark--测试删除标记', (done) => {
@@ -86,32 +34,6 @@ import UserRuler from '@/unuse/components/user-rulerts'
 })
 
 test('setNodeMark--给节点标记',  (done) => {
-  const nodes = [
-    {
-      name: 'app-file-test.vue',
-      isDir: false,
-      level: 2,
-      note: ' // 我就是个注释\r',
-      imports: [process.cwd() + '\\test\\temp\\aa.vue'],
-      belongTo: [],
-      size: 96,
-      rowSize: 4,
-      suffix: '.vue',
-      fullPath: process.cwd() + '\\test\\temp\\app-file-test.vue'
-    },
-    {
-      name: 'aa.vue',
-      isDir: false,
-      level: 2,
-      note: ' // 我就是个注释\r',
-      imports: [],
-      belongTo: [],
-      size: 96,
-      rowSize: 4,
-      suffix: '.vue',
-      fullPath: process.cwd() + '\\test\\temp\\aa.vue'
-    }
-  ]
   async function get() {
    const file = process.cwd() + '\\test\\temp\\app-file-test.vue'
    try {
