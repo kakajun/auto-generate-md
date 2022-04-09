@@ -69,7 +69,7 @@ test('deletMark--测试删除标记', (done) => {
 <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
-    const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
+    const file = process.cwd() + '\\unuse\\AppDeletMarTest.vue'
     const finalStr = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
@@ -86,7 +86,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
 })
 
-test('setNodeMark--给节点标记', async (done) => {
+test('setNodeMark--给节点标记',  (done) => {
   const nodes = [
     {
       name: 'app-file-test.vue',
@@ -113,13 +113,17 @@ test('setNodeMark--给节点标记', async (done) => {
       fullPath: 'D:\\worker\\auto-generate-md\\test\\temp\\aa.vue'
     }
   ]
-
-
+ async function get() {
   try {
-  await setNodeMark(nodes, 'base', 'D:\\worker\\auto-generate-md\\test\\temp\\app-file-test.vue')
-  done()
-
+    await setNodeMark(nodes, 'base', 'D:\\worker\\auto-generate-md\\test\\temp\\app-file-test.vue')
+    console.log("vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv");
+    expect(1).toEqual(1)
+    done()
   } catch (error) {
+    console.log("7777777777777777777777777777777777777777");
     done(error)
   }
+}
+get()
+
 })

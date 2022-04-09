@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = true
+debug.enabled = false
 /**
  * @desc: 递归循环所有文件
  * @author: majun
