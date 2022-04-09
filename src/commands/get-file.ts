@@ -49,6 +49,7 @@ function getImport(sarr: any[], fullPath: string) {
 
 export type ItemType = {
   name: string
+  copyed:boolean
   isDir: boolean
   level: number
   note: string

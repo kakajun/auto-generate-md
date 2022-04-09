@@ -18,8 +18,11 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
   // debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
+
   // debug('查找的node: ', node)
   if (node) {
+    if (node.copyed) return   // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析
+    node.copyed=true
     // 得到标记
     const belongTo = node.belongTo
     if (belongTo.length > 0) {
@@ -39,8 +42,6 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
         }
       }
     }
-
-
   }
 }
 
