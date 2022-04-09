@@ -6,7 +6,7 @@ import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
-import { markFile, deletMarkAll } from './mark-file'
+import { markFile, deletMarkAll, witeFile } from './mark-file'
 import fs from 'fs-extra'
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
@@ -34,11 +34,30 @@ async function changePathAction(nodes: Array<ItemType>) {
  * @author: majun
  * @param {Array} nodes
  */
-async function markFileAction(nodes: Array<ItemType>) {
+async  function markFileAction(nodes: Array<ItemType>) {
   let pathName = process.cwd() + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
-    markFile(nodes, routers)
+   await  markFile(nodes, routers)
+    wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
+  } else {
+    console.error('跟路径没发现有classify.js, 现在退出')
+    process.exit(1)
+  }
+}
+
+/**
+ * @desc: 5,将打标记的进行copy
+ * @author: majun
+ * @param {Array} nodes
+ */
+async function witeFileAction(nodes: Array<ItemType>) {
+  let pathName = process.cwd() + '/classify.js'
+  if (fs.existsSync(pathName)) {
+    const routers = require(pathName)
+    await markFile(nodes, routers)
+    // copy文件一定是建立在打标记的基础上
+    witeFile(nodes, routers)
   } else {
     console.error('跟路径没发现有classify.js, 现在退出')
     process.exit(1)
@@ -71,9 +90,13 @@ async function deletMarkAction(nodes: Array<ItemType>) {
  * @param {string} md
  */
 export async function generateAllAction(nodes: Array<ItemType>, md: string) {
+    let pathName = process.cwd() + '/classify.js'
+    const routers = require(pathName)
   getMdAction(md)
- await changePathAction(nodes)
- await markFileAction(nodes)
+  await changePathAction(nodes)
+  await markFileAction(nodes)
+  // copy文件一定是建立在打标记的基础上
+  witeFile(nodes, routers)
   wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
 }
 
@@ -112,6 +135,11 @@ function getActions() {
     title: 'Delete Mark',
     value: 'Delete Mark',
     action: () => deletMarkAction(nodes)
+  })
+  actionMap.set('Classification', {
+    title: 'Classification',
+    value: 'Classification',
+    action: () => witeFileAction(nodes)
   })
 
   actionMap.set('Wirte Json Nodes', {

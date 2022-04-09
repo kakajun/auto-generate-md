@@ -24,7 +24,28 @@ type classifyType = [
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export  function markFile(nodes: ItemType[], routers: classifyType) {
+export async function markFile(nodes: ItemType[], routers: classifyType) {
+  for (let i = 0; i < routers.length; i++) {
+    const ele = routers[i]
+    for (let j = 0; j < ele.router.length; j++) {
+      const obj = ele.router[j]
+      const pathN = obj.component
+      const renamePath = pathN.replace(/\//g, '\\')
+      // 路径转绝对路径
+      let absolutePath = renamePath.replace('@', process.cwd())
+      // 递归打上子集所有
+      await setNodeMark(nodes, ele.name, absolutePath)
+    }
+  }
+}
+
+/**
+ * @desc: 标记文件主程序
+ * @author: majun
+ * @param {ItemType} nodes
+ * @param {string} rootPath
+ */
+export  function witeFile(nodes: ItemType[], routers: classifyType) {
   routers.forEach( (ele) => {
     // 这里循环打标记的路由
     ele.router.forEach(async (obj: { component: any }) => {
@@ -32,9 +53,7 @@ export  function markFile(nodes: ItemType[], routers: classifyType) {
       const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
       let absolutePath = renamePath.replace('@', process.cwd())
-      // 递归打上子集所有
-      await setNodeMark(nodes, ele.name, absolutePath)
-      // // 对打上标记的文件进行分类写入
+      // 对打上标记的文件进行分类写入
       await markWriteFile(nodes, ele.name, absolutePath)
     })
   })
