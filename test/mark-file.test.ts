@@ -113,17 +113,11 @@ test('setNodeMark--给节点标记', async (done) => {
       fullPath: 'D:\\worker\\auto-generate-md\\test\\temp\\aa.vue'
     }
   ]
-  const str = `//base
-  //base
-<script setup>
-import UserRuler from './unuse/components/user-rulerts'
-</script>`
-  const file = __dirname + '\\unuse\\AppDeletMarTest.vue'
-  const finalStr = `<script setup>
-import UserRuler from './unuse/components/user-rulerts'
-</script>`
-  await setNodeMark(nodes, ele.name, absolutePath)
+
+
   try {
+  await setNodeMark(nodes, 'base', 'D:\\worker\\auto-generate-md\\test\\temp\\app-file-test.vue')
+  done()
 
   } catch (error) {
     done(error)

@@ -38,7 +38,7 @@ test('witeFile--更改不规范path', (done) => {
 
   try {
     const node = {
-      name: 'AppTest.vue',
+      name: 'app-test.vue',
       isDir: false,
       level: 0,
       note: '',
@@ -47,7 +47,7 @@ test('witeFile--更改不规范path', (done) => {
       size: 367,
       rowSize: 12,
       suffix: '.js',
-      fullPath: process.cwd() + '\\test\\temp\\AppTest.vue'
+      fullPath: process.cwd() + '\\test\\temp\\app-test.vue'
     }
     // 1. 随机创建一个文件
     const str = `<script setup>
@@ -64,7 +64,7 @@ import UserRuler from '../../unuse/components/user-rulerts.vue'
       await witeFile(node, true)
       done()
       const getStr = fs.readFileSync(file, 'utf-8')
-      //  fs.unlinkSync(process.cwd() + '\\unuse\\AppTest.vue')
+      //  fs.unlinkSync(process.cwd() + '\\unuse\\app-test.vue')
       expect(getStr).toEqual(finalStr)
     })
   } catch (error) {

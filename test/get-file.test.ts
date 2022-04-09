@@ -7,7 +7,7 @@ test('getFile--获取注释', (done) => {
   // 1. 随机创建一个文件
   const str = ` // 我就是个注释
   <script setup>
-import UserRuler from './test/temp/aa'
+import UserRuler from './aa'
 </script>`
   const file = process.cwd()+ '\\test\\temp\\app-file-test.vue'
   console.log(file,"7777")
@@ -17,8 +17,12 @@ import UserRuler from './test/temp/aa'
     const obj = getFile(file)
     done()
     // fs.unlinkSync(file)
-    expect(obj).toEqual({ note: ' // 我就是个注释', rowSize: 4, size: 93 ,    "imports":   ["D:\\gitwork\\auto-generate-md\\test\\temp\\aa.vue",
-     ]})
+    expect(obj).toEqual({
+      note: ' // 我就是个注释',
+      rowSize: 4,
+      size: 66,
+      imports: [process.cwd() + '\\test\\temp\\aa.vue']
+    })
   })
   } catch (error) {
   done(error)
