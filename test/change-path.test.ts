@@ -36,7 +36,6 @@ test('changeImport--更改不规范path', () => {
 })
 
 test('witeFile--更改不规范path', (done) => {
-
   try {
     const node = nodes[0]
     // 1. 随机创建一个文件
@@ -54,7 +53,6 @@ import UserRuler from '../../unuse/components/user-rulerts.vue'
       await witeFile(node, true)
       done()
       const getStr = fs.readFileSync(file, 'utf-8')
-      //  fs.unlinkSync(process.cwd() + '\\unuse\\app-test.vue')
       expect(getStr).toEqual(finalStr)
     })
   } catch (error) {

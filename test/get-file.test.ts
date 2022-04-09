@@ -4,7 +4,6 @@ import createDebugger from 'debug'
 const debug = createDebugger('get-file.test')
 debug.enabled = true
 test('getFile--获取注释', (done) => {
-  // 1. 随机创建一个文件
   const str = `// 我就是个注释
 <script setup>
 import UserRuler from './aa'
