@@ -19,24 +19,28 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   // debug('查找的node: ', node)
-  if (node && node.imports) {
+  if (node) {
     // 得到标记
     const belongTo = node.belongTo
     if (belongTo.length > 0) {
       await   setDispFileNew(path, name)
     }
-    // 找到有子文件了,循环它
-    for (let index = 0; index < node.imports.length; index++) {
-      const element = node.imports[index]
-      // debug('依赖文件: ', element)
-      // 如果文件存在
-      if (fs.existsSync(path)) {
-        // 继续递归,直到子文件没有子文件
-         await markWriteFile(nodes, name, element)
-      } else {
-        console.error('文件不存在', path)
+    if (node.imports) {
+      // 找到有子文件了,循环它
+      for (let index = 0; index < node.imports.length; index++) {
+        const element = node.imports[index]
+        // debug('依赖文件: ', element)
+        // 如果文件存在
+        if (fs.existsSync(path)) {
+          // 继续递归,直到子文件没有子文件
+          await markWriteFile(nodes, name, element)
+        } else {
+          console.error('文件不存在', path)
+        }
       }
     }
+
+
   }
 }
 
@@ -60,4 +64,3 @@ export async function setDispFileNew(pathN: string, name: string) {
      console.error(err)
    }
 }
-
