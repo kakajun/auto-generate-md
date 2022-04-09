@@ -5,22 +5,20 @@ const debug = createDebugger('get-file.test')
 debug.enabled = true
 test('getFile--获取注释', (done) => {
   // 1. 随机创建一个文件
-  const str = ` // 我就是个注释
-  <script setup>
+  const str = `// 我就是个注释
+<script setup>
 import UserRuler from './aa'
 </script>`
   const file = process.cwd()+ '\\test\\temp\\app-file-test.vue'
-  console.log(file,"7777")
   try {
     fs.writeFile(file, str, { encoding: 'utf8' }, () => {
      console.log('Write app-file-test successful')
     const obj = getFile(file)
     done()
-    // fs.unlinkSync(file)
     expect(obj).toEqual({
-      note: ' // 我就是个注释',
+      note: '// 我就是个注释',
       rowSize: 4,
-      size: 66,
+      size: 63,
       imports: [process.cwd() + '\\test\\temp\\aa.vue']
     })
   })

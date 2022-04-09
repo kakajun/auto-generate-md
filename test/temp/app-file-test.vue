@@ -1,5 +1,5 @@
 //base
 // 我就是个注释
-  <script setup>
+<script setup>
 import UserRuler from './aa'
 </script>

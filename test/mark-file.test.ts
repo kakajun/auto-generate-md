@@ -80,7 +80,6 @@ import UserRuler from '@/unuse/components/user-rulerts'
         expect(receive).toEqual(finalStr)
       })
     } catch (error) {
-       console.error(error)
       done(error)
     }
 
@@ -119,16 +118,10 @@ test('setNodeMark--给节点标记',  (done) => {
     await deletMark(file, 'base')
      await setNodeMark(nodes, 'base', file)
      const str = fs.readFileSync(file, 'utf-8')
-     const final = `//base
-// 我就是个注释
-  <script setup>
-import UserRuler from './aa'
-</script>
-`
-    expect(str).toEqual(final)
+    const index = str.indexOf('//base')
+    expect(index).toEqual(0)
     done()
   } catch (error) {
-    console.error(error)
     done(error)
   }
 }
