@@ -3,7 +3,6 @@ import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import { ItemType } from './get-file'
 import fs from 'fs-extra';
-import path from 'path';
 const debug = createDebugger('mark-write-file')
 debug.enabled = true
 
@@ -48,12 +47,11 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
  * @param {string} name
  * @param {string} rootPath
  */
-async function setDispFileNew(pathN: string, name: string) {
+export async function setDispFileNew(pathN: string, name: string) {
   // debug('copyFile入参: ', name, path, rootPath)
    const relative = pathN.replace(process.cwd(), '')
    const originPath = pathN
    const writeFileName = process.cwd() + '\\' + name + relative
-  //  debug('originPath: ', originPath)
   try {
     if (fs.existsSync(writeFileName)) return  // 如果文件都存在那算了
     await fs.copy(originPath, writeFileName)
@@ -63,20 +61,3 @@ async function setDispFileNew(pathN: string, name: string) {
    }
 }
 
-/**
- * @desc: 给一个路径和包名,然后就创建文件夹,如果存在那就啥也不管
- * @author: majun
- * @param {type} params
- */
-export function setFolder(name: string) {
-  // debug('setFolder入参: ', path, name)
-  const foldNameArrs = process.cwd().split('\\')
-  const latArr = foldNameArrs.pop()  // 最后一位和要创建的一位一样,那么就会无限创建文件夹
-  if ( latArr===name) {
-    console.error('创建文件夹异常:')
-    return
-  }
-  if (!fs.existsSync(process.cwd() + name)) {
-    fs.mkdirSync(process.cwd() + name)
-  }
-}

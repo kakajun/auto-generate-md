@@ -1,7 +1,7 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
 import { ItemType } from './get-file'
-// import { setFolder, markWriteFile } from './mark-write-file'
+// import {  markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
 debug.enabled = true
@@ -32,12 +32,8 @@ export  function markFile(nodes: ItemType[], routers: classifyType) {
       const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
       let absolutePath = renamePath.replace('@', process.cwd())
-      // 打标记
-      await setmark(absolutePath, ele.name)
       // 递归打上子集所有
       await setNodeMark(nodes, ele.name, absolutePath)
-      // 建分类包
-      // setFolder(rootPath, ele.name)
       // // 对打上标记的文件进行分类写入
       // markWriteFile(nodes, ele.name, absolutePath, rootPath)
     })
