@@ -11,6 +11,8 @@ debug.enabled = true
 
 test('getRelatPath--获取相对地址', () => {
   debug('process.cwd()', process.cwd())
+  console.log("555555555555");
+  console.log('process.cwd()', process.cwd())
   expect(
     getRelatPath(
       process.cwd() + '\\unuse\\components\\user-rulerts.vue',
