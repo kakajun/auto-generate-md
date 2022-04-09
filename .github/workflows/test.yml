@@ -1,0 +1,19 @@
+name: test
+
+on:
+  push:
+    branch: 'master'
+  pull_request:
+    branch: 'master'
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v2
+
+      - name: Install and Build 🔧
+        run: |
+          yarn install
+          npm run test
