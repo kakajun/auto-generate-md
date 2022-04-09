@@ -3,11 +3,10 @@ import {
   findNodes, deletMark,
   setNodeMark
 } from '../src/commands/mark-file';
-import { ItemType } from '../src/commands/get-file'
 import nodes from './nodes'
 import fs from 'fs'
 test('findNodes--查node', () => {
-  const node = findNodes(nodes as Array<ItemType>, process.cwd() + '\\test\\temp\\app-file-test.vue')
+  const node = findNodes(nodes, process.cwd() + '\\test\\temp\\app-file-test.vue')
    expect(node).toMatchObject(nodes[0])
 })
 
