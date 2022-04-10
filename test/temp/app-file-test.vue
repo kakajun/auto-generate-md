@@ -1,3 +1,4 @@
+// 我就是个注释
 <script setup>
-import UserRuler from '../../unuse/components/user-rulerts.vue'
+import UserRuler from './aa'
 </script>
