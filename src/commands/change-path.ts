@@ -74,8 +74,9 @@ export function makeSuffix(filePath: string, fullPath: string) {
       }
     }
   }
-  const nomoreImport = path.normalize(absoluteImport)
-  return nomoreImport
+   absoluteImport = absoluteImport.replace(/\\/g, '/')
+  // const nomoreImport = path.normalize(absoluteImport)
+  return absoluteImport
 }
 
 /**

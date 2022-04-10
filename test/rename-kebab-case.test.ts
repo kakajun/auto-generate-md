@@ -2,9 +2,10 @@ import fs from 'fs'
 import { renameKebabCase, checkCamelFile } from '../src/commands/rename-kebab-case'
 // import nodes from './nodes'
 import createDebugger from 'debug'
+const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-kebab-case.test')
 debug.enabled = true
-const file = process.cwd() + '/test/temp/MyTemplate.vue'
+const file = rootPath + '/test/temp/MyTemplate.vue'
 function setCamelCaseFile() {
   const str = `<template>
   <div class="">test</div>
@@ -38,8 +39,8 @@ test('rename-kebab-case.test--修改kebab-case', (done) => {
   async function get() {
     try {
       await setCamelCaseFile()
-      await renameKebabCase(process.cwd() + '/test/temp')
-      const existFlag = fs.existsSync(process.cwd() + '/test/temp/my-template.vue')
+      await renameKebabCase(rootPath + '/test/temp')
+      const existFlag = fs.existsSync(rootPath + '/test/temp/my-template.vue')
       expect(existFlag).toEqual(true)
       done()
     } catch (error) {

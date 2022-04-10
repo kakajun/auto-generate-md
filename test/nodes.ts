@@ -4,13 +4,13 @@ export default [
     isDir: false,
     level: 2,
     note: ' // 我就是个注释',
-    imports: [process.cwd() + '\\test\\temp\\aa.vue'],
+    imports: [process.cwd() + '/test/temp/aa.vue'],
     belongTo: ['base'],
     size: 96,
     copyed: false,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: process.cwd() + '\\test\\temp\\app-file-test.vue'
+    fullPath: process.cwd() + '/test/temp/app-file-test.vue'
   },
   {
     name: 'aa.vue',
@@ -23,6 +23,6 @@ export default [
     size: 96,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: process.cwd() + '\\test\\temp\\aa.vue'
+    fullPath: process.cwd() + '/test/temp/aa.vue'
   }
 ]

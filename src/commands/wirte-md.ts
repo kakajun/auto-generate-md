@@ -4,6 +4,7 @@ import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import { ItemType } from './get-file'
 import createDebugger from 'debug'
+const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('wirte-md')
 debug.enabled = false
 type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { [key: string]: number } }
@@ -13,7 +14,7 @@ type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { 
  * @return {fileName}  要写入文件地址
  */
 export function wirteMd(data: string, filePath: string) {
-  const file = path.resolve(process.cwd(), filePath)
+  const file = path.resolve(rootPath, filePath)
   // 异步写入数据到文件
   fs.writeFile(file, data, { encoding: 'utf8' }, () => {
     console.log('Write successful')
@@ -87,7 +88,7 @@ export function getMd(
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined
 ) {
   console.log('\x1B[36m%s\x1B[0m', '*** run location: ', path.resolve('./') + '\n')
-  const nodes = getFileNodes(process.cwd(),option)
+  const nodes = getFileNodes(rootPath,option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   console.log('\x1B[33m%s\x1b[0m', coutMd)

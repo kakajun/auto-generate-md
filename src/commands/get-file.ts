@@ -106,7 +106,8 @@ export function getFileNodes(
   const files = fs
     .readdirSync(dir)
     .map((item) => {
-      const fullPath = path.join(dir, item)
+      let fullPath = path.join(dir, item)
+
       const isDir = fs.lstatSync(fullPath).isDirectory()
       return {
         name: item,
@@ -143,7 +144,7 @@ export function getFileNodes(
           const obj = getFile(fullPath)
           Object.assign(item, obj)
           item.suffix = lastName
-          item.fullPath = fullPath
+          item.fullPath = fullPath.replace(/\\/g, '/')
           nodes.push(item)
         }
       }

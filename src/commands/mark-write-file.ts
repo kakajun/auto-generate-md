@@ -5,7 +5,7 @@ import { ItemType } from './get-file'
 import fs from 'fs-extra';
 const debug = createDebugger('mark-write-file')
 debug.enabled = true
-
+const rootPath = process.cwd().replace(/\\/g, '/')
 /**
  * @desc:  递归文件子依赖创建文件- 文件外递归
  * @author: majun
@@ -54,9 +54,9 @@ export async function markWriteFile(nodes:  ItemType[], name: string, path: stri
  */
 export async function setDispFileNew(pathN: string, name: string) {
   // debug('copyFile入参: ', name, path, rootPath)
-   const relative = pathN.replace(process.cwd(), '')
+   const relative = pathN.replace(rootPath, '')
    const originPath = pathN
-   const writeFileName = process.cwd() + '\\' + name + relative
+   const writeFileName = rootPath + '/' + name + relative
   try {
     if (fs.existsSync(writeFileName)) return  // 如果文件都存在那算了
     await fs.copy(originPath, writeFileName)

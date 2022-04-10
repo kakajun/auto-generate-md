@@ -9,6 +9,7 @@ import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeFile } from './mark-file'
 import fs from 'fs-extra'
+const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
 /**
@@ -17,8 +18,8 @@ const { ignores: ignore, includes: include } = handle(options)
  * @param {string} md
  */
 function getMdAction(md: string) {
-  console.log('\x1B[36m%s\x1B[0m', '*** location: ', `${process.cwd()}\\readme-md.md`)
-  wirteMd(md, `${process.cwd()}\\readme-md.md`)
+  console.log('\x1B[36m%s\x1B[0m', '*** location: ', `${rootPath}/readme-md.md`)
+  wirteMd(md, `${rootPath}/readme-md.md`)
 }
 
 /**
@@ -36,11 +37,11 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async  function markFileAction(nodes: ItemType[]) {
-  let pathName = process.cwd() + '/classify.js'
+  let pathName = rootPath + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
    await  markFile(nodes, routers)
-    wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
+    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   } else {
     console.error('跟路径没发现有classify.js, 现在退出')
     process.exit(1)
@@ -53,7 +54,7 @@ async  function markFileAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function witeFileAction(nodes: ItemType[]) {
-  let pathName = process.cwd() + '/classify.js'
+  let pathName = rootPath + '/classify.js'
   if (fs.existsSync(pathName)) {
     const routers = require(pathName)
     await markFile(nodes, routers)
@@ -72,7 +73,7 @@ async function witeFileAction(nodes: ItemType[]) {
 async function wirteJsNodesAction(nodes: ItemType[]) {
   // 要先改路径后缀,否则依赖收集不到
 await  changePathAction(nodes)
-  wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
+  wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
 }
 
 /**
@@ -91,7 +92,7 @@ async function deletMarkAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function renameAction() {
-  renameKebabCase(process.cwd())
+  renameKebabCase(rootPath)
 }
 
 /**
@@ -101,14 +102,14 @@ async function renameAction() {
  * @param {string} md
  */
 export async function generateAllAction(nodes: ItemType[], md: string) {
-    let pathName = process.cwd() + '/classify.js'
+    let pathName = rootPath + '/classify.js'
     const routers = require(pathName)
   getMdAction(md)
   await changePathAction(nodes)
   await markFileAction(nodes)
   // copy文件一定是建立在打标记的基础上
   witeFile(nodes, routers)
-  wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
+  wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
 }
 
 /**
@@ -162,7 +163,7 @@ function getActions() {
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',
     value: 'Wirte Json Nodes',
-    action: () => wirteJsNodes(JSON.stringify(nodes), process.cwd() + '\\readme-file.js')
+    action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   })
   actionMap.set('Wirte  Nodes With Import(may change path)', {
     title: 'Wirte  Nodes With Import(may change path)',
