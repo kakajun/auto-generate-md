@@ -1,6 +1,5 @@
 import fs from 'fs'
 import { renameKebabCase, checkCamelFile } from '../src/commands/rename-kebab-case'
-// import nodes from './nodes'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-kebab-case.test')

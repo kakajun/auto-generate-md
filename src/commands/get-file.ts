@@ -107,7 +107,6 @@ export function getFileNodes(
     .readdirSync(dir)
     .map((item) => {
       let fullPath = path.join(dir, item)
-
       const isDir = fs.lstatSync(fullPath).isDirectory()
       return {
         name: item,

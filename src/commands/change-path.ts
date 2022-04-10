@@ -74,9 +74,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
       }
     }
   }
-   absoluteImport = absoluteImport.replace(/\\/g, '/')
-  // const nomoreImport = path.normalize(absoluteImport)
-  return absoluteImport
+  return absoluteImport.replace(/\\/g, '/')
 }
 
 /**
@@ -105,7 +103,7 @@ export function changeImport(ele: string, fullPath: string) {
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   // const reg = /import.*[\"|\'](.*)[\'|\"]/
   const reg = /import.*from [\"|\'](.*)[\'|\"]/
-      //  if (fullPath == 'D:\\gitwork\\auto-generate-md\\unuse\\App.vue') {
+      //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
       //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
       //      debug(ele.match(reg), '11111111111111')
       //  }

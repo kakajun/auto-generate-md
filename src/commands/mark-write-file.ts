@@ -3,9 +3,9 @@ import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import { ItemType } from './get-file'
 import fs from 'fs-extra';
+const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')
 debug.enabled = true
-const rootPath = process.cwd().replace(/\\/g, '/')
 /**
  * @desc:  递归文件子依赖创建文件- 文件外递归
  * @author: majun
@@ -18,7 +18,6 @@ export async function markWriteFile(nodes:  ItemType[], name: string, path: stri
   // debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
-
   // debug('查找的node: ', node)
   if (node) {
     if (node.copyed) return   // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析

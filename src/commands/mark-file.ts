@@ -31,7 +31,6 @@ export async function markFile(nodes:  ItemType[], routers: classifyType) {
     for (let j = 0; j < ele.router.length; j++) {
       const obj = ele.router[j]
       const pathN = obj.component
-      // const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
       let absolutePath = pathN.replace('@', rootPath)
       // 递归打上子集所有
@@ -51,7 +50,6 @@ export  function witeFile(nodes:  ItemType[], routers: classifyType) {
     // 这里循环打标记的路由
     ele.router.forEach(async (obj: { component: any }) => {
       const pathN = obj.component
-      // const renamePath = pathN.replace(/\//g, '\\')
       // 路径转绝对路径
       let absolutePath = pathN.replace('@', rootPath)
       // 对打上标记的文件进行分类写入
@@ -100,13 +98,10 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
  */
 export function findNodes(nodes: ItemType[], path: string): ItemType | null {
   let node = null
-  // 里面有/符号的要替换为\, 不然后面全等不了
-  // const renamePath = path.replace(/\//g, '\\')
   function find(nodes: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const element = nodes[index]
       if (element.children) find(element.children)
-      // debug(element.fullPath, '=====', renamePath)
       if (element.fullPath === path) node = element
     }
   }

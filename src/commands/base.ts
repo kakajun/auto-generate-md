@@ -9,6 +9,7 @@ import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeFile } from './mark-file'
 import fs from 'fs-extra'
+// 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)

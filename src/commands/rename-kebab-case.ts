@@ -2,12 +2,10 @@
 
 import fs from 'fs'
 import path from 'path'
-// import { kebabCase } from 'lodash'
 interface fileObjType {
   [key: string]: any
 }
 let fileObj = {} as fileObjType // 搞个全局变量接收
-
 // 封装一个专门使用判断是否为目录的函数
 async function dir(path: string) {
   return new Promise((resolve) => {
