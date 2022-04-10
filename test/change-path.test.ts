@@ -13,8 +13,8 @@ test('getRelatPath--获取相对地址', () => {
   debug('process.cwd()', process.cwd())
   expect(
     getRelatPath(
-      '\\unuse\\components\\user-rulerts.vue',
-      '\\unuse\\App.vue'
+      '/unuse/components/user-rulerts.vue',
+      '/unuse/App.vue'
     )
   ).toEqual('./components/user-rulerts.vue')
 })
