@@ -2,6 +2,7 @@
 import { ItemType } from './get-file'
 import prompts from 'prompts'
 import { wirteMd, getMd } from './wirte-md'
+import { renameKebabCase } from './rename-kebab-case'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
@@ -83,6 +84,16 @@ async function deletMarkAction(nodes: ItemType[]) {
   deletMarkAll(nodes,'base')
 }
 
+
+/**
+ * @desc://8. 规范命名kabel-case
+ * @author: majun
+ * @param {Array} nodes
+ */
+async function renameAction() {
+  renameKebabCase(process.cwd())
+}
+
 /**
  * @desc: 执行所有操作
  * @author: majun
@@ -141,6 +152,12 @@ function getActions() {
     value: 'Classification',
     action: () => witeFileAction(nodes)
   })
+  actionMap.set('RenameKebabCase', {
+    title: 'RenameKebabCase',
+    value: 'RenameKebabCase',
+    action: () => renameAction()
+  })
+
 
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',

@@ -72,5 +72,9 @@
   "files": [
     "bin",
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "@types/lodash": "^4.14.181",
+    "lodash": "^4.17.21"
+  }
 }

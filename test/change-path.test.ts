@@ -11,12 +11,10 @@ debug.enabled = true
 
 test('getRelatPath--获取相对地址', () => {
   debug('process.cwd()', process.cwd())
-  console.log('555555555555', process.cwd() + '\\unuse\\components\\user-rulerts.vue')
-  console.log('process.cwd()', process.cwd() + '\\unuse\\App.vue')
   expect(
     getRelatPath(
-      process.cwd() + '\\unuse\\components\\user-rulerts.vue',
-      process.cwd() + '\\unuse\\App.vue'
+      '\\unuse\\components\\user-rulerts.vue',
+      '\\unuse\\App.vue'
     )
   ).toEqual('./components/user-rulerts.vue')
 })
