@@ -124,7 +124,7 @@ export function changeImport(ele: string, fullPath: string) {
       debug('!!!!!!!!!匹配imp: ', impStr[1])
       // 先补后缀
       obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
-      console.log('补过后', obj.absoluteImport)
+      // console.log('补过后', obj.absoluteImport)
       // 后改相对路径
       obj.impName = getRelatPath(obj.absoluteImport, fullPath)
     }
