@@ -5,7 +5,7 @@ import {  markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
-debug.enabled = true
+debug.enabled = false
 type classifyType = [
   {
     name: string
@@ -70,7 +70,7 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
     // 打标记
     await setmark(path, name)
   }
-  debug('查找的node: ', node)
+  // debug('查找的node: ', node)
   if (node && node.imports) {
     // 标记归属设置
     if (node.belongTo.indexOf(name)>-1) return  // 已经分析过该文件了, 就不再分析,否则会死循环
