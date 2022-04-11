@@ -39,8 +39,25 @@ export async function renamePath(nodes: ItemType[]) {
 export async function renameFold(node: ItemType) {
     let filename = path.parse(node.fullPath).base
   if (checkCamelFile(filename)) {
-    replaceName(node.fullPath)
+   const obj= await replaceName(node.fullPath)
+    // 这里一定要更新node,否则后面找不到路径
+    changePathName(node, obj)
   }
+}
+/**
+ * @desc: 递归改所有路径名字
+ * @author: majun
+ * @param {ItemType} node
+ * @param {object} obj
+ */
+export function changePathName(node: ItemType, obj: { newPath: string; oldPath: string }) {
+  if (node.children) {
+    node.children.forEach((element) => {
+      changePathName(element, obj)
+    })
+  }
+  const { newPath, oldPath } = obj
+  node.fullPath = node.fullPath.replace(oldPath, newPath)
 }
 
 /**
@@ -69,12 +86,12 @@ export function replaceName(fullPath:string) {
   const newName = toKebabCase(filename)
   const oldPath = fullPath
   const newPath = oldPath.replace(filename, newName)
-  return new Promise<void>((resolve) => {
+  return new Promise<{ newPath: string; oldPath: string }>((resolve) => {
     fs.rename(oldPath, newPath, (err) => {
       if (err) {
         throw err
       } else console.log(filename + ' is done')
-      resolve()
+      resolve({ newPath, oldPath })
     })
   })
 }
@@ -84,7 +101,7 @@ export function replaceName(fullPath:string) {
  */
 function writeFile() {
   return new Promise<void>((resolve) => {
-    fs.writeFile(rootPath+'./data.json', JSON.stringify(fileObj), 'utf8', (err) => {
+    fs.writeFile(rootPath+'/data.json', JSON.stringify(fileObj), 'utf8', (err) => {
       if (err) {
         console.warn(err)
       }

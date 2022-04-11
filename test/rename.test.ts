@@ -67,7 +67,7 @@ function setFile() {
 }
 
 
-function creatFold(foldPath) {
+function creatFold(foldPath:string) {
   return new Promise<void>((resolve) => {
     if (fs.existsSync(foldPath)) {
       resolve()
