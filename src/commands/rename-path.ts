@@ -35,7 +35,7 @@ export async function renamePath(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-  writeFile()
+  // writeFile()
 }
 
 function rewriteFile(node: ItemType) {
@@ -46,10 +46,12 @@ function rewriteFile(node: ItemType) {
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
     if (ele.indexOf('import') > -1) {
-      const impOldName = getImportName(ele)
+      let impOldName = getImportName(ele)
       if (checkCamelFile(impOldName)) {
-        const newName = toKebabCase(impOldName)
-        sarr[index] = ele.replace(impOldName, newName)
+        // 取文件名,否则转case会出错
+          let name = path.parse(impOldName).name
+        const newName = toKebabCase(name)
+        sarr[index] = ele.replace(name, newName)
         writeFlag = true
       }
     }
@@ -74,7 +76,7 @@ function rewriteFile(node: ItemType) {
  */
 export async function renameFold(node: ItemType) {
   let filename = path.parse(node.fullPath).base
-  const filter = ['FMEA']   // 把这样子的文件夹过滤
+  const filter = ['FMEA', 'DVP']   // 把这样子的文件夹过滤
   const falg = filter.some((item) => filename.indexOf(item)>-1)
   if (!falg&&checkCamelFile(filename)) {
     const obj = await replaceName(node.fullPath)
