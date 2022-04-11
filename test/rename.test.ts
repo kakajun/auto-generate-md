@@ -1,8 +1,5 @@
 import fs from 'fs-extra'
-import {
-  renamePath,
-  replaceName
-} from '../src/commands/rename-path'
+import { renamePathRecursion, replaceName } from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -102,7 +99,7 @@ async  function get() {
   try {
    await creatFold(foldPath)
    await setFile()
-   await renamePath(nodes)
+   await renamePathRecursion(nodes)
    expect(1).toEqual(1)
    done()
  } catch (error) {

@@ -11,12 +11,18 @@ debug.enabled = false
 interface fileObjType {
   [key: string]: any
 }
-let fileObj = {} as fileObjType // 搞个全局变量接收
+let fileObj = {} as fileObjType; // 搞个全局变量接收
+
+export async function renamePath(nodes: ItemType[]) {
+  await renamePathRecursion(nodes)
+  writeFile()
+}
+  // writeFile()  // 写出来
 /**
  * @desc: 循环node, 改文件, 改依赖, 思路:循环每个文件, 并把import 里面不合格的命名改合格
  * @author: majun
  */
-export async function renamePath(nodes: ItemType[]) {
+export async function renamePathRecursion(nodes: ItemType[]) {
   async function getNode(nodes: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
@@ -32,7 +38,7 @@ export async function renamePath(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-  writeFile()  // 写出来
+
 }
 
 function rewriteFile(node: ItemType) {
@@ -70,9 +76,11 @@ function rewriteFile(node: ItemType) {
  * @param {ItemType} node
  */
 export async function renameFold(node: ItemType) {
-    let filename = path.parse(node.fullPath).base
-  if (checkCamelFile(filename)) {
-   const obj= await replaceName(node.fullPath)
+  let filename = path.parse(node.fullPath).base
+  const filter = ['FMEA']   // 把这样子的文件夹过滤
+  const falg = filter.some((item) => filename.indexOf(item)>-1)
+  if (!falg&&checkCamelFile(filename)) {
+    const obj = await replaceName(node.fullPath)
     // 这里一定要更新node,否则后面找不到路径
     changePathName(node, obj)
   }
@@ -103,7 +111,7 @@ export async function renameFile(node: ItemType) {
    if (checkCamelFile(filename)) {
      const suffix = ['.js', '.vue'] // 这里只重命名js和vue文件
      const lastName = path.extname(node.fullPath)
-     let flag = suffix.some((item) => lastName.indexOf(item) > -1)
+     let flag = suffix.some((item) => lastName === item)
      if (flag) {
      const obj=  await replaceName(node.fullPath)
        // 这里一定要更新node,否则后面找不到路径
