@@ -4,6 +4,7 @@ import { ItemType } from './get-file'
 import { checkCamelFile, toKebabCase } from './rename-kebab-case'
 import createDebugger from 'debug'
 import path from 'path';
+import { getImportName } from './change-path'
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = false
@@ -23,12 +24,44 @@ export async function renamePath(nodes: ItemType[]) {
         await renameFold(ele)
         await getNode(ele.children)
       } else {
+        // 重命名文件
         await renameFile(ele)
+        // 重写文件的import
+        await rewriteFile(ele)
       }
     }
   }
   await getNode(nodes)
   writeFile()  // 写出来
+}
+
+function rewriteFile(node: ItemType) {
+  return new Promise<void>((resolve) => {
+  let writeFlag = false
+  const str = fs.readFileSync(node.fullPath, 'utf-8')
+  const sarr = str.split(/[\n]/g)
+  for (let index = 0; index < sarr.length; index++) {
+    const ele = sarr[index]
+    if (ele.indexOf('import') > -1) {
+      const impOldName = getImportName(ele)
+      if (checkCamelFile(impOldName)) {
+        const newName = toKebabCase(impOldName)
+        sarr[index] = ele.replace(impOldName, newName)
+        writeFlag = true
+      }
+    }
+  }
+  if (writeFlag) {
+   let fileStr = sarr.join('\n')
+    // 异步写入数据到文件
+    fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' }, () => {
+      console.log('Write successful-------' +node. fullPath)
+      resolve()
+    })
+  } else {
+    resolve()
+  }
+  })
 }
 
 /**
@@ -72,7 +105,9 @@ export async function renameFile(node: ItemType) {
      const lastName = path.extname(node.fullPath)
      let flag = suffix.some((item) => lastName.indexOf(item) > -1)
      if (flag) {
-       await replaceName(node.fullPath)
+     const obj=  await replaceName(node.fullPath)
+       // 这里一定要更新node,否则后面找不到路径
+       changePathName(node, obj)
      }
    }
  }

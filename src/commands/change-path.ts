@@ -78,19 +78,12 @@ export function makeSuffix(filePath: string, fullPath: string) {
 }
 
 /**
- * @desc: 找到import并返回全路径和原始路径
+ * @desc: 根据一行代码匹配import的详细内容
  * @author: majun
- * @param {string} ele    找到的行引入
- * @param {string} fullPath  文件的全路径
  */
-export function changeImport(ele: string, fullPath: string) {
-  let obj = {
-    impName: '',
-    filePath: '',
-    absoluteImport:''
-  }
-
-  // 注释的不转,其他公共也不转
+export function getImportName(ele: string) {
+  let str=''
+ // 注释的不转,其他公共也不转
   const ignore = [
     'xiwicloud',
     'bpmn-js',
@@ -109,24 +102,35 @@ export function changeImport(ele: string, fullPath: string) {
       //  }
   // 这里只收集组件依赖, 插件依赖排除掉
   if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !== 0) {
-    debug('changeImport入参: ', fullPath)
-    const impStr = ele.match(reg)
+    const impStr = ele.match(reg);
     // 没有import的不转
-    if (impStr && impStr[1]) {
-      // import NProgress from 'nprogress'
-      // const reg2 = /import.*from [\"|\'](.*)[\'|\"]/
-      // // 如上的匹配会被误伤,再写个正则
-      // const regStr = ele.match(reg2)
-      // if (regStr && impStr[1] && impStr[1].indexOf('/')===-1) return obj  // 进一步判断如果是插件,直接返回空
-      // 依赖的具体名字
-      obj.filePath = impStr[1]
-      debug('!!!!!!!!!匹配imp: ', impStr[1])
-      // 先补后缀
-      obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
-      // console.log('补过后', obj.absoluteImport)
-      // 后改相对路径
-      obj.impName = getRelatPath(obj.absoluteImport, fullPath)
-    }
+    if (impStr && impStr[1]) str = impStr[1];
+  }
+  return str
+}
+
+/**
+ * @desc: 找到import并返回全路径和原始路径
+ * @author: majun
+ * @param {string} ele    找到的行引入
+ * @param {string} fullPath  文件的全路径
+ */
+export function changeImport(ele: string, fullPath: string) {
+  let obj = {
+    impName: '',
+    filePath: '',
+    absoluteImport:''
+  }
+  const impName = getImportName(ele)
+  if (impName) {
+    // 依赖的具体名字
+    obj.filePath = impName
+    debug('!!!!!!!!!匹配imp: ', impName)
+    // 先补后缀
+    obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
+    // console.log('补过后', obj.absoluteImport)
+    // 后改相对路径
+    obj.impName = getRelatPath(obj.absoluteImport, fullPath)
   }
   return obj
 }
