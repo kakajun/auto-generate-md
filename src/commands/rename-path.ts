@@ -13,16 +13,13 @@ interface fileObjType {
 }
 let fileObj = {} as fileObjType; // 搞个全局变量接收
 
-export async function renamePath(nodes: ItemType[]) {
-  await renamePathRecursion(nodes)
-  writeFile()
-}
+
   // writeFile()  // 写出来
 /**
  * @desc: 循环node, 改文件, 改依赖, 思路:循环每个文件, 并把import 里面不合格的命名改合格
  * @author: majun
  */
-export async function renamePathRecursion(nodes: ItemType[]) {
+export async function renamePath(nodes: ItemType[]) {
   async function getNode(nodes: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
@@ -38,7 +35,7 @@ export async function renamePathRecursion(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-
+  writeFile()
 }
 
 function rewriteFile(node: ItemType) {
