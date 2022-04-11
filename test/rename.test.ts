@@ -36,19 +36,14 @@ const nodes = [
 function setFile() {
   const file = rootPath + '/test/TestKableCase/youTemplate.vue'
   const str = `<template>
-    <div class="">test</div>
-  </template>
-  <script>
-  export default {
-    name: '',
-    components: {},
-    data() {
-      return {}
-    },
-    methods: {}
-  }
-  </script>
-  <style lang="scss" scoped></style>
+  <div class=""></div>
+</template>
+
+<script>
+import UserRuler from '@/unuse/components/userRulerts'
+export default {
+}
+</script>
   `
   return new Promise<void>((resove, reject) => {
     try {
@@ -63,8 +58,7 @@ function setFile() {
   })
 }
 
-
-function creatFold(foldPath:string) {
+function creatFold(foldPath: string) {
   return new Promise<void>((resolve) => {
     if (fs.existsSync(foldPath)) {
       resolve()
@@ -80,7 +74,7 @@ function creatFold(foldPath:string) {
 }
 
 test('replaceName --改文件名', (done) => {
-    let foldPath = rootPath + '/test/checkTestKableCase'
+  let foldPath = rootPath + '/test/checkTestKableCase'
   async function get() {
     try {
       await creatFold(foldPath)
@@ -94,17 +88,28 @@ test('replaceName --改文件名', (done) => {
   get()
 })
 test('checkCamelFile --检测kebab-case', (done) => {
-   let foldPath = rootPath + '/test/TestKableCase'
-async  function get() {
-  try {
-   await creatFold(foldPath)
-   await setFile()
-   await renamePathRecursion(nodes)
-   expect(1).toEqual(1)
-   done()
- } catch (error) {
-   done(error)
- }
+  let foldPath = rootPath + '/test/TestKableCase'
+  const finalStr = `<template>
+  <div class=""></div>
+</template>
+
+<script>
+import UserRuler from '@/unuse/components/user-rulerts'
+export default {
 }
+</script>`
+  async function get() {
+    try {
+      await creatFold(foldPath)
+      await setFile()
+      await renamePathRecursion(nodes)
+      let newPath = rootPath + '/test/test-kable-case/you-template.vue'
+      const str = fs.readFileSync(newPath, 'utf-8')
+      expect(str).toEqual(finalStr)
+      done()
+    } catch (error) {
+      done(error)
+    }
+  }
   get()
 })
