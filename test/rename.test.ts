@@ -15,7 +15,7 @@ const nodes = [
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/TestKableCase',
+    fullPath: rootPath + '/test/temp/TestKableCase',
     children: [
       {
         name: 'youTemplate',
@@ -28,13 +28,13 @@ const nodes = [
         copyed: false,
         rowSize: 4,
         suffix: '.vue',
-        fullPath: rootPath + '/test/TestKableCase/youTemplate.vue'
+        fullPath: rootPath + '/test/temp/TestKableCase/youTemplate.vue'
       }
     ]
   }
 ]
 function setFile() {
-  const file = rootPath + '/test/TestKableCase/youTemplate.vue'
+  const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
   const str = `<template>
   <div class=""></div>
 </template>
@@ -44,7 +44,7 @@ import UserRuler from '@/unuse/components/userRulerts'
 export default {
 }
 </script>
-  `
+`
   return new Promise<void>((resove, reject) => {
     try {
       fs.writeFile(file, str, { encoding: 'utf8' }, () => {
@@ -74,7 +74,7 @@ function creatFold(foldPath: string) {
 }
 
 test('replaceName --改文件名', (done) => {
-  let foldPath = rootPath + '/test/checkTestKableCase'
+  let foldPath = rootPath + '/test/temp/checkTestKableCase'
   async function get() {
     try {
       await creatFold(foldPath)
@@ -88,7 +88,7 @@ test('replaceName --改文件名', (done) => {
   get()
 })
 test('checkCamelFile --检测kebab-case', (done) => {
-  let foldPath = rootPath + '/test/TestKableCase'
+  let foldPath = rootPath + '/test/temp/TestKableCase'
   const finalStr = `<template>
   <div class=""></div>
 </template>
@@ -97,13 +97,14 @@ test('checkCamelFile --检测kebab-case', (done) => {
 import UserRuler from '@/unuse/components/user-rulerts'
 export default {
 }
-</script>`
+</script>
+`
   async function get() {
     try {
       await creatFold(foldPath)
       await setFile()
       await renamePathRecursion(nodes)
-      let newPath = rootPath + '/test/test-kable-case/you-template.vue'
+      let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
       const str = fs.readFileSync(newPath, 'utf-8')
       expect(str).toEqual(finalStr)
       done()
