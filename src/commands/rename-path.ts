@@ -1,7 +1,7 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
 import { ItemType } from './get-file'
-import { checkCamelFile, toKebabCase, replaceName } from './rename-kebab-case'
+import { checkCamelFile, toKebabCase } from './rename-kebab-case'
 import createDebugger from 'debug'
 import path from 'path';
 const debug = createDebugger('mark-file')
@@ -37,9 +37,10 @@ export async function renamePath(nodes: ItemType[]) {
  * @param {ItemType} node
  */
 export async function renameFold(node: ItemType) {
-  if (checkCamelFile(node.fullPath)) {
-     replaceName(node.fullPath,)
-   }
+    let filename = path.parse(node.fullPath).base
+  if (checkCamelFile(filename)) {
+    replaceName(node.fullPath)
+  }
 }
 
 /**
@@ -47,22 +48,36 @@ export async function renameFold(node: ItemType) {
  * @author: majun
  * @param {ItemType} node
  */
- export async function renameFile(node: ItemType) {
-   if (checkCamelFile(node.fullPath)) {
+export async function renameFile(node: ItemType) {
+       let filename = path.parse(node.fullPath).base
+   if (checkCamelFile(filename)) {
      const suffix = ['.js', '.vue'] // 这里只重命名js和vue文件
      const lastName = path.extname(node.fullPath)
      let flag = suffix.some((item) => lastName.indexOf(item) > -1)
      if (flag) {
-       // 写入file
-       let fileName = path.parse(node.fullPath).base
-       const newFileName = toKebabCase(fileName)
-       fileObj[fileName] = newFileName
-       // 修改文件名
        await replaceName(node.fullPath)
      }
    }
  }
 
+/**
+ * 重命名文件 CamelCase || PascalCase => kebab-case
+ * @param node 节点
+ */
+export function replaceName(fullPath:string) {
+  let filename = path.parse(fullPath).base
+  const newName = toKebabCase(filename)
+  const oldPath = fullPath
+  const newPath = oldPath.replace(filename, newName)
+  return new Promise<void>((resolve) => {
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) {
+        throw err
+      } else console.log(filename + ' is done')
+      resolve()
+    })
+  })
+}
 /**
  * 将修改的文件数据写入file
  * @param fileName 文件名

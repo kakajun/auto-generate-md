@@ -1,6 +1,8 @@
 import fs from 'fs-extra'
-import { renamePath } from '../src/commands/rename-path'
-import { ItemType } from '../src/commands/get-file'
+import {
+  renamePath,
+  replaceName
+} from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -64,18 +66,48 @@ function setFile() {
   })
 }
 
-test('checkCamelFile --检测kebab-case', (done) => {
-  fs.mkdir( rootPath + '/test/TestKableCase', async function (err) {
-    if (err) {
-      return console.error(err)
+
+function creatFold(foldPath) {
+  return new Promise<void>((resolve) => {
+    if (fs.existsSync(foldPath)) {
+      resolve()
+    } else {
+      fs.mkdir(foldPath, function (err) {
+        if (err) {
+          return console.error(err)
+        }
+        resolve()
+      })
     }
+  })
+}
+
+test('replaceName --改文件名', (done) => {
+    let foldPath = rootPath + '/test/checkTestKableCase'
+  async function get() {
     try {
-      await setFile()
-      await renamePath(nodes)
+      await creatFold(foldPath)
+      await replaceName(foldPath)
       expect(1).toEqual(1)
       done()
     } catch (error) {
       done(error)
     }
-  })
+  }
+  get()
+})
+test('checkCamelFile --检测kebab-case', (done) => {
+   let foldPath = rootPath + '/test/TestKableCase'
+async  function get() {
+  try {
+   await creatFold(foldPath)
+   await setFile()
+   await renamePath(nodes)
+   expect(1).toEqual(1)
+   done()
+ } catch (error) {
+   done(error)
+ }
+}
+  get()
 })
