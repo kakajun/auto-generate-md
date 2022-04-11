@@ -34,6 +34,7 @@ export async function renameKebabCase(filePath: string) {
         files.map(async (filename) => {
           // 获取当前文件的绝对路径
           const filedir = path.join(filePath, filename)
+
           const isCamelFile = checkCamelFile(filedir) // 驼峰文件
           if (await dir(filedir)) {
             if (!filedir.includes('/assets')) {
@@ -41,10 +42,16 @@ export async function renameKebabCase(filePath: string) {
             }
           } else {
             if (isCamelFile) {
-              // 写入file
-              await writeFile(filename)
-              // 修改文件名
-              await replaceName(filePath, filename)
+              const suffix = ['.js', '.vue']  // 这里只重命名js和vue文件
+              const lastName = path.extname(filedir)
+             let flag= suffix.some((item) => lastName.indexOf(item) > -1)
+              if (flag) {
+                // 写入file
+                await writeFile(filename)
+                // 修改文件名
+                await replaceName(filePath)
+              }
+
             }
           }
         })
@@ -67,7 +74,8 @@ export function checkCamelFile(fileName: string) {
  * @param filePath 文件相对路径
  * @param fileName 文件名
  */
-function replaceName(filePath: string, filename: string) {
+export function replaceName(filePath: string) {
+    let filename = path.parse(filePath).base
   const oldPath = filePath + '/' + filename
   const newPath = filePath + '/' + toKebabCase(filename)
   return new Promise<void>((resolve) => {
@@ -97,7 +105,7 @@ function writeFile(filename: string) {
   })
 }
 
-function toKebabCase(str: string) {
+export function toKebabCase(str: string) {
   const regex = /[A-Z]/g
   return fistLetterLower(str).replace(regex, (word: string) => {
     return '-' + word.toLowerCase()

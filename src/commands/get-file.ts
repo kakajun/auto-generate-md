@@ -53,9 +53,9 @@ export type ItemType = {
   isDir: boolean
   level: number
   note: string
-  size: number
-  suffix: string
-  rowSize: number
+  size?: number
+  suffix?: string
+  rowSize?: number
   fullPath: string
   belongTo: string[] // 标记归属设置 分类用
   imports: string[] // 依赖收集
@@ -134,6 +134,7 @@ export function getFileNodes(
       if (isDir) {
         //recursion 递归
         getFileNodes(fullPath, option, (item.children = []), level + 1)
+         item.fullPath = fullPath.replace(/\\/g, '/')
         nodes.push(item)
       } else {
         const i = fullPath.lastIndexOf('.')

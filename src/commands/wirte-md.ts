@@ -33,7 +33,7 @@ function getCountMd(datas: ItemType[]) {
   function getDeatle(nodes: ItemType[]) {
     nodes.forEach((obj: ItemType) => {
       if (obj.children) getDeatle(obj.children)
-      else {
+      else if (obj.suffix && obj.rowSize && obj.size) {
         if (!coutObj.hasOwnProperty(obj.suffix)) coutObj[obj.suffix] = 0
         coutObj[obj.suffix]++
         rowTotleNumber += obj.rowSize

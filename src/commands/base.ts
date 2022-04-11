@@ -2,7 +2,8 @@
 import { ItemType } from './get-file'
 import prompts from 'prompts'
 import { wirteMd, getMd } from './wirte-md'
-import { renameKebabCase } from './rename-kebab-case'
+// import { renameKebabCase } from './rename-kebab-case'
+import { renamePath } from './rename-path'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
@@ -92,8 +93,9 @@ async function deletMarkAction(nodes: ItemType[]) {
  * @author: majun
  * @param {Array} nodes
  */
-async function renameAction() {
-  renameKebabCase(rootPath)
+async function renameAction(nodes: ItemType[]) {
+  // renameKebabCase(rootPath)
+  renamePath(nodes)
 }
 
 /**
@@ -157,7 +159,7 @@ function getActions() {
   actionMap.set('RenameKebabCase', {
     title: 'RenameKebabCase',
     value: 'RenameKebabCase',
-    action: () => renameAction()
+    action: () => renameAction(nodes)
   })
 
 
