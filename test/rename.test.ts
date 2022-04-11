@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { renamePathRecursion, replaceName } from '../src/commands/rename-path'
+import { renamePath, replaceName } from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -103,7 +103,7 @@ export default {
     try {
       await creatFold(foldPath)
       await setFile()
-      await renamePathRecursion(nodes)
+      await renamePath(nodes)
       let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
       const str = fs.readFileSync(newPath, 'utf-8')
       expect(str).toEqual(finalStr)
