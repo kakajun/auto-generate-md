@@ -4,6 +4,7 @@ const debug = createDebugger('get-file.test')
 debug.enabled = true
 import { setDispFileNew, markWriteFile } from '../src/commands/mark-write-file'
 import nodes from './nodes'
+
 describe('mark-write-file.test的测试', () => {
   test('mark-write-file.test--找到文件然后copy文件', (done) => {
     const file = rootPath + '/test/temp/app-file-test.vue'

@@ -5,8 +5,8 @@ import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
-  let foldPath = rootPath + '/test/temp'
-  emptyDir(foldPath)
+let foldPath = rootPath + '/test/temp'
+emptyDir(foldPath)
 const nodes = [
   {
     name: 'TestKableCase',
@@ -74,23 +74,24 @@ function creatFold(foldPath: string) {
   })
 }
 
-test('replaceName --改文件名', (done) => {
-  let foldPath = rootPath + '/test/temp/checkTestKableCase'
-  async function get() {
-    try {
-      await creatFold(foldPath)
-      await replaceName(foldPath)
-      expect(1).toEqual(1)
-      done()
-    } catch (error) {
-      done(error)
+describe('rename.test的测试', () => {
+  test('replaceName --改文件名', (done) => {
+    let foldPath = rootPath + '/test/temp/checkTestKableCase'
+    async function get() {
+      try {
+        await creatFold(foldPath)
+        await replaceName(foldPath)
+        expect(1).toEqual(1)
+        done()
+      } catch (error) {
+        done(error)
+      }
     }
-  }
-  get()
-})
-test('checkCamelFile --检测kebab-case', (done) => {
-  let foldPath = rootPath + '/test/temp/TestKableCase'
-  const finalStr = `<template>
+    get()
+  })
+  test('checkCamelFile --检测kebab-case', (done) => {
+    let foldPath = rootPath + '/test/temp/TestKableCase'
+    const finalStr = `<template>
   <div class=""></div>
 </template>
 
@@ -100,28 +101,29 @@ export default {
 }
 </script>
 `
-  async function get() {
-    try {
-      await creatFold(foldPath)
-      await setFile()
-      await renamePath(nodes)
-      let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
-      const str = fs.readFileSync(newPath, 'utf-8')
-      expect(str).toEqual(finalStr)
-      done()
-    } catch (error) {
-      done(error)
+    async function get() {
+      try {
+        await creatFold(foldPath)
+        await setFile()
+        await renamePath(nodes)
+        let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
+        const str = fs.readFileSync(newPath, 'utf-8')
+        expect(str).toEqual(finalStr)
+        done()
+      } catch (error) {
+        done(error)
+      }
     }
-  }
-  get()
-})
-test('emptyDir --清空文件夹及文件', () => {
-  let foldPath = rootPath + '/test/temp'
-  emptyDir(foldPath)
-  const flag = fs.existsSync(foldPath)
-  expect(flag).toEqual(false)
-})
+    get()
+  })
+  test('emptyDir --清空文件夹及文件', () => {
+    let foldPath = rootPath + '/test/temp'
+    emptyDir(foldPath)
+    const flag = fs.existsSync(foldPath)
+    expect(flag).toEqual(false)
+  })
 
-test('checkCamelFile --检测kebab-case', () => {
-  expect(checkCamelFile('/test/temp/MyTemplate.vue')).toEqual(true)
+  test('checkCamelFile --检测kebab-case', () => {
+    expect(checkCamelFile('/test/temp/MyTemplate.vue')).toEqual(true)
+  })
 })
