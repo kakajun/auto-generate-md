@@ -25,6 +25,7 @@
     "build": "node script/build.js",
     "prepare": "husky install",
     "test": "jest",
+     "test:coverage": "jest --coverage",
     "testdev": "jest --watch ",
     "lint-fix": "eslint --fix  --ext .js,.ts"
   },

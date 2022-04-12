@@ -35,7 +35,7 @@ export async function renamePath(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-  // writeFile()
+  writeFile()
 }
 
 function rewriteFile(node: ItemType) {
