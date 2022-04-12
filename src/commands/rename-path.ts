@@ -1,7 +1,6 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
 import { ItemType } from './get-file'
-import { checkCamelFile, toKebabCase } from './rename-kebab-case'
 import createDebugger from 'debug'
 import path from 'path';
 import { getImportName } from './change-path'
@@ -14,6 +13,27 @@ interface fileObjType {
 let fileObj = {} as fileObjType; // 搞个全局变量接收
 
 
+/**
+ * 将单个字符串的首字母小写
+ * @param str 字符串
+ */
+function fistLetterLower(str: string | String) {
+  return str.charAt(0).toLowerCase() + str.slice(1)
+}
+
+export function toKebabCase(str: string) {
+  const regex = /[A-Z]/g
+  return fistLetterLower(str).replace(regex, (word: string) => {
+    return '-' + word.toLowerCase()
+  })
+}
+/**
+ * 检测驼峰文件名
+ * @param fileName 文件名
+ */
+export function checkCamelFile(fileName: string) {
+  return /([a-z])([A-Z])/.test(fileName) || /([A-Z])/.test(fileName)
+}
   // writeFile()  // 写出来
 /**
  * @desc: 循环node, 改文件, 改依赖, 思路:循环每个文件, 并把import 里面不合格的命名改合格

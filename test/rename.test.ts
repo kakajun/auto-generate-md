@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { renamePath, replaceName, emptyDir } from '../src/commands/rename-path'
+import { renamePath, replaceName, emptyDir, checkCamelFile } from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -120,4 +120,8 @@ test('emptyDir --清空文件夹及文件', () => {
   emptyDir(foldPath)
   const flag = fs.existsSync(foldPath)
   expect(flag).toEqual(false)
+})
+
+test('checkCamelFile --检测kebab-case', () => {
+  expect(checkCamelFile('/test/temp/MyTemplate.vue')).toEqual(true)
 })
