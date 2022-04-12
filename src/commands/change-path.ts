@@ -84,15 +84,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
 export function getImportName(ele: string) {
   let str=''
  // 注释的不转,其他公共也不转
-  const ignore = [
-    'xiwicloud',
-    'bpmn-js',
-    'element-ui',
-    'lodash',
-    'handsontable',
-    'nprogress',
-    'quill'
-  ]
+  const ignore = ['xiwicloud', 'bpmn-js', 'element-ui', 'lodash', 'handsontable', 'nprogress', 'quill', 'qrcodejs2']
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   // const reg = /import.*[\"|\'](.*)[\'|\"]/
   const reg = /import.*from [\"|\'](.*)[\'|\"]/
