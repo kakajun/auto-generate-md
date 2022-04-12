@@ -40,7 +40,7 @@ function setFile() {
 </template>
 
 <script>
-import UserRuler from '@/unuse/components/userRulerts'
+import UserRuler from './SearchForm'
 export default {
 }
 </script>
@@ -94,7 +94,7 @@ test('checkCamelFile --检测kebab-case', (done) => {
 </template>
 
 <script>
-import UserRuler from '@/unuse/components/user-rulerts'
+import UserRuler from './search-form'
 export default {
 }
 </script>
