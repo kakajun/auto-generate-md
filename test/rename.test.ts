@@ -5,7 +5,8 @@ import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
-
+  let foldPath = rootPath + '/test/temp'
+  emptyDir(foldPath)
 const nodes = [
   {
     name: 'TestKableCase',
