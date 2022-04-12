@@ -10,6 +10,7 @@ import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeFile } from './mark-file'
 import fs from 'fs-extra'
+import path from 'path';
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
@@ -123,56 +124,60 @@ function getActions() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd({ ignore, include })
-
-  actionMap.set('Generate All', {
-    title: 'Generate All',
-    value: 'Generate All',
-    selected: true,
-    action: () => generateAllAction(nodes, md)
-  })
+  let filename = path.parse(rootPath).base
   actionMap.set('Generate MD', {
     title: 'Generate MD',
     value: 'Generate MD',
     selected: true,
     action: () => getMdAction(md)
   })
-  actionMap.set('Change Path', {
-    title: 'Change Path',
-    value: 'Change Path',
-    action: () => changePathAction(nodes)
-  })
-  actionMap.set('Mark File', {
-    title: 'Mark File',
-    value: 'Mark File',
-    action: () => markFileAction(nodes)
-  })
-  actionMap.set('Delete Mark', {
-    title: 'Delete Mark',
-    value: 'Delete Mark',
-    action: () => deletMarkAction(nodes)
-  })
-  actionMap.set('Classification', {
-    title: 'Classification',
-    value: 'Classification',
-    action: () => witeFileAction(nodes)
-  })
-  actionMap.set('RenameKebabCase', {
-    title: 'RenameKebabCase',
-    value: 'RenameKebabCase',
-    action: () => renameAction(nodes)
-  })
+  if (filename === 'src') {
+      actionMap.set('Generate All', {
+        title: 'Generate All',
+        value: 'Generate All',
+        selected: true,
+        action: () => generateAllAction(nodes, md)
+      })
+        actionMap.set('Change Path', {
+          title: 'Change Path',
+          value: 'Change Path',
+          action: () => changePathAction(nodes)
+        })
+        actionMap.set('Mark File', {
+          title: 'Mark File',
+          value: 'Mark File',
+          action: () => markFileAction(nodes)
+        })
+        actionMap.set('Delete Mark', {
+          title: 'Delete Mark',
+          value: 'Delete Mark',
+          action: () => deletMarkAction(nodes)
+        })
+        actionMap.set('Classification', {
+          title: 'Classification',
+          value: 'Classification',
+          action: () => witeFileAction(nodes)
+        })
+        actionMap.set('RenameKebabCase', {
+          title: 'RenameKebabCase',
+          value: 'RenameKebabCase',
+          action: () => renameAction(nodes)
+        })
 
+        actionMap.set('Wirte Json Nodes', {
+          title: 'Wirte Json Nodes',
+          value: 'Wirte Json Nodes',
+          action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
+        })
+        actionMap.set('Wirte  Nodes With Import(may change path)', {
+          title: 'Wirte  Nodes With Import(may change path)',
+          value: 'Wirte  Nodes With Import(may change path)',
+          action: () => wirteJsNodesAction(nodes)
+        })
+  } else {
+      console.log('提示: 改路径,分类文件, KebabCase重命名只能在src目录下操作!')
+    }
 
-  actionMap.set('Wirte Json Nodes', {
-    title: 'Wirte Json Nodes',
-    value: 'Wirte Json Nodes',
-    action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
-  })
-  actionMap.set('Wirte  Nodes With Import(may change path)', {
-    title: 'Wirte  Nodes With Import(may change path)',
-    value: 'Wirte  Nodes With Import(may change path)',
-    action: () => wirteJsNodesAction(nodes)
-  })
   return actionMap
 }
 
