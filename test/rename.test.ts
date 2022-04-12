@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { renamePath, replaceName } from '../src/commands/rename-path'
+import { renamePath, replaceName, emptyDir } from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -113,4 +113,10 @@ export default {
     }
   }
   get()
+})
+test('emptyDir --清空文件夹及文件', () => {
+  let foldPath = rootPath + '/test/temp'
+  emptyDir(foldPath)
+  const flag = fs.existsSync(foldPath)
+  expect(flag).toEqual(false)
 })
