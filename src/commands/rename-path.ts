@@ -1,5 +1,5 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
-import fs from 'fs'
+import fs from 'fs-extra'
 import { ItemType } from './get-file'
 import createDebugger from 'debug'
 import path from 'path';
@@ -110,14 +110,14 @@ export async function renameFold(node: ItemType) {
  * @param {ItemType} node
  * @param {object} obj
  */
-export function changePathName(node: ItemType, obj: { newPath: string; oldPath: string }) {
+export function changePathName(node: ItemType, obj: { newName: string; filename: string }) {
   if (node.children) {
     node.children.forEach((element) => {
       changePathName(element, obj)
     })
   }
-  const { newPath, oldPath } = obj
-  node.fullPath = node.fullPath.replace(oldPath, newPath)
+  const { newName, filename } = obj
+  node.fullPath = node.fullPath.replace(filename, newName)
 }
 
 /**
@@ -143,18 +143,27 @@ export async function renameFile(node: ItemType) {
  * 重命名文件 CamelCase || PascalCase => kebab-case
  * @param node 节点
  */
-export function replaceName(fullPath:string) {
+export  function replaceName(fullPath:string) {
   let filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
   const oldPath = fullPath
   const newPath = oldPath.replace(filename, newName)
-  return new Promise<{ newPath: string; oldPath: string }>((resolve) => {
-    fs.rename(oldPath, newPath, (err) => {
-      if (err) {
-        throw err
-      } else console.log(filename + ' is done')
-      resolve({ newPath, oldPath })
-    })
+  return new Promise<{ newName: string; filename: string }>(async (resolve) => {
+    // rename之前要判断一下,假如已经有了,那么直接拷贝过去,并且删除原来的
+    const lastName = path.extname(newPath)
+    if (!lastName) {
+      // 文件夹, 特殊处理,要copy文件
+      if (fs.existsSync(newPath)) {
+        await fs.copy(fullPath, newPath)
+        resolve({ newName, filename })
+      }
+    } else
+      fs.rename(oldPath, newPath, (err) => {
+        if (err) {
+          throw err
+        } else console.log(filename + ' is done')
+        resolve({ newName, filename })
+      })
   })
 }
 /**
@@ -178,15 +187,16 @@ function writeFile() {
  * @param {*} path
  */
 export function emptyDir(path:string) {
-    const files = fs.readdirSync(path);
-    files.forEach(file => {
-        const filePath = `${path}/${file}`;
-        const stats = fs.statSync(filePath);
-        if (stats.isDirectory()) {
-            emptyDir(filePath);
-        } else {
-            fs.unlinkSync(filePath);
-            console.log(`删除${file}文件成功`);
-        }
-    });
+  const files = fs.readdirSync(path);
+  for (let index = 0; index < files.length; index++) {
+    const file = files[index]
+      const filePath = `${path}/${file}`
+      const stats = fs.statSync(filePath)
+      if (stats.isDirectory()) {
+        emptyDir(filePath)
+      } else {
+        fs.unlinkSync(filePath)
+        console.log(`删除${file}文件成功`)
+      }
+  }
 }
