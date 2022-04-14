@@ -16,20 +16,6 @@ import UserRuler from './aa'
     })
   })
 }
-export function creatFold(foldPath: string) {
-  return new Promise<void>((resolve) => {
-    if (fs.existsSync(foldPath)) {
-      resolve()
-    } else {
-      fs.mkdir(foldPath, function (err) {
-        if (err) {
-          return console.error(err)
-        }
-        resolve()
-      })
-    }
-  })
-}
 
 export function setFile() {
   const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'

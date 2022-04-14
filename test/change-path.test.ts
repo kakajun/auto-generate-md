@@ -2,7 +2,7 @@ import path from 'path'
 import fs from 'fs-extra'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './nodes'
-import { creatFold } from './utils'
+
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = true
@@ -12,7 +12,7 @@ describe('change-path的测试', () => {
     let foldPath = rootPath + '/test/temp'
     fs.removeSync(foldPath); // 先清空目录
      debug('删除文件成功%%%%%%%%%%%%%%%%%%%')
-     creatFold(foldPath)
+     fs.ensureDirSync(foldPath)
      expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
        './components/user-rulerts.vue'
      )
