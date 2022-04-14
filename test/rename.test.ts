@@ -5,8 +5,6 @@ import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
-let foldPath = rootPath + '/test/temp'
-emptyDir(foldPath)
 const nodes = [
   {
     name: 'TestKableCase',
@@ -109,6 +107,7 @@ export default {
         let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
         const str = fs.readFileSync(newPath, 'utf-8')
         expect(str).toEqual(finalStr)
+        emptyDir(rootPath + '/test/temp')   // 清空文件夹
         done()
       } catch (error) {
         done(error)
@@ -116,12 +115,12 @@ export default {
     }
     get()
   })
-  test('emptyDir --清空文件夹及文件', () => {
-    let foldPath = rootPath + '/test/temp'
-    emptyDir(foldPath)
-    const flag = fs.existsSync(foldPath)
-    expect(flag).toEqual(false)
-  })
+  // test('emptyDir --清空文件夹及文件', () => {
+  //   let foldPath = rootPath + '/test/temp'
+
+  //   const flag = fs.existsSync(foldPath)
+  //   expect(flag).toEqual(false)
+  // })
 
   test('checkCamelFile --检测kebab-case', () => {
     expect(checkCamelFile('/test/temp/MyTemplate.vue')).toEqual(true)

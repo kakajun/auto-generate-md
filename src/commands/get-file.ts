@@ -70,7 +70,7 @@ export type ItemType = {
  * @return {*}
  */
 export function getFileNodes(
-  dir = path.resolve('./'),
+  dir = process.cwd(),
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined,
   nodes: ItemType[] = [],
   level = 0
@@ -134,7 +134,7 @@ export function getFileNodes(
       if (isDir) {
         //recursion 递归
         getFileNodes(fullPath, option, (item.children = []), level + 1)
-         item.fullPath = fullPath.replace(/\\/g, '/')
+        item.fullPath = fullPath.replace(/\\/g, '/')
         nodes.push(item)
       } else {
         const i = fullPath.lastIndexOf('.')

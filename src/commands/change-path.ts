@@ -52,7 +52,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
   // 如果有@符号的
   if (filePath.indexOf('@') > -1) {
     debug('!!!!!!!!!filePath: ', filePath)
-    absoluteImport = filePath.replace('@', path.resolve('./'))
+    absoluteImport = filePath.replace('@', process.cwd())
   } else {
     absoluteImport = path.resolve(path.dirname(fullPath), filePath)
   }
