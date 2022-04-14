@@ -4,7 +4,7 @@ import path from 'path'
 import createDebugger from 'debug'
 import { changeImport } from './change-path';
 const debug = createDebugger('get-file')
-debug.enabled = true
+debug.enabled = false
 /**
  * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} fullPath

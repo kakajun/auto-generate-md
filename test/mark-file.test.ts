@@ -2,6 +2,9 @@ import { findNodes, deletMark, setNodeMark } from '../src/commands/mark-file'
 import nodes from './nodes'
 import fs from 'fs'
 const rootPath = process.cwd().replace(/\\/g, '/')
+import createDebugger from 'debug'
+const debug = createDebugger('mark-file.test')
+debug.enabled = false
 
 describe('mark-file.test的测试', () => {
   test('findNodes--查node', () => {

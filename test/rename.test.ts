@@ -47,11 +47,11 @@ export default {
   return new Promise<void>((resove, reject) => {
     try {
       fs.writeFile(file, str, { encoding: 'utf8' }, () => {
-        console.log('Write successful')
+        debug('Write successful')
         resove()
       })
     } catch (error) {
-      console.log(error)
+      debug(error)
       reject()
     }
   })

@@ -1,7 +1,7 @@
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('get-file.test')
-debug.enabled = true
+debug.enabled = false
 import { setDispFileNew, markWriteFile } from '../src/commands/mark-write-file'
 import nodes from './nodes'
 

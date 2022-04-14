@@ -3,7 +3,7 @@ import { getFile } from '../src/commands/get-file'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('get-file.test')
-debug.enabled = true
+debug.enabled = false
 describe('get-file的测试', () => {
   test('getFile--获取注释', (done) => {
     const str = `// 我就是个注释
@@ -13,7 +13,7 @@ import UserRuler from './aa'
     const file = rootPath + '/test/temp/app-file-test.vue'
     try {
       fs.writeFile(file, str, { encoding: 'utf8' }, () => {
-        console.log('Write app-file-test successful')
+        debug('Write app-file-test successful')
         const obj = getFile(file)
         done()
         expect(obj).toEqual({

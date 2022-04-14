@@ -4,9 +4,11 @@ import { ItemType } from './get-file'
 import createDebugger from 'debug'
 import path from 'path';
 import { getImportName } from './change-path'
-const debug = createDebugger('mark-file')
+const debug = createDebugger('rename-path')
 const rootPath = process.cwd().replace(/\\/g, '/')
+
 debug.enabled = false
+
 interface fileObjType {
   [key: string]: any
 }
@@ -154,7 +156,9 @@ export  function replaceName(fullPath:string) {
     if (!lastName) {
       // 文件夹, 特殊处理,要copy文件
       if (fs.existsSync(newPath)) {
+        // debug('newPath: ', newPath)
         await fs.copy(fullPath, newPath)
+        emptyDir(fullPath) // 清空文件夹里面文件
         resolve({ newName, filename })
       }
     } else
