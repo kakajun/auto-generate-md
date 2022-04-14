@@ -127,8 +127,8 @@ export async function renameFold(node: ItemType) {
  * @desc: 文件夹重命名后, 子文件都会存在路径的更改,也就要递归处理
  * @author: majun
  */
-function changePathFold(node: ItemType, obj: { newName: string; filename: string; }) {
-    const { newName, filename } = obj
+export function changePathFold(node: ItemType, obj: { newName: string; filename: string }) {
+  const { newName, filename } = obj
   if (node.children) {
     for (let index = 0; index < node.children.length; index++) {
       const ele = node.children[index]
@@ -137,6 +137,8 @@ function changePathFold(node: ItemType, obj: { newName: string; filename: string
     }
   }
   node.fullPath = node.fullPath.replace(filename, newName)
+  debug(node.fullPath, newName)
+  node.name = node.name.replace(filename, newName)
 }
 /**
  * @desc: 递归改所有路径名字
@@ -152,12 +154,13 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
       const array = node.imports
       for (let j = 0; j < array.length; j++) {
         const ele = array[j]
-        if (ele.indexOf(filename) > -1) {
-          array[j].replace(filename, newName)
-        }
+         debug('import-ele: ', ele)
+          array[j] = toKebabCase(ele)
+          debug('更换import: ',array[j])
       }
     }
     node.fullPath = node.fullPath.replace(filename, newName)
+    node.name = node.name.replace(filename, newName)
     debug('替换后的 node.fullPath:', node.fullPath)
   }
 }

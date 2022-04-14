@@ -41,32 +41,44 @@ export const nodeOne= [
   }
 ]
 
+export const foldNode = {
+  name: 'checkTestKableCase',
+  isDir: true,
+  level: 1,
+  note: '',
+  copyed: false,
+  imports: [],
+  belongTo: [],
+  fullPath: rootPath + '/test/temp/checkTestKableCase',
+  children: [
+    {
+      name: 'checkTestKableCaseInner',
+      isDir: true,
+      level: 1,
+      note: '',
+      copyed: false,
+      imports: [],
+      belongTo: [],
+      fullPath: rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
+    }
+  ]
+}
+
+export const fileNode = {
+  name: 'youTemplate',
+  isDir: false,
+  level: 2,
+  note: ' // 我就是个注释',
+  imports: ['/test/temp/myTemplate.vue'],
+  belongTo: [],
+  size: 96,
+  copyed: false,
+  rowSize: 4,
+  suffix: '.vue',
+  fullPath: rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+}
+
 export const nodesTwo = [
-  {
-    name: 'TestKableCase',
-    isDir: true,
-    level: 1,
-    note: '',
-    copyed: false,
-    imports: [],
-    belongTo: [],
-    fullPath: rootPath + '/test/temp/TestKableCase',
-    children: [
-      {
-        name: 'youTemplate',
-        isDir: false,
-        level: 2,
-        note: ' // 我就是个注释',
-        imports: [],
-        belongTo: [],
-        size: 96,
-        copyed: false,
-        rowSize: 4,
-        suffix: '.vue',
-        fullPath: rootPath + '/test/temp/TestKableCase/youTemplate.vue'
-      }
-    ]
-  },
   {
     name: 'checkTestKableCase',
     isDir: true,
@@ -76,53 +88,29 @@ export const nodesTwo = [
     imports: [],
     belongTo: [],
     fullPath: rootPath + '/test/temp/checkTestKableCase',
-    children: [
-      {
-        name: 'youTemplate',
-        isDir: false,
-        level: 2,
-        note: ' // 我就是个注释',
-        imports: [],
-        belongTo: [],
-        size: 96,
-        copyed: false,
-        rowSize: 4,
-        suffix: '.vue',
-        fullPath: rootPath + '/test/temp/checkTestKableCase/MyTemplate.vue'
-      }
-    ]
+    children: [fileNode]
   },
   {
-    name: 'checkTestKableCase2',
+    name: 'TestKableCase',
     isDir: true,
     level: 1,
     note: '',
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/checkTestKableCase2',
+    fullPath: rootPath + '/test/temp/TestKableCase',
     children: []
   },
   {
-    name: 'checkTestKableCase2',
+    name: 'checkTestKable',
     isDir: true,
     level: 1,
     note: '',
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/checkTestKableCase',
-    children: [
-      {
-        name: 'checkTestKableCaseInner',
-        isDir: true,
-        level: 1,
-        note: '',
-        copyed: false,
-        imports: [],
-        belongTo: [],
-        fullPath: rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
-      }
-    ]
-  }
+    fullPath: rootPath + '/test/temp/checkTestKable',
+    children: []
+  },
+  ...[foldNode]
 ]
