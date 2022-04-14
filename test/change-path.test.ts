@@ -18,17 +18,17 @@ describe('change-path的测试', () => {
       path.resolve('src/commands/change-path.ts').replace(/\\/g, '/')
     )
   })
-  test('makeSuffix--得到全路径import', () => {
+  test('makeSuffix--得到import', () => {
     expect(
       getImportName("import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'")
-    ).toEqual(rootPath.replace(/\\/g, '/') + '/unuse/components/user-rulerts.vue')
+    ).toEqual('@/unuse/components/user-rulerts')
   })
 
 
   test('changeImport--更改不规范path', () => {
     expect(
       changeImport(
-        "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts.vue'",
+        "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'",
         path.resolve('unuse/App.vue').replace(/\\/g, '/')
       )
     ).toEqual({
