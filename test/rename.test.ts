@@ -3,7 +3,6 @@ import {
   // renameFilePath,
   renameFoldPath,
   replaceName,
-  // emptyDir,
   checkCamelFile
 } from '../src/commands/rename-path'
 import {
@@ -76,13 +75,6 @@ describe('rename.test的测试',  () => {
 //     }
 //     get()
 //   })
-  // test('emptyDir --清空文件夹及文件', () => {
-  //   let foldPath = rootPath + '/test/temp'
-
-  //   const flag = fs.existsSync(foldPath)
-  //   expect(flag).toEqual(false)
-  // })
-
 test('checkCamelFile --检测kebab-case', () => {
   let flag = checkCamelFile('MyTemplate.vue')
   debug('flag:', flag)

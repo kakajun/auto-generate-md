@@ -6,9 +6,7 @@ import path from 'path'
 import { getImportName } from './change-path'
 const debug = createDebugger('rename-path')
 const rootPath = process.cwd().replace(/\\/g, '/')
-
 debug.enabled = true
-
 interface fileObjType {
   [key: string]: any
 }
@@ -192,8 +190,7 @@ export function replaceName(fullPath: string) {
       if (fs.existsSync(newPath)) {
         // debug('newPath: ', newPath)
         await fs.copy(fullPath, newPath)
-        fs.rmdir(fullPath)  // 删除目录
-        // emptyDir(fullPath) // 清空文件夹里面文件
+        fs.removeSync(fullPath)  // 删除目录
         resolve({ newName, filename })
       }
     }
@@ -218,23 +215,4 @@ function writeFileDatas(name: string) {
       resolve()
     })
   })
-}
-
-/**
- * 删除文件夹下所有问价及将文件夹下所有文件清空
- * @param {*} path
- */
-export function emptyDir(path: string) {
-  const files = fs.readdirSync(path)
-  for (let index = 0; index < files.length; index++) {
-    const file = files[index]
-    const filePath = `${path}/${file}`
-    const stats = fs.statSync(filePath)
-    if (stats.isDirectory()) {
-      emptyDir(filePath)
-    } else {
-      fs.unlinkSync(filePath)
-      console.log(`删除${file}文件成功`)
-    }
-  }
 }

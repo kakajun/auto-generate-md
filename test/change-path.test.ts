@@ -1,5 +1,5 @@
 import path from 'path'
-import fs from 'fs'
+import fs from 'fs-extra'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './nodes'
 import { creatFold } from './utils'
@@ -10,13 +10,12 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
     let foldPath = rootPath + '/test/temp'
-    fs.rm(foldPath, () => {
-      debug('删除文件成功%%%%%%%%%%%%%%%%%%%%%%')
-      creatFold(foldPath)
-      expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
-        './components/user-rulerts.vue'
-      )
-    }) // 删除目录
+    fs.removeSync(foldPath); // 先清空目录
+     debug('删除文件成功%%%%%%%%%%%%%%%%%%%')
+     creatFold(foldPath)
+     expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
+       './components/user-rulerts.vue'
+     )
   })
 
   test('makeSuffix--补全后缀和@替换', () => {
