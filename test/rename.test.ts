@@ -15,16 +15,15 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
 
-describe('rename.test的测试', async () => {
+describe('rename.test的测试',  () => {
   let foldPath = rootPath + '/test/temp/checkTestKableCase'
   let foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
   let foldPath3 = rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
-  await creatFold(foldPath)
-  await creatFold(foldPath2)
-  await creatFold(foldPath3)
-  test('replaceName --改文件名', async (done) => {
+
+  test('replaceName --改文件名',  (done) => {
     async function get() {
       try {
+         await creatFold(foldPath2)
         await replaceName(foldPath2)
         expect(1).toEqual(1)
         done()
@@ -35,9 +34,11 @@ describe('rename.test的测试', async () => {
     get()
   })
 
-    test('renameFoldPath --改所有文件名', async (done) => {
+    test('renameFoldPath --改所有文件名',  (done) => {
       async function get() {
         try {
+            await creatFold(foldPath)
+            await creatFold(foldPath3)
           await renameFoldPath(nodesTwo)
           expect(1).toEqual(1)
           done()

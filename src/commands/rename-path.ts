@@ -55,7 +55,6 @@ export async function renameFoldPath(nodes: ItemType[]) {
   await writeFileDatas('/dataFold.json')
 }
 
-
 /**
  * @desc: 循环node, 改文件, 改依赖, 思路:循环每个文件, 并把import 里面不合格的命名改合格
  * @author: majun
@@ -181,6 +180,8 @@ export async function renameFile(node: ItemType, nodes: ItemType[]) {
 export function replaceName(fullPath: string) {
   let filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
+  debug('newName: ', newName)
+  debug('filename: ', filename)
   const oldPath = fullPath
   const newPath = oldPath.replace(filename, newName)
   return new Promise<{ newName: string; filename: string }>(async (resolve) => {
@@ -191,23 +192,24 @@ export function replaceName(fullPath: string) {
       if (fs.existsSync(newPath)) {
         // debug('newPath: ', newPath)
         await fs.copy(fullPath, newPath)
-        emptyDir(fullPath) // 清空文件夹里面文件
+        fs.rmdir(fullPath)  // 删除目录
+        // emptyDir(fullPath) // 清空文件夹里面文件
         resolve({ newName, filename })
       }
-    } else
-      fs.rename(oldPath, newPath, (err) => {
-        if (err) {
-          throw err
-        } else console.log(filename + ' is done')
-        resolve({ newName, filename })
-      })
+    }
+
+    fs.rename(oldPath, newPath, (err) => {
+      if (err) throw err
+      else console.log(filename + ' is done')
+      resolve({ newName, filename })
+    })
   })
 }
 /**
  * 将修改的文件数据写入file
  * @param fileName 文件名
  */
-function writeFileDatas(name:string) {
+function writeFileDatas(name: string) {
   return new Promise<void>((resolve) => {
     fs.writeFile(rootPath + name, JSON.stringify(fileObj), 'utf8', (err) => {
       if (err) {

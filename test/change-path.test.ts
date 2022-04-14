@@ -2,15 +2,21 @@ import path from 'path'
 import fs from 'fs'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './nodes'
+import { creatFold } from './utils'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = true
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
-    expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
-      './components/user-rulerts.vue'
-    )
+    let foldPath = rootPath + '/test/temp'
+    fs.rm(foldPath, () => {
+      debug('删除文件成功%%%%%%%%%%%%%%%%%%%%%%')
+      creatFold(foldPath)
+      expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
+        './components/user-rulerts.vue'
+      )
+    }) // 删除目录
   })
 
   test('makeSuffix--补全后缀和@替换', () => {
@@ -23,7 +29,6 @@ describe('change-path的测试', () => {
       getImportName("import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'")
     ).toEqual('@/unuse/components/user-rulerts')
   })
-
 
   test('changeImport--更改不规范path', () => {
     expect(
