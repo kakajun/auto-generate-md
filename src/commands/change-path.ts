@@ -4,7 +4,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = true
+debug.enabled = false
 /**
  * @desc: 递归循环所有文件
  * @author: majun
@@ -61,7 +61,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
   debug('lastName', lastName)
   // 假如没有后缀,补上
   if (!lastName) {
-    debug('!!!!!!!!!!!!!!缺后缀文件: ', absoluteImport)
+    debug('!!!!!!!!!!!缺后缀文件: ', absoluteImport)
     // 获取绝对路径
     const suffix = ['.js', '.ts', '.vue', '/index.js', '/index.vue']
     for (let j = 0; j < suffix.length; j++) {

@@ -1,5 +1,5 @@
 import { findNodes, deletMark, setNodeMark } from '../src/commands/mark-file'
-import nodes from './nodes'
+import { nodeOne } from './nodes'
 import fs from 'fs'
 import { creatFile } from './utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -9,8 +9,8 @@ debug.enabled = false
 
 describe('mark-file.test的测试', () => {
   test('findNodes--查node', () => {
-    const node = findNodes(nodes, rootPath + '/test/temp/app-file-test.vue')
-    expect(node).toMatchObject(nodes[0])
+    const node = findNodes(nodeOne, rootPath + '/test/temp/app-file-test.vue')
+    expect(node).toMatchObject(nodeOne[0])
   })
 
   test('deletMark--测试删除标记', (done) => {
@@ -40,7 +40,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
       await creatFile(file)
       try {
         await deletMark(file, 'base')
-        await setNodeMark(nodes, 'base', file)
+        await setNodeMark(nodeOne, 'base', file)
         const str = fs.readFileSync(file, 'utf-8')
         const index = str.indexOf('//base')
         expect(index).toEqual(0)

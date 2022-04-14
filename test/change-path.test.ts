@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
-import nodes from './nodes'
+import { nodeOne } from './nodes'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = true
@@ -38,11 +38,9 @@ describe('change-path的测试', () => {
     })
   })
 
-
-
   test('witeFile--更改不规范path', (done) => {
     try {
-      const node = nodes[0]
+      const node = nodeOne[0]
       // 1. 随机创建一个文件
       const str = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'

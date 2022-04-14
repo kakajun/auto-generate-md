@@ -1,87 +1,28 @@
 import fs from 'fs-extra'
+import { nodesTwo } from './nodes'
 import {
-  renamePath, replaceName,
+  renameFilePath,
+  renameFoldPath,
+  replaceName,
   // emptyDir,
   checkCamelFile
 } from '../src/commands/rename-path'
-
+import { creatFold, setFile } from './utils'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
-const nodes = [
-  {
-    name: 'TestKableCase',
-    isDir: true,
-    level: 1,
-    note: '',
-    copyed: false,
-    imports: [],
-    belongTo: [],
-    fullPath: rootPath + '/test/temp/TestKableCase',
-    children: [
-      {
-        name: 'youTemplate',
-        isDir: false,
-        level: 2,
-        note: ' // 我就是个注释',
-        imports: [],
-        belongTo: [],
-        size: 96,
-        copyed: false,
-        rowSize: 4,
-        suffix: '.vue',
-        fullPath: rootPath + '/test/temp/TestKableCase/youTemplate.vue'
-      }
-    ]
-  }
-]
-function setFile() {
-  const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
-  const str = `<template>
-  <div class=""></div>
-</template>
 
-<script>
-import UserRuler from './SearchForm'
-export default {
-}
-</script>
-`
-  return new Promise<void>((resove, reject) => {
-    try {
-      fs.writeFile(file, str, { encoding: 'utf8' }, () => {
-        debug('Write successful')
-        resove()
-      })
-    } catch (error) {
-      debug(error)
-      reject()
-    }
-  })
-}
-
-function creatFold(foldPath: string) {
-  return new Promise<void>((resolve) => {
-    if (fs.existsSync(foldPath)) {
-      resolve()
-    } else {
-      fs.mkdir(foldPath, function (err) {
-        if (err) {
-          return console.error(err)
-        }
-        resolve()
-      })
-    }
-  })
-}
-
-describe('rename.test的测试', () => {
-  test('replaceName --改文件名', (done) => {
-    let foldPath = rootPath + '/test/temp/checkTestKableCase'
+describe('rename.test的测试', async () => {
+  let foldPath = rootPath + '/test/temp/checkTestKableCase'
+  let foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
+  let foldPath3 = rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
+  await creatFold(foldPath)
+  await creatFold(foldPath2)
+  await creatFold(foldPath3)
+  test('replaceName --改文件名', async (done) => {
     async function get() {
       try {
-        await creatFold(foldPath)
         await replaceName(foldPath)
         expect(1).toEqual(1)
         done()
@@ -91,7 +32,21 @@ describe('rename.test的测试', () => {
     }
     get()
   })
-  test('checkCamelFile --检测kebab-case', (done) => {
+
+    test('renameFoldPath --改所有文件名', async (done) => {
+      async function get() {
+        try {
+          await renameFoldPath(foldPath)
+          expect(1).toEqual(1)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      }
+      get()
+    })
+
+  test('renamePath --改kebab-case', (done) => {
     let foldPath = rootPath + '/test/temp/TestKableCase'
     const finalStr = `<template>
   <div class=""></div>
@@ -107,11 +62,10 @@ export default {
       try {
         await creatFold(foldPath)
         await setFile()
-        await renamePath(nodes)
+        await renameFoldPath(nodesTwo)
         let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
         const str = fs.readFileSync(newPath, 'utf-8')
         expect(str).toEqual(finalStr)
-        // emptyDir(rootPath + '/test/temp')   // 清空文件夹
         done()
       } catch (error) {
         done(error)
@@ -126,7 +80,9 @@ export default {
   //   expect(flag).toEqual(false)
   // })
 
-  test('checkCamelFile --检测kebab-case', () => {
-    expect(checkCamelFile('/test/temp/MyTemplate.vue')).toEqual(true)
-  })
+test('checkCamelFile --检测kebab-case', () => {
+  let flag = checkCamelFile('MyTemplate.vue')
+  debug('flag:', flag)
+  expect(flag).toEqual(true)
+})
 })

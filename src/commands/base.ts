@@ -3,7 +3,7 @@ import { ItemType } from './get-file'
 import prompts from 'prompts'
 import { wirteMd, getMd } from './wirte-md'
 // import { renameKebabCase } from './rename-kebab-case'
-import { renamePath } from './rename-path'
+import { renameFoldPath, renameFilePath } from './rename-path'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
@@ -88,13 +88,23 @@ async function deletMarkAction(nodes: ItemType[]) {
 }
 
 /**
- * @desc://8. 规范命名kabel-case
+ * @desc://8. 规范命名文件夹kabel-case
  * @author: majun
  * @param {Array} nodes
  */
-async function renameAction(nodes: ItemType[]) {
+async function renameFoldAction(nodes: ItemType[]) {
   // renameKebabCase(rootPath)
-  renamePath(nodes)
+  renameFoldPath(nodes)
+}
+
+/**
+ * @desc://9. 规范命名文件kabel-case
+ * @author: majun
+ * @param {Array} nodes
+ */
+async function renameFileAction(nodes: ItemType[]) {
+  // renameKebabCase(rootPath)
+  renameFilePath(nodes)
 }
 
 /**
@@ -155,11 +165,17 @@ function getActions() {
     value: 'Classification',
     action: () => witeFileAction(nodes)
   })
-  actionMap.set('RenameKebabCase', {
+  actionMap.set('RenameFoldKebabCase', {
     title: 'RenameKebabCase',
     value: 'RenameKebabCase',
-    action: () => renameAction(nodes)
+    action: () => renameFoldAction(nodes)
   })
+  actionMap.set('RenameFoldKebabCase', {
+    title: 'RenameKebabCase',
+    value: 'RenameKebabCase',
+    action: () => renameFileAction(nodes)
+  })
+
 
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',

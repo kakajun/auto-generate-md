@@ -1,4 +1,10 @@
-import fs from 'fs'
+/* 测试公共方法 */
+import fs from 'fs';
+import createDebugger from 'debug'
+const rootPath = process.cwd().replace(/\\/g, '/')
+const debug = createDebugger('utils')
+debug.enabled = true
+
 export function creatFile(file: string) {
   return new Promise<void>((resolve) => {
     const str = `// 我就是个注释
@@ -8,5 +14,44 @@ import UserRuler from './aa'
     fs.writeFile(file, str, { encoding: 'utf8' }, () => {
       resolve()
     })
+  })
+}
+export function creatFold(foldPath: string) {
+  return new Promise<void>((resolve) => {
+    if (fs.existsSync(foldPath)) {
+      resolve()
+    } else {
+      fs.mkdir(foldPath, function (err) {
+        if (err) {
+          return console.error(err)
+        }
+        resolve()
+      })
+    }
+  })
+}
+
+export function setFile() {
+  const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+  const str = `<template>
+  <div class=""></div>
+</template>
+
+<script>
+import UserRuler from './SearchForm'
+export default {
+}
+</script>
+`
+  return new Promise<void>((resove, reject) => {
+    try {
+      fs.writeFile(file, str, { encoding: 'utf8' }, () => {
+        debug('Write successful')
+        resove()
+      })
+    } catch (error) {
+      debug(error)
+      reject()
+    }
   })
 }
