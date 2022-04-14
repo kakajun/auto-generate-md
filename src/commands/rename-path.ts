@@ -43,7 +43,7 @@ export async function renameFoldPath(nodes: ItemType[]) {
     for (let index = 0; index < cpNodes.length; index++) {
       const ele = cpNodes[index]
       if (ele.children) {
-        await renameFold(ele, nodes) // 下面已递归
+        await renameFold(ele) // 下面已递归
         // 递归
         await getNode(ele.children)
       }
@@ -66,7 +66,7 @@ export async function renameFilePath(nodes: ItemType[]) {
         await getNode(ele.children)
       } else {
         // 重命名文件
-        await renameFile(ele, nodes)
+        await renameFile(ele)
         // 重写文件的import
         await rewriteFile(ele)
       }
@@ -112,15 +112,31 @@ function rewriteFile(node: ItemType) {
  * @author: majun
  * @param {ItemType} node
  */
-export async function renameFold(node: ItemType, nodes: ItemType[]) {
+export async function renameFold(node: ItemType) {
   let filename = path.parse(node.fullPath).base
   const filter = ['FMEA', 'DVP'] // 把这样子的文件夹过滤
   const falg = filter.some((item) => filename.indexOf(item) > -1)
   if (!falg && checkCamelFile(filename)) {
     const obj = await replaceName(node.fullPath)
     // 这里一定要更新node,否则后面找不到路径
-    changePathName(node, obj, nodes)
+    changePathFold(node, obj)
   }
+}
+
+/**
+ * @desc: 文件夹重命名后, 子文件都会存在路径的更改,也就要递归处理
+ * @author: majun
+ */
+function changePathFold(node: ItemType, obj: { newName: string; filename: string; }) {
+    const { newName, filename } = obj
+  if (node.children) {
+    for (let index = 0; index < node.children.length; index++) {
+      const ele = node.children[index]
+      // 递归处理
+      changePathFold(ele, obj)
+    }
+  }
+  node.fullPath = node.fullPath.replace(filename, newName)
 }
 /**
  * @desc: 递归改所有路径名字
@@ -128,13 +144,7 @@ export async function renameFold(node: ItemType, nodes: ItemType[]) {
  * @param {ItemType} node
  * @param {object} obj
  */
-export function changePathName(node: ItemType, obj: { newName: string; filename: string }, nodes: ItemType[]) {
-  if (node.children) {
-    for (let index = 0; index < node.children.length; index++) {
-      const element = node.children[index]
-      changePathName(element, obj, nodes)
-    }
-  }
+export function changePathName(node: ItemType, obj: { newName: string; filename: string }) {
   const { newName, filename } = obj
   if (node.fullPath.indexOf(filename) > -1) {
     if (node.imports.length > 0) {
@@ -157,7 +167,7 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
  * @author: majun
  * @param {ItemType} node
  */
-export async function renameFile(node: ItemType, nodes: ItemType[]) {
+export async function renameFile(node: ItemType) {
   let filename = path.parse(node.fullPath).base
   if (checkCamelFile(filename)) {
     const suffix = ['.js', '.vue'] // 这里只重命名js和vue文件
@@ -166,7 +176,7 @@ export async function renameFile(node: ItemType, nodes: ItemType[]) {
     if (flag) {
       const obj = await replaceName(node.fullPath)
       // 这里一定要更新node,否则后面找不到路径
-      changePathName(node, obj, nodes)
+      changePathName(node, obj)
     }
   }
 }
@@ -190,7 +200,7 @@ export function replaceName(fullPath: string) {
       if (fs.existsSync(newPath)) {
         // debug('newPath: ', newPath)
         await fs.copy(fullPath, newPath)
-        fs.removeSync(fullPath)  // 删除目录
+        fs.removeSync(fullPath) // 删除目录
         resolve({ newName, filename })
       }
     }

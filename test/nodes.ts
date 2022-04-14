@@ -101,8 +101,7 @@ export const nodesTwo = [
     imports: [],
     belongTo: [],
     fullPath: rootPath + '/test/temp/checkTestKableCase2',
-    children: [
-    ]
+    children: []
   },
   {
     name: 'checkTestKableCase2',
@@ -122,7 +121,7 @@ export const nodesTwo = [
         copyed: false,
         imports: [],
         belongTo: [],
-        fullPath: rootPath + '/test/temp/checkTestKableCaseInner'
+        fullPath: rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
       }
     ]
   }
