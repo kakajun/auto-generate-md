@@ -1,6 +1,8 @@
+//2工程
+
 
 <script>
-// import user from '../test/deep/user.vue';
+import user from '../test/deep/user.vue';
 export default {
   name: 'HelloWorld',
   props: {
