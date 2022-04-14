@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs'
-import { getRelatPath, makeSuffix, changeImport, witeFile } from '../src/commands/change-path'
+import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import nodes from './nodes'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
@@ -18,6 +18,12 @@ describe('change-path的测试', () => {
       path.resolve('src/commands/change-path.ts').replace(/\\/g, '/')
     )
   })
+  test('makeSuffix--得到全路径import', () => {
+    expect(
+      getImportName("import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'")
+    ).toEqual(rootPath.replace(/\\/g, '/') + '/unuse/components/user-rulerts.vue')
+  })
+
 
   test('changeImport--更改不规范path', () => {
     expect(
@@ -31,6 +37,8 @@ describe('change-path的测试', () => {
       absoluteImport: rootPath + '/unuse/components/user-rulerts.vue'
     })
   })
+
+
 
   test('witeFile--更改不规范path', (done) => {
     try {
