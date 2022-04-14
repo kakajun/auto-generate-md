@@ -32,7 +32,7 @@ describe('change-path的测试', () => {
         path.resolve('unuse/App.vue').replace(/\\/g, '/')
       )
     ).toEqual({
-      filePath: '@/unuse/components/user-rulerts.vue',
+      filePath: '@/unuse/components/user-rulerts',
       impName: './components/user-rulerts.vue',
       absoluteImport: rootPath + '/unuse/components/user-rulerts.vue'
     })

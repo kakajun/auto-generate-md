@@ -1,5 +1,9 @@
 import fs from 'fs-extra'
-import { renamePath, replaceName, emptyDir, checkCamelFile } from '../src/commands/rename-path'
+import {
+  renamePath, replaceName,
+  // emptyDir,
+  checkCamelFile
+} from '../src/commands/rename-path'
 
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -107,7 +111,7 @@ export default {
         let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
         const str = fs.readFileSync(newPath, 'utf-8')
         expect(str).toEqual(finalStr)
-        emptyDir(rootPath + '/test/temp')   // 清空文件夹
+        // emptyDir(rootPath + '/test/temp')   // 清空文件夹
         done()
       } catch (error) {
         done(error)

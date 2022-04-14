@@ -1,6 +1,7 @@
 import { findNodes, deletMark, setNodeMark } from '../src/commands/mark-file'
 import nodes from './nodes'
 import fs from 'fs'
+import { creatFile } from './utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file.test')
@@ -35,7 +36,8 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('setNodeMark--给节点标记', (done) => {
     async function get() {
-      const file = rootPath + '/test/temp/app-file-test.vue'
+      const file = rootPath + '/test/temp/app2-file-test.vue'
+      await creatFile(file)
       try {
         await deletMark(file, 'base')
         await setNodeMark(nodes, 'base', file)
