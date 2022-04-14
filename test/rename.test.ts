@@ -1,13 +1,15 @@
-import fs from 'fs-extra'
 import { nodesTwo } from './nodes'
 import {
-  renameFilePath,
+  // renameFilePath,
   renameFoldPath,
   replaceName,
   // emptyDir,
   checkCamelFile
 } from '../src/commands/rename-path'
-import { creatFold, setFile } from './utils'
+import {
+  creatFold,
+  // setFile
+} from './utils';
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
@@ -23,7 +25,7 @@ describe('rename.test的测试', async () => {
   test('replaceName --改文件名', async (done) => {
     async function get() {
       try {
-        await replaceName(foldPath)
+        await replaceName(foldPath2)
         expect(1).toEqual(1)
         done()
       } catch (error) {
@@ -36,7 +38,7 @@ describe('rename.test的测试', async () => {
     test('renameFoldPath --改所有文件名', async (done) => {
       async function get() {
         try {
-          await renameFoldPath(foldPath)
+          await renameFoldPath(nodesTwo)
           expect(1).toEqual(1)
           done()
         } catch (error) {
@@ -46,33 +48,33 @@ describe('rename.test的测试', async () => {
       get()
     })
 
-  test('renamePath --改kebab-case', (done) => {
-    let foldPath = rootPath + '/test/temp/TestKableCase'
-    const finalStr = `<template>
-  <div class=""></div>
-</template>
+//   test('renamePath --改kebab-case', (done) => {
+//     let foldPath = rootPath + '/test/temp/TestKableCase'
+//     const finalStr = `<template>
+//   <div class=""></div>
+// </template>
 
-<script>
-import UserRuler from './search-form'
-export default {
-}
-</script>
-`
-    async function get() {
-      try {
-        await creatFold(foldPath)
-        await setFile()
-        await renameFoldPath(nodesTwo)
-        let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
-        const str = fs.readFileSync(newPath, 'utf-8')
-        expect(str).toEqual(finalStr)
-        done()
-      } catch (error) {
-        done(error)
-      }
-    }
-    get()
-  })
+// <script>
+// import UserRuler from './search-form'
+// export default {
+// }
+// </script>
+// `
+//     async function get() {
+//       try {
+//         await creatFold(foldPath)
+//         await setFile()
+//         await renameFoldPath(nodesTwo)
+//         let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
+//         const str = fs.readFileSync(newPath, 'utf-8')
+//         expect(str).toEqual(finalStr)
+//         done()
+//       } catch (error) {
+//         done(error)
+//       }
+//     }
+//     get()
+//   })
   // test('emptyDir --清空文件夹及文件', () => {
   //   let foldPath = rootPath + '/test/temp'
 
