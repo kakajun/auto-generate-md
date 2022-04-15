@@ -80,17 +80,6 @@ export const fileNode = {
 
 export const nodesTwo = [
   {
-    name: 'checkTestKableCase',
-    isDir: true,
-    level: 1,
-    note: '',
-    copyed: false,
-    imports: [],
-    belongTo: [],
-    fullPath: rootPath + '/test/temp/checkTestKableCase',
-    children: [fileNode]
-  },
-  {
     name: 'TestKableCase',
     isDir: true,
     level: 1,
@@ -99,18 +88,28 @@ export const nodesTwo = [
     imports: [],
     belongTo: [],
     fullPath: rootPath + '/test/temp/TestKableCase',
-    children: []
+    children: [fileNode]
   },
   {
-    name: 'checkTestKable',
+    name: 'myVue',
     isDir: true,
     level: 1,
     note: '',
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/checkTestKable',
-    children: []
-  },
-  ...[foldNode]
+    fullPath: rootPath + '/test/temp/myVue',
+    children: [
+      {
+        name: 'myTable',
+        isDir: true,
+        level: 1,
+        note: '',
+        copyed: false,
+        imports: [],
+        belongTo: [],
+        fullPath: rootPath + '/test/temp/myVue/myTable'
+      }
+    ]
+  }
 ]

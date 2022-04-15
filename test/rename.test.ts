@@ -1,28 +1,24 @@
 import {
   foldNode,
   fileNode,
-  // nodesTwo
+  nodesTwo
 } from './nodes'
 import fs from 'fs-extra'
 import {
   // renameFilePath,
   changePathFold,
   changePathName,
-  // renameFoldPath,
+  renameFoldPath,
   replaceName,
   checkCamelFile
 } from '../src/commands/rename-path'
-
+import { creatFile } from './utils'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')
 debug.enabled = true
 
 describe('rename.test的测试', () => {
-  // let foldPath = rootPath + '/test/temp/checkTestKableCase'
-  let foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
-  // let foldPath3 = rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
-
   test('checkCamelFile --检测kebab-case', () => {
     let flag = checkCamelFile('MyTemplate.vue')
     debug('flag:', flag)
@@ -31,10 +27,30 @@ describe('rename.test的测试', () => {
 
   test('changePathFold --递归修改文件夹node的path', () => {
   changePathFold(foldNode, { newName: 'check-test-kable-case', filename: 'checkTestKableCase' })
-      //  debug('foldNode', JSON.stringify(foldNode))
-    const str =
-      '{"name":"check-test-kable-case","isDir":true,"level":1,"note":"","copyed":false,"imports":[],"belongTo":[],"fullPath":"D:/worker/auto-generate-md/test/temp/check-test-kable-case","children":[{"name":"check-test-kable-caseInner","isDir":true,"level":1,"note":"","copyed":false,"imports":[],"belongTo":[],"fullPath":"D:/worker/auto-generate-md/test/temp/check-test-kable-case/checkTestKableCaseInner"}]}'
-    expect(str).toEqual(JSON.stringify(foldNode))
+     const obj = {
+       name: 'check-test-kable-case',
+       isDir: true,
+       level: 1,
+       note: '',
+       copyed: false,
+       imports: [],
+       belongTo: [],
+       fullPath: rootPath + '/test/temp/check-test-kable-case',
+       children: [
+         {
+           name: 'check-test-kable-caseInner',
+           isDir: true,
+           level: 1,
+           note: '',
+           copyed: false,
+           imports: [],
+           belongTo: [],
+           fullPath: rootPath + '/test/temp/check-test-kable-case/checkTestKableCaseInner'
+         }
+       ]
+     }
+    const str = JSON.stringify(obj)
+    expect(JSON.stringify(foldNode)).toEqual(str)
   })
 
     test('changePathName --递归修改文件里面的import', () => {
@@ -60,11 +76,14 @@ describe('rename.test的测试', () => {
 
 
   test('replaceName --改文件名', (done) => {
+
+      let foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
     async function get() {
       try {
         fs.ensureDirSync(foldPath2)
         await replaceName(foldPath2)
-        expect(1).toEqual(1)
+        const flag = fs.existsSync(rootPath + '/test/temp/check-test-kable-case2')
+        expect(flag).toEqual(true)
         done()
       } catch (error) {
         done(error)
@@ -73,20 +92,27 @@ describe('rename.test的测试', () => {
     get()
   })
 
-  // test('renameFoldPath --改所有文件名', (done) => {
-  //   async function get() {
-  //     try {
-  //       fs.ensureDirSync(foldPath)
-  //       fs.ensureDirSync(foldPath3)
-  //       await renameFoldPath(nodesTwo)
-  //       expect(1).toEqual(1)
-  //       done()
-  //     } catch (error) {
-  //       done(error)
-  //     }
-  //   }
-  //   get()
-  // })
+  test('renameFoldPath --改所有文件名', (done) => {
+    // 自备独立测试数据
+    let foldPath = rootPath + '/test/temp/TestKableCase'
+      let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+    let foldPath1 = rootPath + '/test/temp/myVue/checkTestKableCaseInner'
+    const finalPath = rootPath + '/test/temp/my-vue/check-test-kable-case-inner'
+    async function get() {
+      try {
+        fs.ensureDirSync(foldPath)
+        await creatFile(file)
+        fs.ensureDirSync(foldPath1)
+        await renameFoldPath(nodesTwo)
+        const flag =fs.existsSync( finalPath)
+        expect(flag).toEqual(true)
+        done()
+      } catch (error) {
+        done(error)
+      }
+    }
+    get()
+  })
 
   //   test('renamePath --改kebab-case', (done) => {
   //     let foldPath = rootPath + '/test/temp/TestKableCase'

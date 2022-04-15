@@ -78,7 +78,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
 }
 
 /**
- * @desc: 根据一行代码匹配import的详细内容
+ * @desc: 根据一行代码匹配import的详细内容  TODO 这里还得优化
  * @author: majun
  */
 export function getImportName(ele: string) {
