@@ -5,12 +5,7 @@ import createDebugger from 'debug'
 import path from 'path'
 import { getImportName } from './change-path'
 const debug = createDebugger('rename-path')
-const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = true
-interface fileObjType {
-  [key: string]: any
-}
-let fileObj = {} as fileObjType // 搞个全局变量接收
 
 /**
  * 将单个字符串的首字母小写
@@ -50,7 +45,6 @@ export async function renameFoldPath(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-  // await writeFileDatas('/dataFold.json')
 }
 
 /**
@@ -73,7 +67,6 @@ export async function renameFilePath(nodes: ItemType[]) {
     }
   }
   await getNode(nodes)
-  await writeFileDatas('/dataFile.json')
 }
 
 function rewriteFile(node: ItemType) {
@@ -195,7 +188,7 @@ export async function renameFile(node: ItemType) {
 }
 
 /**
- * 重命名文件 CamelCase || PascalCase => kebab-case
+ * 重命名文件夹 CamelCase || PascalCase => kebab-case
  * @param node 节点
  */
 export function replaceName(fullPath: string) {
@@ -228,19 +221,5 @@ export function replaceName(fullPath: string) {
      console.error('重命名失败!!!')
     }
 
-  })
-}
-/**
- * 将修改的文件数据写入file
- * @param fileName 文件名
- */
-function writeFileDatas(name: string) {
-  return new Promise<void>((resolve) => {
-    fs.writeFile(rootPath + name, JSON.stringify(fileObj), 'utf8', (err) => {
-      if (err) {
-        console.warn(err)
-      }
-      resolve()
-    })
   })
 }
