@@ -1,5 +1,5 @@
 const rootPath = process.cwd().replace(/\\/g, '/')
-export const nodeOne= [
+export const nodeOne = [
   {
     name: 'app-file-test.vue',
     isDir: false,
@@ -111,7 +111,22 @@ export const nodesThree = [
         copyed: false,
         imports: [],
         belongTo: [],
-        fullPath: rootPath + '/test/temp/myVue/myTable'
+        fullPath: rootPath + '/test/temp/myVue/myTable',
+        children: [
+          {
+            name: 'testTemplate',
+            isDir: false,
+            level: 2,
+            note: ' // 我就是个注释',
+            imports: ['/test/temp/myTemplate.vue'],
+            belongTo: [],
+            size: 96,
+            copyed: false,
+            rowSize: 4,
+            suffix: '.vue',
+            fullPath: rootPath + '/test/temp/myVue/myTable/testTemplate.vue'
+          }
+        ]
       }
     ]
   }

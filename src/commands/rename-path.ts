@@ -96,11 +96,17 @@ function rewriteFile(node: ItemType) {
     }
     if (writeFlag) {
       let fileStr = sarr.join('\n')
-      // 异步写入数据到文件
-      fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' }, () => {
-        console.log('Write successful-------' + node.fullPath)
-        resolve()
-      })
+      try {
+        // 异步写入数据到文件
+        fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' }, () => {
+          console.log('Write successful-------' + node.fullPath)
+          resolve()
+        })
+      } catch (error) {
+        console.error('写入文件失败,地址不存在')
+        console.log( node.fullPath);
+      }
+
     } else {
       resolve()
     }
@@ -219,7 +225,7 @@ export function replaceName(fullPath: string) {
       resolve({ newName, filename })
     })
     } catch (error) {
-     console.error('重命名失败!!!', oldPath)
+     console.error('重命名失败!!!')
     }
 
   })

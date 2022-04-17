@@ -92,13 +92,12 @@ describe('rename.test的测试', () => {
     get()
   })
 
-  test('renameFoldPath --改所有文件名', (done) => {
+  test('renameFoldPath --改所有文件夹名', (done) => {
     // 自备独立测试数据
     let foldPath = rootPath + '/test/temp/TestKableCase'
     let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
     const finalPath = rootPath + '/test/temp/test-kable-case'
-    // let foldPath1 = rootPath + '/test/temp/myVue/checkTestKableCaseInner'
-    // const finalPath = rootPath + '/test/temp/my-vue/check-test-kable-case-inner'
+
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
@@ -115,31 +114,24 @@ describe('rename.test的测试', () => {
     get()
   })
 
-  //   test('renamePath --改kebab-case', (done) => {
-  //     let foldPath = rootPath + '/test/temp/TestKableCase'
-  //     const finalStr = `<template>
-  //   <div class=""></div>
-  // </template>
+  test('renameFoldPath --改所有文件名', (done) => {
+    // 自备独立测试数据
+ let foldPath = rootPath + '/test/temp/myVue/myTable'
+ let file = rootPath + '/test/temp/myVue/myTable/testTemplate.vue'
+    const finalPath = rootPath + '/test/temp/myVue/myTable/test-template.vue'
 
-  // <script>
-  // import UserRuler from './search-form'
-  // export default {
-  // }
-  // </script>
-  // `
-  //     async function get() {
-  //       try {
-  //         await ensureDirSync(foldPath)
-  //         await setFile()
-  //         await renameFoldPath(nodesTwo)
-  //         let newPath = rootPath + '/test/temp/test-kable-case/you-template.vue'
-  //         const str = fs.readFileSync(newPath, 'utf-8')
-  //         expect(str).toEqual(finalStr)
-  //         done()
-  //       } catch (error) {
-  //         done(error)
-  //       }
-  //     }
-  //     get()
-  //   })
+    async function get() {
+      try {
+        fs.ensureDirSync(foldPath)
+        await creatFile(file)
+        await renameFoldPath(nodesTwo)
+        const flag = fs.existsSync(finalPath)
+        expect(flag).toEqual(true)
+        done()
+      } catch (error) {
+        done(error)
+      }
+    }
+    get()
+  })
 })
