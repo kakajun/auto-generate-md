@@ -76,11 +76,11 @@ describe('rename.test的测试', () => {
 
 
   test('replaceName --改文件名', (done) => {
-
       let foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
     async function get() {
       try {
         fs.ensureDirSync(foldPath2)
+
         await replaceName(foldPath2)
         const flag = fs.existsSync(rootPath + '/test/temp/check-test-kable-case2')
         expect(flag).toEqual(true)
@@ -95,14 +95,15 @@ describe('rename.test的测试', () => {
   test('renameFoldPath --改所有文件名', (done) => {
     // 自备独立测试数据
     let foldPath = rootPath + '/test/temp/TestKableCase'
-      let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
-    let foldPath1 = rootPath + '/test/temp/myVue/checkTestKableCaseInner'
-    const finalPath = rootPath + '/test/temp/my-vue/check-test-kable-case-inner'
+    let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+    const finalPath = rootPath + '/test/temp/test-kable-case'
+    // let foldPath1 = rootPath + '/test/temp/myVue/checkTestKableCaseInner'
+    // const finalPath = rootPath + '/test/temp/my-vue/check-test-kable-case-inner'
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
         await creatFile(file)
-        fs.ensureDirSync(foldPath1)
+        // fs.ensureDirSync(foldPath1)
         await renameFoldPath(nodesTwo)
         const flag =fs.existsSync( finalPath)
         expect(flag).toEqual(true)

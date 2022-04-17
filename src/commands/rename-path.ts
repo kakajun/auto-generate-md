@@ -42,15 +42,15 @@ export async function renameFoldPath(nodes: ItemType[]) {
   async function getNode(cpNodes: ItemType[]) {
     for (let index = 0; index < cpNodes.length; index++) {
       const ele = cpNodes[index]
+      await renameFold(ele) // 下面已递归
       if (ele.children) {
-        await renameFold(ele) // 下面已递归
         // 递归
         await getNode(ele.children)
       }
     }
   }
   await getNode(nodes)
-  await writeFileDatas('/dataFold.json')
+  // await writeFileDatas('/dataFold.json')
 }
 
 /**
@@ -114,17 +114,21 @@ function rewriteFile(node: ItemType) {
  */
 export async function renameFold(node: ItemType) {
   let filename = path.parse(node.fullPath).base
+  debug('filename111: ', filename)
   const filter = ['FMEA', 'DVP'] // 把这样子的文件夹过滤
   const falg = filter.some((item) => filename.indexOf(item) > -1)
   if (!falg && checkCamelFile(filename)) {
-    const obj = await replaceName(node.fullPath)
-    // 这里一定要更新node,否则后面找不到路径
-    changePathFold(node, obj)
+    // 这里只处理文件夹
+    if (node.isDir) {
+      const obj = await replaceName(node.fullPath)
+      // 这里一定要更新node,否则后面找不到路径
+      changePathFold(node, obj)
+    }
   }
 }
 
 /**
- * @desc: 文件夹重命名后, 子文件都会存在路径的更改,也就要递归处理
+ * @desc: 重命名后, 子文件都会存在路径的更改,也就要递归处理(既可以处理文件夹, 也可以处理文件)
  * @author: majun
  */
 export function changePathFold(node: ItemType, obj: { newName: string; filename: string }) {
@@ -154,9 +158,9 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
       const array = node.imports
       for (let j = 0; j < array.length; j++) {
         const ele = array[j]
-         debug('import-ele: ', ele)
-          array[j] = toKebabCase(ele)
-          debug('更换import: ',array[j])
+        debug('import-ele: ', ele)
+        array[j] = toKebabCase(ele)
+        debug('更换import: ', array[j])
       }
     }
     node.fullPath = node.fullPath.replace(filename, newName)
@@ -207,12 +211,17 @@ export function replaceName(fullPath: string) {
         resolve({ newName, filename })
       }
     }
-
+    debug(oldPath, newPath, 'oldPath, newPath')
+    try {
     fs.rename(oldPath, newPath, (err) => {
       if (err) throw err
       else console.log(filename + ' is done')
       resolve({ newName, filename })
     })
+    } catch (error) {
+     console.error('重命名失败!!!', oldPath)
+    }
+
   })
 }
 /**

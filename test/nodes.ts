@@ -89,7 +89,10 @@ export const nodesTwo = [
     belongTo: [],
     fullPath: rootPath + '/test/temp/TestKableCase',
     children: [fileNode]
-  },
+  }
+]
+
+export const nodesThree = [
   {
     name: 'myVue',
     isDir: true,
