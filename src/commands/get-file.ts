@@ -35,7 +35,7 @@ export function getFile(fullPath: string) {
  * @param {any} sarr
  * @param {string} fullPath
  */
-function getImport(sarr: any[], fullPath: string) {
+export function getImport(sarr: any[], fullPath: string) {
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
@@ -49,7 +49,7 @@ function getImport(sarr: any[], fullPath: string) {
 
 export type ItemType = {
   name: string
-  copyed: boolean
+  copyed?: boolean
   isDir: boolean
   level: number
   note: string
@@ -97,7 +97,7 @@ export function getFileNodes(
     'readme-md.js'
   ]
   //File suffix contains only  文件后缀只包含
-  let include = ['.js', '.vue']
+  let include = ['.js', '.vue','.ts']
 
   if (option) {
     ignore = option.ignore || ignore

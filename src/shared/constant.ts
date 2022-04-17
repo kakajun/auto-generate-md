@@ -1,3 +1,4 @@
+/* 解析package */
 import { name, version } from '../../package.json';
 
 export const CWD = process.cwd();

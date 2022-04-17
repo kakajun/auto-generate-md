@@ -1,3 +1,4 @@
+/* 打个漂亮日志 */
 import { lightBlue, lightGreen, lightRed, lightYellow } from 'kolorist';
 
 const logger = {
