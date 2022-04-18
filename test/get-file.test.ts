@@ -23,7 +23,7 @@ describe('get-file的测试', () => {
       isDir: false,
       level: 0,
       note: '/* 打个漂亮日志 */\r',
-      imports: [''],
+      imports: [],
       belongTo: [],
       size: 531,
       rowSize: 21,

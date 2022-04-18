@@ -43,7 +43,7 @@ export function getImport(sarr: any[], fullPath: string) {
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
-    if (ele.indexOf('import') > -1) {
+    if (ele.indexOf('from') > -1) {
       const { absoluteImport } = changeImport(ele, fullPath)
       if (absoluteImport) {
          imports.push(absoluteImport)
