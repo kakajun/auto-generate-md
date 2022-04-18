@@ -24,11 +24,13 @@ describe('change-path的测试', () => {
     )
   })
   test('makeSuffix--得到import', () => {
-    expect(
-      getImportName(`import
-      { getRelatPath, makeSuffix, changeImport }
-      from '@/unuse/components/user-rulerts'`)
-    ).toEqual('@/unuse/components/user-rulerts')
+    let arrs = getImportName(`import
+      { getRelatPath,
+         makeSuffix,
+         changeImport
+      } from '@/unuse/components/user-rulerts'`)
+    debug('arrs: ', arrs)
+    expect(arrs).toEqual('@/unuse/components/user-rulerts')
   })
 
   test('changeImport--更改不规范path', () => {

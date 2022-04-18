@@ -45,7 +45,10 @@ export function getImport(sarr: any[], fullPath: string) {
   sarr.forEach((ele: string) => {
     if (ele.indexOf('import') > -1) {
       const { absoluteImport } = changeImport(ele, fullPath)
-      imports.push(absoluteImport)
+      if (absoluteImport) {
+         imports.push(absoluteImport)
+      }
+
     }
   })
   return imports
