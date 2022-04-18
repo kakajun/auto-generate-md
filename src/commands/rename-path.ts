@@ -85,7 +85,7 @@ function rewriteFile(node: ItemType) {
           // 这里替换有可能把头也替换了, 所以切一下
           //比如 import moduleName from 'moduleName'  会只替换前一个   "import moduleName from 'moduleName'".split('from')
           const str = ele.split('from')
-          sarr[index] =`${str[0]} from ${str[1].replace(name, newName)}`
+          sarr[index] =`${str[0]}from${str[1].replace(name, newName)}`
           writeFlag = true
         }
       }
