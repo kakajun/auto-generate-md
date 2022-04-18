@@ -84,7 +84,7 @@ async function wirteJsNodesAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function deletMarkAction(nodes: ItemType[]) {
-  deletMarkAll(nodes, 'plan')
+  deletMarkAll(nodes, 'base')
 }
 
 /**
@@ -166,13 +166,13 @@ function getActions() {
     action: () => witeFileAction(nodes)
   })
   actionMap.set('RenameFoldKebabCase', {
-    title: 'RenameKebabCase',
-    value: 'RenameKebabCase',
+    title: 'RenameFoldKebabCase',
+    value: 'RenameFoldKebabCase',
     action: () => renameFoldAction(nodes)
   })
-  actionMap.set('RenameFoldKebabCase', {
-    title: 'RenameKebabCase',
-    value: 'RenameKebabCase',
+  actionMap.set('RenameFielKebabCase', {
+    title: 'RenameFielKebabCase',
+    value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
   })
 
