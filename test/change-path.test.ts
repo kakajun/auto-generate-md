@@ -25,7 +25,9 @@ describe('change-path的测试', () => {
   })
   test('makeSuffix--得到import', () => {
     expect(
-      getImportName("import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'")
+      getImportName(`import
+      { getRelatPath, makeSuffix, changeImport }
+      from '@/unuse/components/user-rulerts'`)
     ).toEqual('@/unuse/components/user-rulerts')
   })
 
