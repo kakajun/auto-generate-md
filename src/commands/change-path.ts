@@ -87,7 +87,7 @@ export function getImportName(ele: string) {
   const ignore = ['xiwicloud', 'bpmn-js', 'element-ui', 'lodash', 'handsontable', 'nprogress', 'quill', 'qrcodejs2']
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   // const reg = /import.*[\"|\'](.*)[\'|\"]/
-  const reg = /} from [\"|\'](.*)[\'|\"]/
+  const reg = / from [\"|\'](.*)[\'|\"]/
       //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
       //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
       //      debug(ele.match(reg), '11111111111111')
