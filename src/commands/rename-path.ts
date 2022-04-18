@@ -76,7 +76,7 @@ function rewriteFile(node: ItemType) {
     const sarr = str.split(/[\n]/g)
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
-      if (ele.indexOf('import') > -1) {
+      if (ele.indexOf('from') > -1) {
         let impOldName = getImportName(ele)
         if (checkCamelFile(impOldName)) {
           // 取文件名,否则转case会出错

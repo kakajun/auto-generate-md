@@ -142,7 +142,7 @@ return new Promise<void>((resolve, reject) => {
     const sarr = fileStr.split(/[\n]/g)
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
-      if (ele.indexOf('import') > -1 && isRelative) {
+      if (ele.indexOf('from') > -1 && isRelative) {
         const obj = changeImport(ele, fullPath)
         //  if (node.name === '***') {
         //   debug(obj,"bbbnnn")
