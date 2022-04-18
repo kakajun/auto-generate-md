@@ -25,7 +25,7 @@
     "build": "node script/build.js",
     "prepare": "husky install",
     "test": "jest",
-     "test:coverage": "jest --coverage",
+    "test:coverage": "jest --coverage",
     "testdev": "jest --watch ",
     "lint-fix": "eslint --fix  --ext .js,.ts"
   },
@@ -54,6 +54,7 @@
     "jest": "^27.5.1",
     "kolorist": "^1.5.0",
     "lint-staged": "^11.1.2",
+    "node-environment": "^0.5.1",
     "nodemon": "^2.0.15",
     "prettier": "^2.5.1",
     "prompts": "^2.4.2",
@@ -73,5 +74,8 @@
   "files": [
     "bin",
     "lib"
-  ]
+  ],
+  "dependencies": {
+    "node-environment": "^0.5.1"
+  }
 }
