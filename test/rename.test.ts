@@ -93,7 +93,6 @@ describe('rename.test的测试', () => {
       try {
         fs.ensureDirSync(foldPath)
         await creatFile(file)
-        // fs.ensureDirSync(foldPath1)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)

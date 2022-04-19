@@ -1,8 +1,8 @@
 
 
 // import path from 'path';
-import {getImportName } from '../src/commands/change-path';
+import { getRouter } from '../src/commands/get-router'
 
-const str = getImportName(`import history from '../WF/history.vue'`)
+const arrs = getRouter()
 
-console.log(str)
+console.log(arrs)
