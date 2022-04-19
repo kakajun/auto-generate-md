@@ -3,7 +3,6 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 import { changeImport } from './change-path';
-
 const debug = createDebugger('get-file')
 debug.enabled = true
 import { env } from 'node-environment'

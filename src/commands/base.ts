@@ -8,7 +8,7 @@ import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeFile } from './mark-file'
-import fs from 'fs-extra'
+import { getRouterArrs } from './get-router'
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
@@ -38,14 +38,10 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: ItemType[]) {
-  let pathName = rootPath + '/classify.js'
-  if (fs.existsSync(pathName)) {
-    const routers = require(pathName)
+  const routers = getRouterArrs()
+  if (routers) {
     await markFile(nodes, routers)
     wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
-  } else {
-    console.error('跟路径没发现有classify.js, 现在退出')
-    process.exit(1)
   }
 }
 
@@ -55,15 +51,11 @@ async function markFileAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function witeFileAction(nodes: ItemType[]) {
-  let pathName = rootPath + '/classify.js'
-  if (fs.existsSync(pathName)) {
-    const routers = require(pathName)
+   const routers = getRouterArrs()
+  if (routers) {
     await markFile(nodes, routers)
     // copy文件一定是建立在打标记的基础上
     witeFile(nodes, routers)
-  } else {
-    console.error('跟路径没发现有classify.js, 现在退出')
-    process.exit(1)
   }
 }
 /**
@@ -111,14 +103,15 @@ async function renameFileAction(nodes: ItemType[]) {
  * @param {string} md
  */
 export async function generateAllAction(nodes: ItemType[], md: string) {
-  let pathName = rootPath + '/classify.js'
-  const routers = require(pathName)
-  getMdAction(md)
-  await changePathAction(nodes)
-  await markFileAction(nodes)
-  // copy文件一定是建立在打标记的基础上
-  witeFile(nodes, routers)
-  wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
+   const routers = getRouterArrs()
+  if (routers) {
+    getMdAction(md);
+    await changePathAction(nodes);
+    await markFileAction(nodes);
+    // copy文件一定是建立在打标记的基础上
+    witeFile(nodes, routers);
+    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js');
+  }
 }
 
 /**

@@ -1,4 +1,7 @@
 import fs from 'fs'
+import createDebugger from 'debug'
+const debug = createDebugger('get-file')
+debug.enabled = true
 const rootPath = process.cwd().replace(/\\/g, '/')
 /**
  * @desc: 得到路由
@@ -28,9 +31,29 @@ export function getRouter() {
           path,
           component: impStr[1]
         })
-        console.log(impStr[1])
+        debug(impStr[1])
       }
     }
+  }
+  return routers
+}
+
+/**
+ * @desc: 获取要操作的路由
+ * @author: majun
+ */
+export function getRouterArrs() {
+  let pathName = rootPath + '/classify.js'
+  let routers = null
+  if (fs.existsSync(pathName)) {
+    routers = require(pathName)
+  } else {
+    // 如果没有classify,那么直接找路由
+    routers = getRouter()
+  }
+  if (!routers) {
+    console.error('跟路径没发现有classify.js,并且src里面没有router文件, 现在退出')
+    process.exit(1)
   }
   return routers
 }
