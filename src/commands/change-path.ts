@@ -84,10 +84,20 @@ export function makeSuffix(filePath: string, fullPath: string) {
 export function getImportName(ele: string) {
   let str=''
  // 注释的不转,其他公共也不转
-  const ignore = ['xiwicloud', 'bpmn-js', 'element-ui', 'lodash', 'handsontable', 'nprogress', 'quill', 'qrcodejs2']
+  const ignore = [
+    'xiwicloud',
+    'bpmn-js',
+    'element-ui',
+    'lodash',
+    'handsontable',
+    'nprogress',
+    'quill',
+    'qrcodejs2',
+    'echarts'
+  ]
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   // const reg = /import.*[\"|\'](.*)[\'|\"]/
-  const reg = /import.*from [\"|\'](.*)[\'|\"]/
+  const reg = / from [\"|\'](.*)[\'|\"]/
       //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
       //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
       //      debug(ele.match(reg), '11111111111111')
@@ -142,7 +152,7 @@ return new Promise<void>((resolve, reject) => {
     const sarr = fileStr.split(/[\n]/g)
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
-      if (ele.indexOf('import') > -1 && isRelative) {
+      if (ele.indexOf('from') > -1 && isRelative) {
         const obj = changeImport(ele, fullPath)
         //  if (node.name === '***') {
         //   debug(obj,"bbbnnn")

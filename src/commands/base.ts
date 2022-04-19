@@ -2,7 +2,6 @@
 import { ItemType } from './get-file'
 import prompts from 'prompts'
 import { wirteMd, getMd } from './wirte-md'
-// import { renameKebabCase } from './rename-kebab-case'
 import { renameFoldPath, renameFilePath } from './rename-path'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
@@ -93,7 +92,6 @@ async function deletMarkAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function renameFoldAction(nodes: ItemType[]) {
-  // renameKebabCase(rootPath)
   renameFoldPath(nodes)
 }
 
@@ -103,7 +101,6 @@ async function renameFoldAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function renameFileAction(nodes: ItemType[]) {
-  // renameKebabCase(rootPath)
   renameFilePath(nodes)
 }
 
@@ -166,13 +163,13 @@ function getActions() {
     action: () => witeFileAction(nodes)
   })
   actionMap.set('RenameFoldKebabCase', {
-    title: 'RenameKebabCase',
-    value: 'RenameKebabCase',
+    title: 'RenameFoldKebabCase',
+    value: 'RenameFoldKebabCase',
     action: () => renameFoldAction(nodes)
   })
-  actionMap.set('RenameFoldKebabCase', {
-    title: 'RenameKebabCase',
-    value: 'RenameKebabCase',
+  actionMap.set('RenameFielKebabCase', {
+    title: 'RenameFielKebabCase',
+    value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
   })
 

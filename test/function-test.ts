@@ -1,24 +1,8 @@
 
-const rootPath = process.cwd().replace(/\\/g, '/')
-import {
-  renameFilePath,
 
-} from '../src/commands/rename-path'
-import { nodesThree } from './nodes'
-import fs from 'fs-extra'
-import { creatFile } from './utils'
+// import path from 'path';
+import {getImportName } from '../src/commands/change-path';
 
-let foldPath = rootPath + '/test/temp/myVue/myTable'
-    let file = rootPath + '/test/temp/myVue/myTable/testTemplate.vue'
-// const finalPath = rootPath + '/test/temp/my-vue/check-test-kable-case-inner'
-    async function get() {
-  try {
-    fs.ensureDirSync(foldPath)
-    await creatFile(file)
-    await renameFilePath(nodesThree)
+const str = getImportName(`import history from '../WF/history.vue'`)
 
-  } catch (error) {
-    console.error(error);
-  }
-}
-get()
+console.log(str)

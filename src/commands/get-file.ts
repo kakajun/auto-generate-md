@@ -4,7 +4,11 @@ import path from 'path'
 import createDebugger from 'debug'
 import { changeImport } from './change-path';
 const debug = createDebugger('get-file')
-debug.enabled = false
+debug.enabled = true
+import { env } from 'node-environment'
+  // debug('isDev:!!!!!!!!! ', env())
+const isDev = env() === 'development'
+
 /**
  * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} fullPath
@@ -39,9 +43,12 @@ export function getImport(sarr: any[], fullPath: string) {
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
-    if (ele.indexOf('import') > -1) {
+    if (ele.indexOf('from') > -1) {
       const { absoluteImport } = changeImport(ele, fullPath)
-      imports.push(absoluteImport)
+      if (absoluteImport) {
+         imports.push(absoluteImport)
+      }
+
     }
   })
   return imports
@@ -97,12 +104,12 @@ export function getFileNodes(
     'readme-md.js'
   ]
   //File suffix contains only  文件后缀只包含
-  let include = ['.js', '.vue','.ts']
-
+  let include = isDev?['.js', '.vue']:['.js', '.vue', '.ts']
   if (option) {
     ignore = option.ignore || ignore
     include = option.include || include
   }
+
   const files = fs
     .readdirSync(dir)
     .map((item) => {

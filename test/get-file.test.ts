@@ -11,24 +11,24 @@ describe('get-file的测试', () => {
       isDir: false,
       level: 0,
       note: '/* 解析package */\r',
-      imports: ['D:/worker/auto-generate-md/package.json'],
+      imports: [rootPath + '/package.json'],
       belongTo: [],
       size: 175,
       rowSize: 9,
       suffix: '.ts',
-      fullPath: 'D:/worker/auto-generate-md/src/shared/constant.ts'
+      fullPath: rootPath + '/src/shared/constant.ts'
     },
     {
       name: 'logger.ts',
       isDir: false,
       level: 0,
       note: '/* 打个漂亮日志 */\r',
-      imports: [''],
+      imports: [],
       belongTo: [],
       size: 531,
       rowSize: 21,
       suffix: '.ts',
-      fullPath: 'D:/worker/auto-generate-md/src/shared/logger.ts'
+      fullPath: rootPath + '/src/shared/logger.ts'
     }
   ]
   test('getFile--获取注释', (done) => {
@@ -59,7 +59,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     const sarr = str.split(/[\n]/g)
     const arrs = getImport(sarr, rootPath + '/test/temp/bb.vue')
-    expect(arrs).toMatchObject(['D:/worker/auto-generate-md/unuse/components/user-rulerts.vue'])
+    expect(arrs).toMatchObject([rootPath + '/unuse/components/user-rulerts.vue'])
   })
 
   test('getFileNodes--生成所有文件的node信息', () => {
