@@ -49,7 +49,10 @@ export function getRouterArrs() {
     routers = require(pathName)
   } else {
     // 如果没有classify,那么直接找路由
-    routers = getRouter()
+    routers = [{
+      name: 'plan',
+      router: getRouter()
+    }]
   }
   if (!routers) {
     console.error('跟路径没发现有classify.js,并且src里面没有router文件, 现在退出')
