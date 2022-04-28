@@ -61,13 +61,20 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('getFileNodes--生成所有文件的node信息', () => {
     const arrs = getFileNodes(rootPath + '/src/shared')
+    // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
+    arrs.forEach((item => {
+      item.size = 0
+    }))
+     nodes.forEach((item) => {
+        item.size=0
+     })
     expect(arrs).toMatchObject(nodes)
   })
 
   test('getImport--获取每个文件依赖的方法', () => {
     const notes = ['├── constant.ts            /* 解析package */\n', '└── logger.ts            /* 打个漂亮日志 */\n']
     const arrs = getNote(nodes)
-    console.log(JSON.stringify(arrs), 'arrs')
+    // console.log(JSON.stringify(arrs), 'arrs')
    expect(arrs).toMatchObject(notes)
   })
 })
