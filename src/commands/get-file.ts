@@ -4,7 +4,7 @@ import path from 'path'
 import createDebugger from 'debug'
 import { changeImport } from './change-path';
 const debug = createDebugger('get-file')
-debug.enabled = true
+debug.enabled = false
 import { env } from 'node-environment'
 const isDev = env() === 'development'
 /**

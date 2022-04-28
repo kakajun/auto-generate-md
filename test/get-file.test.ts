@@ -25,32 +25,29 @@ describe('get-file的测试', () => {
       note: '/* 打个漂亮日志 */\r',
       imports: [],
       belongTo: [],
-      size: 531,
-      rowSize: 21,
+      size: 440,
+      rowSize: 20,
       suffix: '.ts',
       fullPath: rootPath + '/src/shared/logger.ts'
     }
   ]
   test('getFile--获取注释', (done) => {
-    async function get() {
-      const file = rootPath + '/test/temp/app-file-test.vue'
-      const file2 = rootPath + '/test/temp/aa.vue'
-      try {
-        await creatFile(file)
-        await creatFile(file2)
-        const obj = getFile(file)
-        done()
-        expect(obj).toEqual({
-          note: '// 我就是个注释',
-          rowSize: 4,
-          size: 63,
-          imports: [rootPath + '/test/temp/aa.vue']
-        })
-      } catch (error) {
-        done(error)
-      }
+    const file = rootPath + '/test/temp/app-file-test.vue'
+    const file2 = rootPath + '/test/temp/aa.vue'
+    try {
+      creatFile(file)
+      creatFile(file2)
+      const obj = getFile(file)
+      done()
+      expect(obj).toEqual({
+        note: '// 我就是个注释',
+        rowSize: 4,
+        size: 63,
+        imports: [rootPath + '/test/temp/aa.vue']
+      })
+    } catch (error) {
+      done(error)
     }
-    get()
   })
 
   test('getImport--获取每个文件依赖的方法', () => {
@@ -64,7 +61,6 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('getFileNodes--生成所有文件的node信息', () => {
     const arrs = getFileNodes(rootPath + '/src/shared')
-    //  console.log(arrs)
     expect(arrs).toMatchObject(nodes)
   })
 

@@ -2,18 +2,17 @@
 import { lightBlue, lightGreen, lightRed, lightYellow } from 'kolorist';
 
 const logger = {
-  PREFIX: '[dev-cli]',
   info(text: string) {
-    console.log(lightBlue(`✈ ${logger.PREFIX} - ${text}`));
+    console.log(lightBlue(`✈ - ${text}`));
   },
   success(text: string) {
-    console.log(lightGreen(`✔ ${logger.PREFIX} - ${text}`));
+    console.log(lightGreen(`✔ - ${text}`));
   },
   warn(text: string) {
-    console.log(lightYellow(`▶ ${logger.PREFIX} - ${text}`));
+    console.log(lightYellow(`▶ - ${text}`));
   },
   error(text: string) {
-    console.log(lightRed(`✖ ${logger.PREFIX} - ${text}`));
+    console.log(lightRed(`✖  - ${text}`));
   }
 };
 

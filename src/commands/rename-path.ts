@@ -3,9 +3,10 @@ import fs from 'fs-extra'
 import { ItemType } from './get-file'
 import createDebugger from 'debug'
 import path from 'path'
+import logger from '../shared/logger'
 import { getImportName } from './change-path'
 const debug = createDebugger('rename-path')
-debug.enabled = true
+debug.enabled = false
 
 /**
  * 将单个字符串的首字母小写
@@ -94,10 +95,9 @@ export async function renameFilePath(nodes: ItemType[]) {
       try {
         // 异步写入数据到文件
         await fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' })
-         console.log('Write successful-------' + node.fullPath)
+         logger.success(`rewriteFile successful-------: ${node.fullPath}` )
       } catch (error) {
-        console.error('写入文件失败,地址不存在')
-        console.log(node.fullPath)
+        logger.error(`写入文件失败,地址不存在: ${node.fullPath}`)
       }
     }
 }
@@ -209,12 +209,12 @@ export async function replaceName(fullPath: string) {
   try {
      const flag = fs.existsSync(oldPath)
     if (flag) {
+        console.log(oldPath, '改名为: ', newPath ,"成功")
         await fs.rename(oldPath, newPath)
     } else {
-      console.error(oldPath,"不存在重命名干嘛?")
+      logger.error(`文件${oldPath}不存在重命名干嘛?`)
     }
-
-    console.log(filename + ' is done')
+    logger.info(filename + ' is reneme done')
     return { newName, filename }
   } catch (error) {
     throw error

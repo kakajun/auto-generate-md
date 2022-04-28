@@ -1,7 +1,8 @@
 import fs from 'fs'
 import createDebugger from 'debug'
+import logger from '../shared/logger'
 const debug = createDebugger('get-file')
-debug.enabled = true
+debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 /**
  * @desc: 得到路由
@@ -55,7 +56,7 @@ export function getRouterArrs() {
     }]
   }
   if (!routers) {
-    console.error('跟路径没发现有classify.js,并且src里面没有router文件, 现在退出')
+    logger.error('跟路径没发现有classify.js,并且src里面没有router文件, 现在退出')
     process.exit(1)
   }
   return routers

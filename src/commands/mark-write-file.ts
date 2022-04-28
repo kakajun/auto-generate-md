@@ -2,7 +2,8 @@
 import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import { ItemType } from './get-file'
-import fs from 'fs-extra';
+import fs from 'fs-extra'
+import logger from '../shared/logger'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')
 debug.enabled = false
@@ -14,18 +15,18 @@ debug.enabled = false
  * @param {string} path  绝对路径
  * @param {string} rootPath   确定哪一级开始创建文件夹
  */
-export async function markWriteFile(nodes:  ItemType[], name: string, path: string) {
+export async function markWriteFile(nodes: ItemType[], name: string, path: string) {
   // debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   // debug('查找的node: ', node)
   if (node) {
-    if (node.copyed) return   // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析
-    node.copyed=true
+    if (node.copyed) return // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析
+    node.copyed = true
     // 得到标记
     const belongTo = node.belongTo
     if (belongTo.length > 0) {
-      await   setDispFileNew(path, name)
+      await setDispFileNew(path, name)
     }
     if (node.imports) {
       // 找到有子文件了,循环它
@@ -37,7 +38,7 @@ export async function markWriteFile(nodes:  ItemType[], name: string, path: stri
           // 继续递归,直到子文件没有子文件
           await markWriteFile(nodes, name, element)
         } else {
-          console.error('文件不存在', path)
+          logger.error( `${path}文件不存在`, )
         }
       }
     }
@@ -52,15 +53,14 @@ export async function markWriteFile(nodes:  ItemType[], name: string, path: stri
  * @param {string} rootPath
  */
 export async function setDispFileNew(pathN: string, name: string) {
-  // debug('copyFile入参: ', name, path, rootPath)
-   const relative = pathN.replace(rootPath, '')
-   const originPath = pathN
-   const writeFileName = rootPath + '/' + name + relative
+  const relative = pathN.replace(rootPath, '')
+  const originPath = pathN
+  const writeFileName = rootPath + '/' + name + relative
   try {
-    if (fs.existsSync(writeFileName)) return  // 如果文件都存在那算了
+    if (fs.existsSync(writeFileName)) return // 如果文件都存在那算了
     await fs.copy(originPath, writeFileName)
-        debug('写入文件success! : ', writeFileName)
-   } catch (err) {
-     console.error(err)
-   }
+    debug('写入文件success! : ', writeFileName)
+  } catch (err) {
+    console.error(err)
+  }
 }

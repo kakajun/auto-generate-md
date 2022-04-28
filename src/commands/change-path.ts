@@ -2,6 +2,7 @@
 import { ItemType } from './get-file'
 import fs from 'fs'
 import path from 'path'
+import logger from '../shared/logger'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
 debug.enabled = false
@@ -18,7 +19,7 @@ export async function changePath(nodes: ItemType[]) {
        await getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        await witeFile(ele, true)
+        witeFile(ele, true)
       }
     }
   }
@@ -166,10 +167,10 @@ export  function witeFile(node: ItemType, isRelative?: Boolean) {
       fileStr = sarr.join('\n')
       // 异步写入数据到文件
       fs.writeFileSync(fullPath, fileStr, { encoding: 'utf8' })
-       console.log('Write successful-------' + fullPath)
+       logger.success(`Write file successful: ${fullPath}`)
     }
   } catch (error) {
-    console.error('读取文件失败,文件名: ', fullPath)
+    logger.error(`读取文件失败,文件名: ${fullPath} `)
   }
 }
 
@@ -183,4 +184,5 @@ export function wirteJsNodes(data: string, filePath: string) {
   const pre = 'export default'
   // 异步写入数据到文件
   fs.writeFileSync(file, pre + data, { encoding: 'utf8' })
+   logger.success(`Write file successful: ${filePath}`)
 }

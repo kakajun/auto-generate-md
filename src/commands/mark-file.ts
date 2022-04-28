@@ -3,6 +3,7 @@ import fs from 'fs'
 import { ItemType } from './get-file'
 import {  markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
+import logger from '../shared/logger'
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = false
@@ -84,7 +85,7 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
         // 继续递归,直到子文件没有子文件
        await setNodeMark(nodes, name, element)
       } else {
-        console.error('文件不存在', path)
+        logger.error(`文件不存在: ${path}`)
       }
     }
   }
@@ -124,10 +125,10 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
      }
      // 直接打上标记
      fileStr = '//' + name + '\n' + fileStr
-      fs.writeFileSync(file, fileStr)
-      debug('mark successful-------' + file)
+     fs.writeFileSync(file, fileStr)
+     logger.info(`mark successful-------: ${file}`)
    } catch (error) {
-     console.error('给文件打标记的文件不存在: ', file)
+     logger.error(`给文件打标记的文件不存在: ${file}`)
      return
    }
 }

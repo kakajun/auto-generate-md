@@ -3,6 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import { ItemType } from './get-file'
+import logger from '../shared/logger'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('wirte-md')
@@ -17,7 +18,7 @@ export function wirteMd(data: string, filePath: string) {
   const file = path.resolve(rootPath, filePath)
   // 异步写入数据到文件
   fs.writeFile(file, data, { encoding: 'utf8' }, () => {
-    console.log('Write successful')
+    logger.success('Write successful')
   })
 }
 
@@ -87,15 +88,15 @@ Total number of codes: ${format(sizeTotleNumber)} \n`
 export function getMd(
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined
 ) {
-  console.log('\x1B[36m%s\x1B[0m', '*** run location: ', process.cwd() + '\n')
+  logger.success('*** run location: '+process.cwd() + '\n')
   const nodes = getFileNodes(rootPath,option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
-  console.log('\x1B[33m%s\x1b[0m', coutMd)
+  logger.success(coutMd)
   const note = getNote(nodes) // 得到所有note的数组
   const md = note.join('') + '\n' // 数组转字符串
   if (md.length > 0) {
-    console.log('\x1B[36m%s\x1B[0m', '*** Automatic generation completed ! ')
+    logger.success('*** Automatic generation completed !')
   }
   return { md: md + coutMd, nodes }
 }
