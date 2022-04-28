@@ -68,7 +68,7 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
   const node = findNodes(nodes, path)
   if (node) {
     // 打标记
-    await setmark(path, name)
+    setmark(path, name)
   }
   // debug('查找的node: ', node)
   if (node && node.imports) {
@@ -115,25 +115,21 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
  * @param {string} file
  * @param {string} name
  */
-function setmark(file: string, name: string) {
- return new Promise<void>((resolve, reject) => {
+ function setmark(file: string, name: string) {
    try {
      let fileStr = fs.readFileSync(file, 'utf-8')
      if (fileStr.indexOf('//' + name + '\n') === 0) {
        // 打过标记了,就不打了
-       resolve()
+       return
      }
      // 直接打上标记
      fileStr = '//' + name + '\n' + fileStr
-     fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
-       debug('mark successful-------' + file)
-       resolve()
-     })
+      fs.writeFileSync(file, fileStr)
+      debug('mark successful-------' + file)
    } catch (error) {
      console.error('给文件打标记的文件不存在: ', file)
-     reject()
+     return
    }
- })
 }
 
 /**
@@ -159,7 +155,6 @@ export function deletMarkAll(nodes: ItemType[], name: string) {
  * @param {string} name
  */
 export function deletMark(file: string, name: string) {
- return new Promise<string>((resolve, reject) => {
      let fileStr=''
     try {
        fileStr = fs.readFileSync(file, 'utf-8')
@@ -172,13 +167,11 @@ export function deletMark(file: string, name: string) {
        }
       }
       fileStr = sarr.join('\n')
-      fs.writeFile(file, fileStr, { encoding: 'utf8' }, () => {
-        debug('delete mark successful-------' + file)
-        resolve(fileStr)
-      })
+      fs.writeFileSync(file, fileStr, { encoding: 'utf8' })
+       debug('delete mark successful-------' + file)
+       return fileStr
     } catch (error) {
       console.error('删除标记的文件不存在: ', file)
-      reject()
-    }
-  })
+  }
+  return ''
 }

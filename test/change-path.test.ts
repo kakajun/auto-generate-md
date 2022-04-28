@@ -61,7 +61,7 @@ import UserRuler from '../../unuse/components/user-rulerts.vue'
       // 异步写入数据到文件
       fs.writeFile(file, str, { encoding: 'utf8' }, async () => {
         debug('Write successful')
-        await witeFile(node, true)
+        witeFile(node, true)
         done()
         const getStr = fs.readFileSync(file, 'utf-8')
         expect(getStr).toEqual(finalStr)

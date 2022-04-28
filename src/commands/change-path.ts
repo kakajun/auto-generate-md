@@ -144,7 +144,6 @@ export function changeImport(ele: string, fullPath: string) {
    */
 export  function witeFile(node: ItemType, isRelative?: Boolean) {
   const { fullPath} = node
-return new Promise<void>((resolve, reject) => {
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')
@@ -166,18 +165,12 @@ return new Promise<void>((resolve, reject) => {
     if (writeFlag) {
       fileStr = sarr.join('\n')
       // 异步写入数据到文件
-      fs.writeFile(fullPath, fileStr, { encoding: 'utf8' }, () => {
-        console.log('Write successful-------' + fullPath)
-        resolve()
-      })
-    } else {
-      resolve()
+      fs.writeFileSync(fullPath, fileStr, { encoding: 'utf8' })
+       console.log('Write successful-------' + fullPath)
     }
   } catch (error) {
-    reject(false)
     console.error('读取文件失败,文件名: ', fullPath)
   }
-})
 }
 
 /**
@@ -189,7 +182,5 @@ export function wirteJsNodes(data: string, filePath: string) {
   const file = path.resolve(process.cwd(), filePath)
   const pre = 'export default'
   // 异步写入数据到文件
-  fs.writeFile(file, pre + data, { encoding: 'utf8' }, (err) => {
-    console.error(err)
-  })
+  fs.writeFileSync(file, pre + data, { encoding: 'utf8' })
 }

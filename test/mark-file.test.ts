@@ -25,7 +25,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     try {
       fs.writeFile(file, str, { encoding: 'utf8' }, async () => {
-        const receive = await deletMark(file, 'base')
+        const receive = deletMark(file, 'base')
         done()
         expect(receive).toEqual(finalStr)
       })
@@ -39,7 +39,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
       const file = rootPath + '/test/temp/app2-file-test.vue'
       await creatFile(file)
       try {
-        await deletMark(file, 'base')
+        deletMark(file, 'base')
         await setNodeMark(nodeOne, 'base', file)
         const str = fs.readFileSync(file, 'utf-8')
         const index = str.indexOf('//base')

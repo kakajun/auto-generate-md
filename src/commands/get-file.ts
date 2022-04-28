@@ -6,10 +6,7 @@ import { changeImport } from './change-path';
 const debug = createDebugger('get-file')
 debug.enabled = true
 import { env } from 'node-environment'
-  // debug('isDev:!!!!!!!!! ', env())
 const isDev = env() === 'development'
-
-
 /**
  * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} fullPath
