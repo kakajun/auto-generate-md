@@ -33,7 +33,6 @@ export async function changePath(nodes: ItemType[]) {
 export function getRelatPath(absoluteImport: string, fullPath: string) {
   let relatPath = path.relative(path.dirname(fullPath), absoluteImport) // 转回相对路径
   relatPath = relatPath.replace(/\\/g, '/')
-  console.log();
   if (relatPath.indexOf('.') !== 0) {
     relatPath = './' + relatPath
   }
