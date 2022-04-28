@@ -69,8 +69,7 @@ export async function renameFilePath(nodes: ItemType[]) {
   await getNode(nodes)
 }
 
-function rewriteFile(node: ItemType) {
-  return new Promise<void>((resolve) => {
+ async function rewriteFile(node: ItemType) {
     let writeFlag = false
     const str = fs.readFileSync(node.fullPath, 'utf-8')
     const sarr = str.split(/[\n]/g)
@@ -85,7 +84,7 @@ function rewriteFile(node: ItemType) {
           // 这里替换有可能把头也替换了, 所以切一下
           //比如 import moduleName from 'moduleName'  会只替换前一个   "import moduleName from 'moduleName'".split('from')
           const str = ele.split('from')
-          sarr[index] =`${str[0]}from${str[1].replace(name, newName)}`
+          sarr[index] = `${str[0]}from${str[1].replace(name, newName)}`
           writeFlag = true
         }
       }
@@ -94,19 +93,13 @@ function rewriteFile(node: ItemType) {
       let fileStr = sarr.join('\n')
       try {
         // 异步写入数据到文件
-        fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' }, () => {
-          console.log('Write successful-------' + node.fullPath)
-          resolve()
-        })
+        await fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' })
+         console.log('Write successful-------' + node.fullPath)
       } catch (error) {
         console.error('写入文件失败,地址不存在')
-        console.log( node.fullPath);
+        console.log(node.fullPath)
       }
-
-    } else {
-      resolve()
     }
-  })
 }
 
 /**
@@ -194,35 +187,36 @@ export async function renameFile(node: ItemType) {
  * 重命名文件夹 CamelCase || PascalCase => kebab-case
  * @param node 节点
  */
-export function replaceName(fullPath: string) {
+export async function replaceName(fullPath: string) {
   let filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
   debug('newName: ', newName)
   debug('filename: ', filename)
   const oldPath = fullPath
   const newPath = oldPath.replace(filename, newName)
-  return new Promise<{ newName: string; filename: string }>(async (resolve) => {
-    // rename之前要判断一下,假如已经有了,那么直接拷贝过去,并且删除原来的
-    const lastName = path.extname(newPath)
-    if (!lastName) {
-      // 文件夹, 特殊处理,要copy文件
-      if (fs.existsSync(newPath)) {
-        // debug('newPath: ', newPath)
-        await fs.copy(fullPath, newPath)
-        fs.removeSync(fullPath) // 删除目录
-        resolve({ newName, filename })
-      }
+  // rename之前要判断一下,假如已经有了,那么直接拷贝过去,并且删除原来的
+  const lastName = path.extname(newPath)
+  if (!lastName) {
+    // 文件夹, 特殊处理,要copy文件
+    if (fs.existsSync(newPath)) {
+      // debug('newPath: ', newPath)
+      await fs.copy(fullPath, newPath)
+      fs.removeSync(fullPath) // 删除目录
+      return { newName, filename }
     }
-    debug(oldPath, newPath, 'oldPath, newPath')
-    try {
-    fs.rename(oldPath, newPath, (err) => {
-      if (err) throw err
-      else console.log(filename + ' is done')
-      resolve({ newName, filename })
-    })
-    } catch (error) {
-     console.error('重命名失败!!!')
+  }
+  debug(oldPath, newPath, 'oldPath, newPath')
+  try {
+     const flag = fs.existsSync(oldPath)
+    if (flag) {
+        await fs.rename(oldPath, newPath)
+    } else {
+      console.error(oldPath,"不存在重命名干嘛?")
     }
 
-  })
+    console.log(filename + ' is done')
+    return { newName, filename }
+  } catch (error) {
+    throw error
+  }
 }

@@ -88,14 +88,18 @@ describe('rename.test的测试', () => {
     // 自备独立测试数据
     let foldPath = rootPath + '/test/temp/TestKableCase'
     let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+    let file2 = rootPath + '/test/temp/test-kable-case/youTemplate.vue'
+        let foldPath2 = rootPath + '/test/temp/TestKableCase/TestKableCase2'
     const finalPath = rootPath + '/test/temp/test-kable-case'
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
+         fs.ensureDirSync(foldPath2)
         await creatFile(file)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
-        expect(flag).toEqual(true)
+       const flag2 = fs.existsSync(file2)
+        expect(flag && flag2).toEqual(true)
         done()
       } catch (error) {
         done(error)

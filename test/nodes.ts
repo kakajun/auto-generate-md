@@ -88,7 +88,19 @@ export const nodesTwo = [
     imports: [],
     belongTo: [],
     fullPath: rootPath + '/test/temp/TestKableCase',
-    children: [fileNode]
+    children: [
+      fileNode,
+      {
+        name: 'TestKableCase2',
+        isDir: true,
+        level: 1,
+        note: '',
+        copyed: false,
+        imports: [],
+        belongTo: [],
+        fullPath: rootPath + '/test/temp/TestKableCase/TestKableCase2'
+      }
+    ]
   }
 ]
 
