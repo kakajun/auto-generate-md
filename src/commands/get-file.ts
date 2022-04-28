@@ -24,7 +24,7 @@ export function getFile(fullPath: string) {
       ? sarr[0]
       : ''
   return {
-    note: f,
+    note: f.replace(/<\/?[^>]*>|(\n|\r)/g, ''),  // 去掉尾巴换行符号
     size,
     rowSize,
     imports
