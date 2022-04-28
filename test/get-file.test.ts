@@ -10,7 +10,7 @@ describe('get-file的测试', () => {
       name: 'constant.ts',
       isDir: false,
       level: 0,
-      note: '/* 解析package */',
+      note: '/* 解析package */\r',
       imports: [rootPath + '/package.json'],
       belongTo: [],
       size: 175,
@@ -22,7 +22,7 @@ describe('get-file的测试', () => {
       name: 'logger.ts',
       isDir: false,
       level: 0,
-      note: '/* 打个漂亮日志 */',
+      note: '/* 打个漂亮日志 */\r',
       imports: [],
       belongTo: [],
       size: 440,
@@ -61,16 +61,16 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('getFileNodes--生成所有文件的node信息', () => {
     const arrs = getFileNodes(rootPath + '/src/shared')
-    expect(arrs).toMatchObject(nodes)
+     expect(JSON.stringify(arrs)).toEqual(JSON.stringify(nodes))
   })
 
   test('getImport--获取每个文件依赖的方法', () => {
     const notes = [
-      '├── constant.ts            /* 解析package */\n',
-      '└── logger.ts            /* 打个漂亮日志 */\n'
+      '├── constant.ts            /* 解析package */\r\n',
+      '└── logger.ts            /* 打个漂亮日志 */\r\n'
     ]
     const arrs = getNote(nodes)
     console.log(arrs, 'arrs')
-    expect(arrs).toMatchObject(notes)
+    expect(JSON.stringify(arrs)).toEqual(JSON.stringify(notes))
   })
 })
