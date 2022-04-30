@@ -19,7 +19,7 @@ export function getRouterFilePath() {
       let fPath = path.join(p, val)
       let stats = fs.statSync(fPath)
       if (stats.isDirectory()) finder(fPath)
-      if (stats.isFile()) routes.push(fPath)
+      if (stats.isFile()) routes.push(fPath.replace(/\\/g, '/'))
     })
   }
   finder(dir)
@@ -64,7 +64,7 @@ export function getRouter(routerPath:string) {
       if (impStr) {
         routers.push({
           path,
-          component: impStr[1].replace(/\\/g, '/')
+          component: impStr[1]
         })
         debug(impStr[1])
       }
