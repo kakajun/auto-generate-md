@@ -41,17 +41,19 @@ export async function markFile(nodes:  ItemType[], routers: classifyType) {
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export  function witeFile(nodes:  ItemType[], routers: classifyType) {
-  routers.forEach( (ele) => {
+export async function witeMarkFile(nodes: ItemType[], routers: classifyType) {
+  for (let index = 0; index < routers.length; index++) {
+    const ele = routers[index]
     // 这里循环打标记的路由
-    ele.router.forEach(async (obj: { component: any }) => {
+    for (let index = 0; index < ele.router.length; index++) {
+      const obj = ele.router[index]
       const pathN = obj.component
       // 路径转绝对路径
       let absolutePath = pathN.replace('@', rootPath)
       // 对打上标记的文件进行分类写入
       await markWriteFile(nodes, ele.name, absolutePath)
-    })
-  })
+    }
+  }
 }
 
 /**

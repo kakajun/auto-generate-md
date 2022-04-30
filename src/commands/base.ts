@@ -7,7 +7,7 @@ import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
 import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
-import { markFile, deletMarkAll, witeFile } from './mark-file'
+import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -55,7 +55,7 @@ async function witeFileAction(nodes: ItemType[]) {
   if (routers) {
     await markFile(nodes, routers)
     // copy文件一定是建立在打标记的基础上
-    witeFile(nodes, routers)
+    await witeMarkFile(nodes, routers)
   }
 }
 /**
@@ -109,7 +109,7 @@ export async function generateAllAction(nodes: ItemType[], md: string) {
     await changePathAction(nodes);
     await markFileAction(nodes);
     // copy文件一定是建立在打标记的基础上
-    witeFile(nodes, routers);
+   await witeMarkFile(nodes, routers)
     wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js');
   }
 }

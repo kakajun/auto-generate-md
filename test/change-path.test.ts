@@ -2,7 +2,6 @@ import path from 'path'
 import fs from 'fs-extra'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './nodes'
-
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = true

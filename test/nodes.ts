@@ -111,7 +111,7 @@ export   const nodesMark = [
     level: 2,
     note: '',
     imports: [],
-    belongTo: [],
+    belongTo: ['test2'],
     size: 96,
     copyed: false,
     rowSize: 4,
@@ -128,13 +128,13 @@ export   const nodesMark = [
     belongTo: [],
     fullPath: rootPath + '/test/temp/my',
     children: [
-       {
+      {
         name: 'aa',
         isDir: false,
         level: 2,
         note: ' // 我就是个注释',
         imports: [],
-        belongTo: [],
+        belongTo: ['test2'],
         size: 96,
         copyed: false,
         rowSize: 4,
@@ -147,7 +147,7 @@ export   const nodesMark = [
         level: 2,
         note: ' // 我就是个注释',
         imports: [rootPath + '/test/temp/my/aa.vue'],
-        belongTo: [],
+        belongTo: ['test2'],
         size: 96,
         copyed: false,
         rowSize: 4,
