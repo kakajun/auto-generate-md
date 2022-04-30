@@ -1,11 +1,4 @@
-import {
-  findNodes,
-  deletMark,
-  setNodeMark,
-  witeMarkFile
-  // setmark,
-  // deletMarkAll
-} from '../src/commands/mark-file'
+import { findNodes, deletMark, setNodeMark, witeMarkFile, setmark, deletMarkAll } from '../src/commands/mark-file'
 import { nodeOne, nodesMark, routersMarg } from './nodes'
 import fs from 'fs-extra'
 import { creatFile, creatFileNoimport } from './utils'
@@ -18,6 +11,42 @@ describe('mark-file.test的测试', () => {
   test('findNodes--查node', () => {
     const node = findNodes(nodeOne, rootPath + '/test/temp/app-file-test.vue')
     expect(node).toMatchObject(nodeOne[0])
+  })
+
+  test('setmark--给节点标记', () => {
+    const file = rootPath + '/test/temp/mark-setmark.vue'
+    creatFile(file)
+    setmark(file, 'setmark')
+    const str = fs.readFileSync(file, 'utf-8')
+    debug(str, '444')
+    const flag = str.indexOf('setmark') > -1
+    expect(flag).toEqual(true)
+  })
+
+  test('deletMarkAll--递归所有文件,删除所有标记', () => {
+    const file = rootPath + '/test/temp/delet-mark-all.vue'
+    creatFile(file)
+    setmark(file, 'setmark')
+    const nodes = [
+      {
+        name: 'mark-setmark',
+        isDir: false,
+        level: 2,
+        note: ' // 我就是个注释',
+        imports: [],
+        belongTo: ['setmark'],
+        size: 96,
+        copyed: false,
+        rowSize: 4,
+        suffix: '.vue',
+        fullPath: rootPath + '/test/temp/delet-mark-all.vue'
+      }
+    ]
+    deletMarkAll(nodes, 'setmark')
+    const str = fs.readFileSync(file, 'utf-8')
+    debug(str, '444')
+    const flag = str.indexOf('setmark') > -1
+    expect(flag).toEqual(false)
   })
 
   test('deletMark--测试删除标记', (done) => {
@@ -72,7 +101,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
       const file3 = rootPath + '/test/temp/my/aa.vue'
       creatFileNoimport(file3)
       try {
-      await  witeMarkFile(nodesMark, routersMarg)
+        await witeMarkFile(nodesMark, routersMarg)
         const finalPath = rootPath + '/test2/test/temp/wite-file-test.vue'
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)

@@ -113,25 +113,25 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
  * @param {string} file
  * @param {string} name
  */
- function setmark(file: string, name: string) {
-   try {
-     let fileStr = fs.readFileSync(file, 'utf-8')
-     if (fileStr.indexOf('//' + name + '\n') === 0) {
-       // 打过标记了,就不打了
-       return
-     }
-     // 直接打上标记
-     fileStr = '//' + name + '\n' + fileStr
-     fs.writeFileSync(file, fileStr)
-     logger.info(`mark successful-------: ${file}`)
-   } catch (error) {
-     logger.error(`给文件打标记的文件不存在: ${file}`)
-     return
-   }
+export function setmark(file: string, name: string) {
+  try {
+    let fileStr = fs.readFileSync(file, 'utf-8')
+    if (fileStr.indexOf('//' + name + '\n') === 0) {
+      // 打过标记了,就不打了
+      return
+    }
+    // 直接打上标记
+    fileStr = '//' + name + '\n' + fileStr
+    fs.writeFileSync(file, fileStr)
+    logger.info(`mark successful-------: ${file}`)
+  } catch (error) {
+    logger.error(`给文件打标记的文件不存在: ${file}`)
+    return
+  }
 }
 
 /**
- * @desc: 递归所有文件
+ * @desc: 递归所有文件,删除所有标记
  * @author: majun
  * @param {Array} nodes
  */

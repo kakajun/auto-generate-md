@@ -4,7 +4,7 @@ import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from 
 import { nodeOne } from './nodes'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
-debug.enabled = true
+debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
