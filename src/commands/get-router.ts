@@ -64,7 +64,7 @@ export function getRouter(routerPath:string) {
       if (impStr) {
         routers.push({
           path,
-          component: impStr[1]
+          component: impStr[1].replace(/\\/g, '/')
         })
         debug(impStr[1])
       }
