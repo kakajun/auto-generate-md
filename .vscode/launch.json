@@ -4,7 +4,7 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "nodemon",
+            "name": "funtion-test",
             "runtimeExecutable": "nodemon",
             "program": "${workspaceFolder}\\test\\function-test.ts",
             "restart": true,

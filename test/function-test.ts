@@ -1,8 +1,8 @@
 
 
 // import path from 'path';
-import { getRouter } from '../src/commands/get-router'
+import { getRouterFilePath } from '../src/commands/get-router'
 
-const arrs = getRouter()
+const arrs = getRouterFilePath()
 
 console.log(arrs)
