@@ -16,10 +16,10 @@ export function getRouterFilePath() {
   function finder(p: string) {
     let files = fs.readdirSync(p)
     files.forEach((val) => {
-      let fPath = path.join(p, val)
+      let fPath = path.join(p, val).replace(/\\/g, '/')
       let stats = fs.statSync(fPath)
       if (stats.isDirectory()) finder(fPath)
-      if (stats.isFile()) routes.push(fPath.replace(/\\/g, '/'))
+      if (stats.isFile()) routes.push(fPath)
     })
   }
   finder(dir)

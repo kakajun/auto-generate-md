@@ -20,7 +20,7 @@ describe('getRouter的测试', () => {
 
   test('getRouterFilePath--递归获取路由数组', () => {
     const arrs = getRouterFilePath()
-    const routerArrs = [process.cwd() + '\\router\\container\\index.js', process.cwd() + '\\router\\index.js']
+    const routerArrs = [rootPath + '/router/container/index.js', rootPath + '/router/index.js']
     expect(arrs).toMatchObject(routerArrs)
   })
 
