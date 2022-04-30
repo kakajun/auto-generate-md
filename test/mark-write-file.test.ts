@@ -6,7 +6,7 @@ import { setDispFileNew, markWriteFile } from '../src/commands/mark-write-file'
 import { nodeOne } from './nodes'
 
 describe('mark-write-file.test的测试', () => {
-  test('mark-write-file.test--找到文件然后copy文件', (done) => {
+  test('setDispFileNew--找到文件然后copy文件', (done) => {
     const file = rootPath + '/test/temp/app-file-test.vue'
     try {
       async function get() {
@@ -19,7 +19,7 @@ describe('mark-write-file.test的测试', () => {
     }
   })
 
-  test('mark-write-file.test--找到文件然后copy文件', (done) => {
+  test('mark-write-file--递归打标记', (done) => {
     const file = rootPath + '/test/temp/app-file-test.vue'
     try {
       async function get() {

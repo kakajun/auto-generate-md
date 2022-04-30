@@ -57,7 +57,7 @@ describe('rename.test的测试', () => {
       isDir: false,
       level: 2,
       note: ' // 我就是个注释',
-      imports: ['/test/temp/my-template.vue'],
+      imports: [rootPath + '/test/temp/my-template.vue'],
       belongTo: [],
       size: 96,
       copyed: false,
@@ -95,7 +95,7 @@ describe('rename.test的测试', () => {
       try {
         fs.ensureDirSync(foldPath)
          fs.ensureDirSync(foldPath2)
-        await creatFile(file)
+         creatFile(file)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
        const flag2 = fs.existsSync(file2)
@@ -116,7 +116,7 @@ describe('rename.test的测试', () => {
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
-        await creatFile(file)
+         creatFile(file)
         await renameFilePath(nodesThree)
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)

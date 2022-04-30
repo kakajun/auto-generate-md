@@ -69,7 +69,7 @@ export const fileNode = {
   isDir: false,
   level: 2,
   note: ' // 我就是个注释',
-  imports: ['/test/temp/myTemplate.vue'],
+  imports: [rootPath + '/test/temp/myTemplate.vue'],
   belongTo: [],
   size: 96,
   copyed: false,
@@ -103,6 +103,76 @@ export const nodesTwo = [
     ]
   }
 ]
+
+export   const nodesMark = [
+  {
+    name: 'wite-file-test',
+    isDir: false,
+    level: 2,
+    note: '',
+    imports: [],
+    belongTo: [],
+    size: 96,
+    copyed: false,
+    rowSize: 4,
+    suffix: '.vue',
+    fullPath: rootPath + '/test/temp/wite-file-test.vue'
+  },
+  {
+    name: 'my',
+    isDir: true,
+    level: 1,
+    note: '',
+    copyed: false,
+    imports: [],
+    belongTo: [],
+    fullPath: rootPath + '/test/temp/my',
+    children: [
+       {
+        name: 'aa',
+        isDir: false,
+        level: 2,
+        note: ' // 我就是个注释',
+        imports: [],
+        belongTo: [],
+        size: 96,
+        copyed: false,
+        rowSize: 4,
+        suffix: '.vue',
+        fullPath: rootPath + '/test/temp/my/aa.vue'
+      },
+      {
+        name: 'wite-file2',
+        isDir: false,
+        level: 2,
+        note: ' // 我就是个注释',
+        imports: [rootPath + '/test/temp/my/aa.vue'],
+        belongTo: [],
+        size: 96,
+        copyed: false,
+        rowSize: 4,
+        suffix: '.vue',
+        fullPath: rootPath + '/test/temp/my/wite-file2.vue'
+      }
+    ]
+  }
+]
+
+  export   const routersMarg = [
+       {
+         name: 'test2',
+         router: [
+           {
+             path: '/wite-file-test',
+             component: '@/test/temp/wite-file-test.vue'
+           },
+           {
+             path: '/wite-file2',
+             component: '@/test/temp/my/wite-file2.vue'
+           }
+         ]
+       }
+     ]
 
 export const nodesThree = [
   {

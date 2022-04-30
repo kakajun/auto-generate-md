@@ -1,6 +1,13 @@
-import { findNodes, deletMark, setNodeMark } from '../src/commands/mark-file'
-import { nodeOne } from './nodes'
-import fs from 'fs'
+import {
+  findNodes,
+  deletMark,
+  setNodeMark,
+  witeFile
+  // setmark,
+  // deletMarkAll
+} from '../src/commands/mark-file'
+import { nodeOne, nodesMark, routersMarg } from './nodes'
+import fs from 'fs-extra'
 import { creatFile } from './utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
 import createDebugger from 'debug'
@@ -37,13 +44,36 @@ import UserRuler from '@/unuse/components/user-rulerts'
   test('setNodeMark--给节点标记', (done) => {
     async function get() {
       const file = rootPath + '/test/temp/app2-file-test.vue'
-      await creatFile(file)
+      creatFile(file)
       try {
         deletMark(file, 'base')
         await setNodeMark(nodeOne, 'base', file)
         const str = fs.readFileSync(file, 'utf-8')
         const index = str.indexOf('//base')
         expect(index).toEqual(0)
+        done()
+      } catch (error) {
+        done(error)
+      }
+    }
+    get()
+  })
+
+  test('witeFile--标记文件主程序', (done) => {
+    async function get() {
+      const file = rootPath + '/test/temp/wite-file-test.vue'
+      creatFile(file)
+      const fold = rootPath + '/test/temp/my'
+      fs.ensureDirSync(fold)
+      const file2 = rootPath + '/test/temp/my/wite-file2.vue'
+      creatFile(file2)
+
+
+      try {
+        witeFile(nodesMark, routersMarg)
+        // const str = fs.readFileSync(file, 'utf-8')
+        // const index = str.indexOf('//base')
+        // expect(index).toEqual(0)
         done()
       } catch (error) {
         done(error)

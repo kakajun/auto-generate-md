@@ -7,19 +7,14 @@ import logger from '../shared/logger'
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = false
-type classifyType = [
-  {
-    name: string
-    router: [
-      {
-        path: string
-        name: string
-        // 路由必须都是绝对路径
-        component: string
-      }
-    ]
-  }
-]
+type classifyType = Array<{
+  name: string
+  router: Array<{
+    path: string
+    // 路由必须都是绝对路径
+    component: string
+  }>
+}>
 /**
  * @desc: 标记文件主程序
  * @author: majun

@@ -13,6 +13,13 @@ import UserRuler from './aa'
   fs.writeFileSync(file, str, { encoding: 'utf8' })
 }
 
+export function creatFileNoimport(file: string) {
+  const str = `// 我就是个注释
+<script setup>
+</script>`
+  fs.writeFileSync(file, str, { encoding: 'utf8' })
+}
+
 export function setFile() {
   const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
   const str = `<template>

@@ -6,7 +6,7 @@ import fs from 'fs-extra'
 import logger from '../shared/logger'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')
-debug.enabled = false
+debug.enabled = true
 /**
  * @desc:  递归文件子依赖创建文件- 文件外递归
  * @author: majun
@@ -16,10 +16,10 @@ debug.enabled = false
  * @param {string} rootPath   确定哪一级开始创建文件夹
  */
 export async function markWriteFile(nodes: ItemType[], name: string, path: string) {
-  // debug('入参: ', name, path)
+  debug('入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
-  // debug('查找的node: ', node)
+  debug('查找的node: ', node)
   if (node) {
     if (node.copyed) return // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析
     node.copyed = true
