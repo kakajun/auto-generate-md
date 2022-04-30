@@ -57,7 +57,7 @@ describe('rename.test的测试', () => {
       isDir: false,
       level: 2,
       note: ' // 我就是个注释',
-      imports: [rootPath + '/test/temp/my-template.vue'],
+      imports: [rootPath.toLowerCase() + '/test/temp/my-template.vue'],
       belongTo: [],
       size: 96,
       copyed: false,
