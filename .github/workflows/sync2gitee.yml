@@ -27,7 +27,9 @@ jobs:
           dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
           # 必选，Gitee对应的用于创建仓库的token，https://gitee.com/profile/personal_access_tokens
           dst_token: ${{ secrets.GITEE_TOKEN }}
+          clone_style: "ssh"
           # 直接取当前项目的仓库名
           static_list: ${{ github.event.repository.name }}
           # 必须强退,否则会失败
           force_update: true
+          debug: true
