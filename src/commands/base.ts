@@ -9,25 +9,12 @@ import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
-import path from 'path';
+import path from 'path'
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 let rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
-/**
- * @desc: 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
- * @author: majun
- * @param {type} params
- */
-function getChangeRootPath() {
-  const foldPath =path.resolve('./').replace(/\\/g, '/')
-  const foldArrs = foldPath.split('/')
-  const foldName = foldArrs.pop()
-  if (foldName !== 'src') {
-    logger.error('请在src目录下运行命令! ')
-    process.exit(1)
-  }
-}
+
 /**
  * @desc: //2.  得到md文档,------------>会写(只生成一个md)
  * @author: majun
@@ -44,7 +31,14 @@ function getMdAction(md: string) {
  * @param {Array} nodes
  */
 async function changePathAction(nodes: ItemType[]) {
-  getChangeRootPath()
+  // 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
+  const foldPath = path.resolve('./').replace(/\\/g, '/')
+  const foldArrs = foldPath.split('/')
+  const foldName = foldArrs.pop()
+  if (foldName !== 'src') {
+    logger.error('changePath需要在src目录下运行命令! ')
+    process.exit(1)
+  }
   await changePath(nodes)
 }
 
@@ -67,7 +61,7 @@ async function markFileAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function witeFileAction(nodes: ItemType[]) {
-   const routers = getRouterArrs()
+  const routers = getRouterArrs()
   if (routers) {
     await markFile(nodes, routers)
     // copy文件一定是建立在打标记的基础上
@@ -119,14 +113,14 @@ async function renameFileAction(nodes: ItemType[]) {
  * @param {string} md
  */
 export async function generateAllAction(nodes: ItemType[], md: string) {
-   const routers = getRouterArrs()
+  const routers = getRouterArrs()
   if (routers) {
-    getMdAction(md);
-    await changePathAction(nodes);
-    await markFileAction(nodes);
+    getMdAction(md)
+    await changePathAction(nodes)
+    await markFileAction(nodes)
     // copy文件一定是建立在打标记的基础上
-   await witeMarkFile(nodes, routers)
-    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js');
+    await witeMarkFile(nodes, routers)
+    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   }
 }
 
@@ -182,7 +176,6 @@ function getActions() {
     action: () => renameFileAction(nodes)
   })
 
-
   actionMap.set('Wirte Json Nodes', {
     title: 'Wirte Json Nodes',
     value: 'Wirte Json Nodes',
@@ -203,7 +196,6 @@ export type BaseCmd = {
 
 export default async function baseAction(cmd: BaseCmd) {
   if (cmd.init) {
-
   }
   selectCommand()
 }
