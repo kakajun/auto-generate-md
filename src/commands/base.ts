@@ -9,10 +9,25 @@ import logger from '../shared/logger'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
+import path from 'path';
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
-const rootPath = process.cwd().replace(/\\/g, '/')
+let rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
+/**
+ * @desc: 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
+ * @author: majun
+ * @param {type} params
+ */
+function getChangeRootPath() {
+  const foldPath =path.resolve('./').replace(/\\/g, '/')
+  const foldArrs = foldPath.split('/')
+  const foldName = foldArrs.pop()
+  if (foldName !== 'src') {
+    logger.error('请在src目录下运行命令! ')
+    process.exit(1)
+  }
+}
 /**
  * @desc: //2.  得到md文档,------------>会写(只生成一个md)
  * @author: majun
@@ -29,6 +44,7 @@ function getMdAction(md: string) {
  * @param {Array} nodes
  */
 async function changePathAction(nodes: ItemType[]) {
+  getChangeRootPath()
   await changePath(nodes)
 }
 
@@ -187,7 +203,7 @@ export type BaseCmd = {
 
 export default async function baseAction(cmd: BaseCmd) {
   if (cmd.init) {
-    // return generateConfig();
+
   }
   selectCommand()
 }
