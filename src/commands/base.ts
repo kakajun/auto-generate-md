@@ -26,12 +26,10 @@ function getMdAction(md: string) {
 }
 
 /**
- * @desc:   //3. 更改所有为绝对路径+ 后缀补全------------>会写(会操作代码)
+ * @desc: 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
  * @author: majun
- * @param {Array} nodes
  */
-async function changePathAction(nodes: ItemType[]) {
-  // 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
+function checkFold() {
   const foldPath = path.resolve('./').replace(/\\/g, '/')
   const foldArrs = foldPath.split('/')
   const foldName = foldArrs.pop()
@@ -39,6 +37,15 @@ async function changePathAction(nodes: ItemType[]) {
     logger.error('changePath需要在src目录下运行命令! ')
     process.exit(1)
   }
+}
+
+/**
+ * @desc:   //3. 更改所有为绝对路径+ 后缀补全------------>会写(会操作代码)
+ * @author: majun
+ * @param {Array} nodes
+ */
+async function changePathAction(nodes: ItemType[]) {
+  checkFold()
   await changePath(nodes)
 }
 
@@ -48,6 +55,7 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: ItemType[]) {
+   checkFold()
   const routers = getRouterArrs()
   if (routers) {
     await markFile(nodes, routers)
@@ -113,6 +121,7 @@ async function renameFileAction(nodes: ItemType[]) {
  * @param {string} md
  */
 export async function generateAllAction(nodes: ItemType[], md: string) {
+  checkFold()
   const routers = getRouterArrs()
   if (routers) {
     getMdAction(md)
@@ -132,7 +141,6 @@ function getActions() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd({ ignore, include })
-
   actionMap.set('Generate All', {
     title: 'Generate All',
     value: 'Generate All',
