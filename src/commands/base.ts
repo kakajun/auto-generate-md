@@ -12,7 +12,7 @@ import { getRouterArrs } from './get-router'
 import path from 'path'
 
 import fs from 'fs'
- 
+
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 let rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
@@ -60,7 +60,7 @@ async function changePathAction(nodes: ItemType[]) {
 async function markFileAction(nodes: ItemType[]) {
    checkFold()
   const routers = getRouterArrs()
-  fs.writeFileSync(rootPath + '/router-file.js', JSON.stringify(routers), { encoding: 'utf8' })
+  fs.writeFileSync(rootPath + '/router-file.js','const router='+ JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
     await markFile(nodes, routers)
     wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
