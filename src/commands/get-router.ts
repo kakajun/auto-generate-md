@@ -32,11 +32,12 @@ export function getRouterFilePath() {
  */
 export function getAllRouter() {
   const arrs = getRouterFilePath()
-   const routers: { path: string; component: string; }[] = []
-  arrs.forEach((p) => {
-   let itemArrs = getRouter(p)
-    routers.push(...itemArrs)
-  })
+  const routers: { path: string; component: string; }[] = []
+  for (let index = 0; index < arrs.length; index++) {
+    const p = arrs[index]
+     let itemArrs = getRouter(p)
+     routers.push(...itemArrs)
+  }
   return routers
 }
 /**
