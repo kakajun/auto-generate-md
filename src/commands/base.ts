@@ -10,7 +10,7 @@ import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
 import path from 'path'
-
+import { VERSION, PKG_NAME } from '../shared/constant'
 import fs from 'fs'
 
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
@@ -58,7 +58,7 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: ItemType[]) {
-   checkFold()
+  //  checkFold()
   const routers = getRouterArrs()
   fs.writeFileSync(rootPath + '/router-file.js','const router='+ JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
@@ -208,6 +208,7 @@ export type BaseCmd = {
 
 export default async function baseAction(cmd: BaseCmd) {
   if (cmd.init) {
+    logger.info(`${PKG_NAME}:version is :${VERSION}`)
   }
   selectCommand()
 }

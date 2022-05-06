@@ -27,6 +27,7 @@ export async function markFile(nodes:  ItemType[], routers: classifyType) {
     for (let j = 0; j < ele.router.length; j++) {
       const obj = ele.router[j]
       const pathN = obj.component
+      logger.info(`准备处理${obj.path}`)
       // 路径转绝对路径
       let absolutePath = pathN.replace('@', rootPath)
       // 递归打上子集所有
@@ -61,7 +62,8 @@ export async function witeMarkFile(nodes: ItemType[], routers: classifyType) {
  * @author: majun
  */
 export async function setNodeMark(nodes: ItemType[], name: string, path: string) {
-  debug('setNodeMark入参: ', name, path)
+  debug('setNodeMark入参: ', name,  path )
+    // debug('nodes: ', nodes)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   if (node) {
@@ -115,6 +117,7 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
  */
 export function setmark(file: string, name: string) {
   try {
+     debug(`mark preper ${file}`)
     let fileStr = fs.readFileSync(file, 'utf-8')
     if (fileStr.indexOf('//' + name + '\n') === 0) {
       // 打过标记了,就不打了
