@@ -2,7 +2,9 @@
 
 > 在任何需要生成文档的，文件夹下的控制台中输入`agmd`， 就能自动生成目录 md 说明
 
-[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667) [![build status]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml/badge.svg?branch=master)]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml)
+[![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)
+[![]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml/badge.svg?branch=master)]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml)
+[![]( https://app.circleci.com/pipelines/github/kakajun/auto-generate-md)]( https://app.circleci.com/pipelines/github/kakajun/auto-generate-md)
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
