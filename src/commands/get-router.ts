@@ -60,7 +60,7 @@ export function getRouter(routerPath:string) {
         path = pathStrs[1]
       }
       // 用正则匹配出所有 component: () => import( )中的组件
-      const reg = /component: \(\) => import\([\'|\"](.*)[\'|\"]\)/
+      const reg = /import\([\'|\"](.*)[\'|\"]\)/
       const impStr = st.match(reg)
       if (impStr) {
         routers.push({
