@@ -54,7 +54,7 @@ export function getRouter(routerPath:string) {
       const st = sarrs[index]
       if (st.indexOf('//') > -1) continue // 打了注释的不要
       //  path: '/form/base-form'  匹配这样子的path
-      const pathReg = /path: (.*),/
+      const pathReg = /path: [\'|\"](.*)[\'|\"]/
       const pathStrs = st.match(pathReg)
       if (pathStrs) {
         path = pathStrs[1]

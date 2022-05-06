@@ -6,13 +6,13 @@ describe('getRouter的测试', () => {
     const arrs = getRouter(p)
     const routerArrs = [
       {
-        path: "'/dashboard/analysis'",
-        component: "'@/unuse/components/test2/HelloWorld.vue'"
+        path: '/dashboard/analysis',
+        component: '@/unuse/components/test2/HelloWorld.vue'
       },
-      { path: "'/app'", component: "'@/unuse/App'" },
+      { path: '/app', component: '@/unuse/App' },
       {
-        path: "'/form/base-form'",
-        component: "'@/unuse/components/user-rulerts.vue'"
+        path: '/form/base-form',
+        component: '@/unuse/components/user-rulerts.vue'
       }
     ]
     expect(arrs).toMatchObject(routerArrs)
@@ -28,20 +28,20 @@ describe('getRouter的测试', () => {
     const arrs = getAllRouter()
     const routerArrs = [
       {
-        component: "'@/unuse/components/test/deep/user.vue'",
-        path: "'test/deep/user'"
+        component: '@/unuse/components/test/deep/user.vue',
+        path: 'test/deep/user'
       },
       {
-        component: "'@/unuse/components/test2/HelloWorld.vue'",
-        path: "'/dashboard/analysis'"
+        component: '@/unuse/components/test2/HelloWorld.vue',
+        path: '/dashboard/analysis'
       },
       {
-        component: "'@/unuse/App'",
-        path: "'/app'"
+        component: '@/unuse/App',
+        path: '/app'
       },
       {
-        component: "'@/unuse/components/user-rulerts.vue'",
-        path: "'/form/base-form'"
+        component: '@/unuse/components/user-rulerts.vue',
+        path: '/form/base-form'
       }
     ]
     expect(arrs).toMatchObject(routerArrs)
