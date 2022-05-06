@@ -50,8 +50,8 @@ describe('mark-file.test的测试', () => {
   })
 
   test('deletMark--测试删除标记', (done) => {
-    const str = `//base
-  //base
+    const str = `//mark
+  //mark
 <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
@@ -61,7 +61,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     try {
       fs.writeFile(file, str, { encoding: 'utf8' }, async () => {
-        const receive = deletMark(file, 'base')
+        const receive = deletMark(file, 'mark')
         done()
         expect(receive).toEqual(finalStr)
       })
@@ -75,10 +75,10 @@ import UserRuler from '@/unuse/components/user-rulerts'
       const file = rootPath + '/test/temp/app2-file-test.vue'
       creatFile(file)
       try {
-        deletMark(file, 'base')
-        await setNodeMark(nodeOne, 'base', file)
+        deletMark(file, 'mark')
+        await setNodeMark(nodeOne, 'mark', file)
         const str = fs.readFileSync(file, 'utf-8')
-        const index = str.indexOf('//base')
+        const index = str.indexOf('//mark')
         expect(index).toEqual(0)
         done()
       } catch (error) {

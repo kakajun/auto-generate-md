@@ -97,7 +97,7 @@ async function wirteJsNodesAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function deletMarkAction(nodes: ItemType[]) {
-  deletMarkAll(nodes, 'base')
+  deletMarkAll(nodes, 'mark')
 }
 
 /**

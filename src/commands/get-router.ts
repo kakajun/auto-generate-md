@@ -87,7 +87,7 @@ export function getRouterArrs() {
     // 如果没有classify,那么直接找路由
     routers = [
       {
-        name: 'plan',
+        name: 'mark',
         router: getAllRouter()
       }
     ]
