@@ -58,7 +58,7 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: ItemType[]) {
-  //  checkFold()
+   checkFold()
   const routers = getRouterArrs()
   fs.writeFileSync(rootPath + '/router-file.js','const router='+ JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
