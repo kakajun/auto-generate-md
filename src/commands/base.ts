@@ -36,6 +36,9 @@ function checkFold() {
   const foldPath = path.resolve('./').replace(/\\/g, '/')
   const foldArrs = foldPath.split('/')
   const foldName = foldArrs.pop()
+  if (foldName === 'pages') {
+    return
+  }
   if (foldName !== 'src') {
     logger.error('changePath需要在src目录下运行命令! ')
     process.exit(1)
@@ -58,9 +61,9 @@ async function changePathAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 async function markFileAction(nodes: ItemType[]) {
-   checkFold()
+  checkFold()
   const routers = getRouterArrs()
-  fs.writeFileSync(rootPath + '/router-file.js','const router='+ JSON.stringify(routers), { encoding: 'utf8' })
+  fs.writeFileSync(rootPath + '/router-file.js', 'const router=' + JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
     await markFile(nodes, routers)
     wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
