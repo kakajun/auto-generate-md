@@ -1,6 +1,6 @@
 # agmd(auto generate md)
 
-> 在任何需要生成文档的，文件夹下的控制台中输入`agmd`， 就能自动生成目录 md 说明
+> 在任何需要生成文档的，文件夹下的控制台中输入`agmd`， 就能自动生成目录 md 说明, 同时能够统计分析当前工程的各类型文件总量和代码总量
 
 [![]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)]( https://camo.githubusercontent.com/28479a7a834310a667f36760a27283f7389e864a/68747470733a2f2f696d672e736869656c64732e696f2f6e706d2f6c2f76322d646174657069636b65722e737667)
 [![]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml/badge.svg?branch=master)]( https://github.com/kakajun/auto-generate-md/actions/workflows/test.yml)
@@ -8,13 +8,15 @@
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
- ## 🚀  Features
+ ## 🚀  功能特性
 
-🔥 Written in TypeScript
+😍 一键统计工程的文件数和代码总量
 
-🔋 build with esbuild
+🔥 用TypeScript书写,80%的代码全部书写了测试用例
 
-💡 easy get foldName and fileName.
+🔋 用esbuild进行打包
+
+💡 一键拿到文件和文件夹名字
 
 ✈️ 全程界面命令选择操作
 
