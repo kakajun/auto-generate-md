@@ -195,4 +195,4 @@ $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 增加单元测试到26个,覆盖率达到84%,一些没必要的方法就没测试
 
 0.3.7
-升级所有依赖到最新
+升级所有依赖到最新111
