@@ -67,7 +67,7 @@ function format(num: number) {
  */
 function setCountMd(obj: secoutType) {
   const { rowTotleNumber, sizeTotleNumber, coutObj } = obj
-  let countMd = '代码总数统计：\n'
+  let countMd = '😍  代码总数统计：\n'
   let totle = 0
   for (const key in coutObj) {
     const ele = coutObj[key]
@@ -86,7 +86,7 @@ function setCountMd(obj: secoutType) {
  * @return {*}
  */
 export function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
-  logger.success('*** 命名运行位置: ' + process.cwd() + '\n')
+  logger.success('👉  命令运行位置: ' + process.cwd() + '\n')
   const nodes = getFileNodes(rootPath, option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
@@ -94,7 +94,7 @@ export function getMd(option?: { ignore: string[] | undefined; include: string[]
   const note = getNote(nodes) // 得到所有note的数组
   const md = note.join('') + '\n' // 数组转字符串
   if (md.length > 0) {
-    logger.success('*** 生成MarkDown完毕 !')
+    logger.success('🀄️  生成MarkDown完毕 !')
   }
   return { md: md + coutMd, nodes }
 }

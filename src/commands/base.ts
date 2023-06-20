@@ -160,68 +160,68 @@ function getActions() {
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd({ ignore, include })
   actionMap.set('help', {
-    title: '帮助',
+    title: '🙏  帮助',
     value: 'help',
     selected: true,
     action: () => help()
   })
   actionMap.set('Generate All', {
-    title: '执行所有操作',
+    title: '🚘  执行所有操作',
     value: 'Generate All',
     selected: true,
     action: () => generateAllAction(nodes, md)
   })
   actionMap.set('Generate MD', {
-    title: '生成结构树文档',
+    title: '📅  生成结构树文档',
     value: 'Generate MD',
     selected: true,
     action: () => getMdAction(md)
   })
   actionMap.set('Change Relative Path', {
-    title: '修改为相当路径',
+    title: '🔑  修改为相当路径',
     value: 'Change Relative Path',
     action: () => changePathAction(nodes)
   })
   actionMap.set('Change Absolute  Path', {
-    title: '修改为绝对路径(暂未实现)',
+    title: '💎  修改为绝对路径(暂未实现)',
     value: 'Change Absolute  Path',
     action: () => changeAbsolutePathAction()
   })
   actionMap.set('Completion suffix', {
-    title: '补全文件后缀',
+    title: '💯  补全文件后缀',
     value: 'Completion suffix',
     action: () => changesuffixAction(nodes, true)
   })
 
   actionMap.set('RenameFoldKebabCase', {
-    title: '统一命名文件夹为KebabCase',
+    title: '🎁  统一命名文件夹为KebabCase',
     value: 'RenameFoldKebabCase',
     action: () => renameFoldAction(nodes)
   })
   actionMap.set('RenameFielKebabCase', {
-    title: '统一命名文件为KebabCase',
+    title: '🍰 统一命名文件为KebabCase',
     value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
   })
 
   actionMap.set('Wirte Json Nodes', {
-    title: '记录节点Json',
+    title: '🔱 记录节点Json',
     value: 'Wirte Json Nodes',
     action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   })
 
   actionMap.set('Mark File', {
-    title: '给需要分类的都打上标记',
+    title: '🎊 给需要分类的都打上标记',
     value: 'Mark File',
     action: () => markFileAction(nodes)
   })
   actionMap.set('Delete Mark', {
-    title: '删除标记',
+    title: '💥 删除标记',
     value: 'Delete Mark',
     action: () => deletMarkAction(nodes)
   })
   actionMap.set('Classification', {
-    title: '分类',
+    title: '💫 分类',
     value: 'Classification',
     action: () => witeFileAction(nodes)
   })
