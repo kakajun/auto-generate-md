@@ -10,10 +10,6 @@ const banner = {
 */`
 }
 const isDev = process.env.NODE_ENV !== 'production'
-/**
- * ESBuild Params
- * @link https://esbuild.github.io/api/#build-api
- */
 
 const binBuildParams = {
   platform: 'node',
