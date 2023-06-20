@@ -166,7 +166,7 @@ function getActions() {
     action: () => help()
   })
   actionMap.set('Generate All', {
-    title: '生成全部',
+    title: '执行所有操作',
     value: 'Generate All',
     selected: true,
     action: () => generateAllAction(nodes, md)
@@ -188,7 +188,7 @@ function getActions() {
     action: () => changeAbsolutePathAction()
   })
   actionMap.set('Completion suffix', {
-    title: '补全后缀',
+    title: '补全文件后缀',
     value: 'Completion suffix',
     action: () => changesuffixAction(nodes, true)
   })
@@ -211,7 +211,7 @@ function getActions() {
   })
 
   actionMap.set('Mark File', {
-    title: '标记文件',
+    title: '给需要分类的都打上标记',
     value: 'Mark File',
     action: () => markFileAction(nodes)
   })
