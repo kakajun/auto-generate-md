@@ -258,13 +258,13 @@ async function selectCommand() {
         {
           name: 'command',
           type: 'select',
-          message: 'Please select a command.',
+          message: '请使用上下键选择一个操作命令：',
           choices: Array.from(actions.values())
         }
       ],
       {
         onCancel: () => {
-          throw new Error('Operation cancelled.')
+          throw new Error('操作取消！')
         }
       }
     )

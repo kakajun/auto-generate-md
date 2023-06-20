@@ -67,16 +67,16 @@ function format(num: number) {
  */
 function setCountMd(obj: secoutType) {
   const { rowTotleNumber, sizeTotleNumber, coutObj } = obj
-  let countMd = ''
+  let countMd = '代码总数统计：\n'
   let totle = 0
   for (const key in coutObj) {
     const ele = coutObj[key]
     totle += ele
-    countMd += `The suffix is ${key} has ${ele} files\n`
+    countMd += `后缀是 ${key} 的文件有 ${ele} 个\n`
   }
-  countMd += `The totle  has ${totle} files\n`
-  let md = `Total number of file lines: ${format(rowTotleNumber)},
-Total number of codes: ${format(sizeTotleNumber)} \n`
+  countMd += `总共有 ${totle} 个文件\n`
+  let md = `总代码行数有: ${format(rowTotleNumber)}行,
+总代码字数有: ${format(sizeTotleNumber)}个\n`
   md = countMd + md
   return md
 }
@@ -85,18 +85,16 @@ Total number of codes: ${format(sizeTotleNumber)} \n`
  * @param {object} option
  * @return {*}
  */
-export function getMd(
-  option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined
-) {
-  logger.success('*** run location: '+process.cwd() + '\n')
-  const nodes = getFileNodes(rootPath,option)
+export function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
+  logger.success('*** 命名运行位置: ' + process.cwd() + '\n')
+  const nodes = getFileNodes(rootPath, option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   logger.success(coutMd)
   const note = getNote(nodes) // 得到所有note的数组
   const md = note.join('') + '\n' // 数组转字符串
   if (md.length > 0) {
-    logger.success('*** Automatic generation completed !')
+    logger.success('*** 生成MarkDown完毕 !')
   }
   return { md: md + coutMd, nodes }
 }
