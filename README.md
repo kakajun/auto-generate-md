@@ -169,6 +169,10 @@ $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 
 [掘金-自动生成目录 md 文件](https://juejin.cn/post/7030030599268073508)
 
+### 写在最后
+
+本工程有26个测试, 大家如果想扩展什么功能, 测试代码跑起来, 很方便, 也欢迎大家克隆本工程然后提交进行PR！
+
 ### 更新记录
 0.1.3
 1. 采用esbuild 进行打包
