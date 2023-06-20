@@ -11,19 +11,19 @@ debug.enabled = false
  * @author: majun
  * @param {Array} nodes      整个文件的nodes
  */
-export async function changePath(nodes: ItemType[]) {
+export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
   async function getNode(nodes: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = nodes[index]
       if (ele.children) {
-       await getNode(ele.children)
+        await getNode(ele.children)
       } else {
         // TODO 这里先写死绝对转相对, 后面如果想相对都转绝对, 可以改这里
-        witeFile(ele, true)
+        witeFile(ele, true, nochangePath)
       }
     }
   }
- await getNode(nodes)
+  await getNode(nodes)
 }
 /**
  * @desc: 这里返回没有@ 符号的路径
@@ -82,8 +82,8 @@ export function makeSuffix(filePath: string, fullPath: string) {
  * @author: majun
  */
 export function getImportName(ele: string) {
-  let str=''
- // 注释的不转,其他公共也不转
+  let str = ''
+  // 注释的不转,其他公共也不转
   const ignore = [
     'xiwicloud',
     'bpmn-js',
@@ -98,15 +98,15 @@ export function getImportName(ele: string) {
   const flag = ignore.some((item) => ele.indexOf(item) > -1)
   // const reg = /import.*[\"|\'](.*)[\'|\"]/
   const reg = / from [\"|\'](.*)[\'|\"]/
-      //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
-      //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
-      //      debug(ele.match(reg), '11111111111111')
-      //  }
+  //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
+  //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
+  //      debug(ele.match(reg), '11111111111111')
+  //  }
   // 这里只收集组件依赖, 插件依赖排除掉
   if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !== 0) {
-    const impStr = ele.match(reg);
+    const impStr = ele.match(reg)
     // 没有import的不转
-    if (impStr && impStr[1]) str = impStr[1];
+    if (impStr && impStr[1]) str = impStr[1]
   }
   return str
 }
@@ -117,11 +117,11 @@ export function getImportName(ele: string) {
  * @param {string} ele    找到的行引入
  * @param {string} fullPath  文件的全路径
  */
-export function changeImport(ele: string, fullPath: string) {
+export function changeImport(ele: string, fullPath: string, nochangePath?: Boolean) {
   let obj = {
     impName: '',
     filePath: '',
-    absoluteImport:''
+    absoluteImport: ''
   }
   const impName = getImportName(ele)
   if (impName) {
@@ -131,9 +131,11 @@ export function changeImport(ele: string, fullPath: string) {
     // 先补后缀
     obj.absoluteImport = makeSuffix(obj.filePath, fullPath)
     debug('补过后', obj.absoluteImport)
-    // 后改相对路径
-    obj.impName = getRelatPath(obj.absoluteImport, fullPath)
-    debug('相对路径: ', obj.impName)
+    if (!nochangePath) {
+      // 后改相对路径
+      obj.impName = getRelatPath(obj.absoluteImport, fullPath)
+      debug('相对路径: ', obj.impName)
+    }
   }
   return obj
 }
@@ -143,8 +145,8 @@ export function changeImport(ele: string, fullPath: string) {
 
    * @param {string} file  目标地址
    */
-export  function witeFile(node: ItemType, isRelative?: Boolean) {
-  const { fullPath} = node
+export function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
+  const { fullPath } = node
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')
@@ -152,7 +154,7 @@ export  function witeFile(node: ItemType, isRelative?: Boolean) {
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
       if (ele.indexOf('from') > -1 && isRelative) {
-        const obj = changeImport(ele, fullPath)
+        const obj = changeImport(ele, fullPath, nochangePath)
         //  if (node.name === '***') {
         //   debug(obj,"bbbnnn")
         //  }
@@ -167,7 +169,7 @@ export  function witeFile(node: ItemType, isRelative?: Boolean) {
       fileStr = sarr.join('\n')
       // 异步写入数据到文件
       fs.writeFileSync(fullPath, fileStr, { encoding: 'utf8' })
-       logger.success(`Write file successful: ${fullPath}`)
+      logger.success(`Write file successful: ${fullPath}`)
     }
   } catch (error) {
     logger.error(`读取文件失败,文件名: ${fullPath} `)
@@ -184,5 +186,5 @@ export function wirteJsNodes(data: string, filePath: string) {
   const pre = 'export default'
   // 异步写入数据到文件
   fs.writeFileSync(file, pre + data, { encoding: 'utf8' })
-   logger.success(`Write file successful: ${filePath}`)
+  logger.success(`Write file successful: ${filePath}`)
 }

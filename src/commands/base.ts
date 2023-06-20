@@ -12,7 +12,7 @@ import { getRouterArrs } from './get-router'
 import path from 'path'
 import { VERSION, PKG_NAME } from '../shared/constant'
 import fs from 'fs'
-
+import help from '../../script/help/index'
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 let rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
@@ -56,6 +56,17 @@ async function changePathAction(nodes: ItemType[]) {
 }
 
 /**
+ * @desc: 修改绝对路径
+ * @author: majun
+ */
+async function changeAbsolutePathAction() {}
+
+async function changesuffixAction(nodes: ItemType[], nochangePath: Boolean) {
+  checkFold()
+  await changePath(nodes, nochangePath)
+}
+
+/**
  * @desc:   //4. 打标记 ------------> 会写(会操作代码)   //5. 分文件 ------------> 会写(会另外生成包文件)
  * @author: majun
  * @param {Array} nodes
@@ -83,16 +94,16 @@ async function witeFileAction(nodes: ItemType[]) {
     await witeMarkFile(nodes, routers)
   }
 }
-/**
- * @desc://6. 得到md对象(只生成一个md)
- * @author: majun
- * @param {Array} nodes
- */
-async function wirteJsNodesAction(nodes: ItemType[]) {
-  // 要先改路径后缀,否则依赖收集不到
-  await changePathAction(nodes)
-  wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
-}
+// /**
+//  * @desc://6. 得到md对象(只生成一个md)
+//  * @author: majun
+//  * @param {Array} nodes
+//  */
+// async function wirteJsNodesAction(nodes: ItemType[]) {
+//   // 要先改路径后缀,否则依赖收集不到
+//   await changePathAction(nodes)
+//   wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
+// }
 
 /**
  * @desc://7. 删除标记
@@ -148,59 +159,77 @@ function getActions() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
   //1. 这里只读文件, ------------>不写
   const { md, nodes } = getMd({ ignore, include })
+  actionMap.set('help', {
+    title: '帮助',
+    value: 'help',
+    selected: true,
+    action: () => help()
+  })
   actionMap.set('Generate All', {
-    title: 'Generate All',
+    title: '生成全部',
     value: 'Generate All',
     selected: true,
     action: () => generateAllAction(nodes, md)
   })
   actionMap.set('Generate MD', {
-    title: 'Generate MD',
+    title: '生成结构树文档',
     value: 'Generate MD',
     selected: true,
     action: () => getMdAction(md)
   })
-  actionMap.set('Change Path', {
-    title: 'Change Path',
-    value: 'Change Path',
+  actionMap.set('Change Relative Path', {
+    title: '修改为相当路径',
+    value: 'Change Relative Path',
     action: () => changePathAction(nodes)
   })
-  actionMap.set('Mark File', {
-    title: 'Mark File',
-    value: 'Mark File',
-    action: () => markFileAction(nodes)
+  actionMap.set('Change Absolute  Path', {
+    title: '修改为绝对路径(暂未实现)',
+    value: 'Change Absolute  Path',
+    action: () => changeAbsolutePathAction()
   })
-  actionMap.set('Delete Mark', {
-    title: 'Delete Mark',
-    value: 'Delete Mark',
-    action: () => deletMarkAction(nodes)
+  actionMap.set('Completion suffix', {
+    title: '补全后缀',
+    value: 'Completion suffix',
+    action: () => changesuffixAction(nodes, true)
   })
-  actionMap.set('Classification', {
-    title: 'Classification',
-    value: 'Classification',
-    action: () => witeFileAction(nodes)
-  })
+
   actionMap.set('RenameFoldKebabCase', {
-    title: 'RenameFoldKebabCase',
+    title: '统一命名文件夹为KebabCase',
     value: 'RenameFoldKebabCase',
     action: () => renameFoldAction(nodes)
   })
   actionMap.set('RenameFielKebabCase', {
-    title: 'RenameFielKebabCase',
+    title: '统一命名文件为KebabCase',
     value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
   })
 
   actionMap.set('Wirte Json Nodes', {
-    title: 'Wirte Json Nodes',
+    title: '记录节点Json',
     value: 'Wirte Json Nodes',
     action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   })
-  actionMap.set('Wirte  Nodes With Import(may change path)', {
-    title: 'Wirte  Nodes With Import(may change path)',
-    value: 'Wirte  Nodes With Import(may change path)',
-    action: () => wirteJsNodesAction(nodes)
+
+  actionMap.set('Mark File', {
+    title: '标记文件',
+    value: 'Mark File',
+    action: () => markFileAction(nodes)
   })
+  actionMap.set('Delete Mark', {
+    title: '删除标记',
+    value: 'Delete Mark',
+    action: () => deletMarkAction(nodes)
+  })
+  actionMap.set('Classification', {
+    title: '分类',
+    value: 'Classification',
+    action: () => witeFileAction(nodes)
+  })
+  // actionMap.set('Wirte  Nodes With Import(may change path)', {
+  //   title: 'Wirte  Nodes With Import(may change path)',
+  //   value: 'Wirte  Nodes With Import(may change path)',
+  //   action: () => wirteJsNodesAction(nodes)
+  // })
   return actionMap
 }
 

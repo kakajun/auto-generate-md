@@ -51,7 +51,7 @@ describe('rename.test的测试', () => {
 
   test('changePathName --递归修改文件里面的import', () => {
     changePathName(fileNode, { newName: 'you-template', filename: 'youTemplate' })
-    debug('tempNode', JSON.stringify(fileNode))
+    // debug('tempNode', JSON.stringify(fileNode))
     let finalObj = {
       name: 'you-template',
       isDir: false,
@@ -89,16 +89,16 @@ describe('rename.test的测试', () => {
     let foldPath = rootPath + '/test/temp/TestKableCase'
     let file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
     let file2 = rootPath + '/test/temp/test-kable-case/youTemplate.vue'
-        let foldPath2 = rootPath + '/test/temp/TestKableCase/TestKableCase2'
+    let foldPath2 = rootPath + '/test/temp/TestKableCase/TestKableCase2'
     const finalPath = rootPath + '/test/temp/test-kable-case'
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
-         fs.ensureDirSync(foldPath2)
-         creatFile(file)
+        fs.ensureDirSync(foldPath2)
+        creatFile(file)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
-       const flag2 = fs.existsSync(file2)
+        const flag2 = fs.existsSync(file2)
         expect(flag && flag2).toEqual(true)
         done()
       } catch (error) {
@@ -116,7 +116,7 @@ describe('rename.test的测试', () => {
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
-         creatFile(file)
+        creatFile(file)
         await renameFilePath(nodesThree)
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)
