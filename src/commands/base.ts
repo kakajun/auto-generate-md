@@ -199,29 +199,29 @@ function getActions() {
     action: () => renameFoldAction(nodes)
   })
   actionMap.set('RenameFielKebabCase', {
-    title: '🍰 统一命名文件为KebabCase',
+    title: '🍰  统一命名文件为KebabCase',
     value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
   })
 
   actionMap.set('Wirte Json Nodes', {
-    title: '🔱 记录节点Json',
+    title: '🔱  记录节点Json',
     value: 'Wirte Json Nodes',
     action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   })
 
   actionMap.set('Mark File', {
-    title: '🎊 给需要分类的都打上标记',
+    title: '🎊  给需要分类的都打上标记',
     value: 'Mark File',
     action: () => markFileAction(nodes)
   })
   actionMap.set('Delete Mark', {
-    title: '💥 删除标记',
+    title: '💥  删除标记',
     value: 'Delete Mark',
     action: () => deletMarkAction(nodes)
   })
   actionMap.set('Classification', {
-    title: '💫 分类',
+    title: '💫  分类',
     value: 'Classification',
     action: () => witeFileAction(nodes)
   })
