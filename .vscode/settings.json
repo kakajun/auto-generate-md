@@ -118,5 +118,6 @@
       "source.fixAll.stylelint": true
     }
   },
-  "svn.ignoreMissingSvnWarning": true
+  "svn.ignoreMissingSvnWarning": true,
+  "devchat.defaultModel": "gpt-4"
 }
