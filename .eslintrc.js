@@ -1,7 +1,8 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    node: true,
+    es6: true
   },
   extends: ['prettier'],
   parser: '@typescript-eslint/parser',
@@ -9,18 +10,7 @@ module.exports = {
     ecmaVersion: 12,
     sourceType: 'module'
   },
-  plugins: ['@typescript-eslint'],
-  settings: {
-    'import/resolver': [
-      'node',
-      {
-        webpack: {
-          config: './build/webpack.base.conf.js'
-        }
-      }
-    ]
-  },
-
+  plugins: ['@typescript-eslint', 'import'],
   rules: {
     'no-console': 0,
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
@@ -31,12 +21,5 @@ module.exports = {
     'prefer-const': 1,
     'prefer-spread': 1,
     'no-unused-expressions': ['error', { allowShortCircuit: true, allowTernary: true }]
-  },
-  settings: {
-    'import/resolver': {
-      node: {
-        extensions: ['.js', '.jsx', '.ts', '.tsx']
-      }
-    }
   }
 }

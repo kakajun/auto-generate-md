@@ -12,12 +12,12 @@ const rootPath = process.cwd().replace(/\\/g, '/')
  */
 export function getRouterFilePath() {
   const dir = rootPath + '/router'
-  let routes: any[] = []
+  const routes: any[] = []
   function finder(p: string) {
-    let files = fs.readdirSync(p)
+    const files = fs.readdirSync(p)
     files.forEach((val) => {
-      let fPath = path.join(p, val).replace(/\\/g, '/')
-      let stats = fs.statSync(fPath)
+      const fPath = path.join(p, val).replace(/\\/g, '/')
+      const stats = fs.statSync(fPath)
       if (stats.isDirectory()) finder(fPath)
       if (stats.isFile()) routes.push(fPath)
     })
@@ -32,11 +32,11 @@ export function getRouterFilePath() {
  */
 export function getAllRouter() {
   const arrs = getRouterFilePath()
-  const routers: { path: string; component: string; }[] = []
+  const routers: { path: string; component: string }[] = []
   for (let index = 0; index < arrs.length; index++) {
     const p = arrs[index]
-     let itemArrs = getRouter(p)
-     routers.push(...itemArrs)
+    const itemArrs = getRouter(p)
+    routers.push(...itemArrs)
   }
   return routers
 }
@@ -44,9 +44,9 @@ export function getAllRouter() {
  * @desc: 得到路由
  * @author: majun
  */
-export function getRouter(routerPath:string) {
-  let routers = []
-  let path = ''
+export function getRouter(routerPath: string) {
+  const routers = []
+  let p = ''
   if (fs.existsSync(routerPath)) {
     const str = fs.readFileSync(routerPath, 'utf-8')
     const sarrs = str.split(/[\n]/g)
@@ -57,14 +57,14 @@ export function getRouter(routerPath:string) {
       const pathReg = /path: [\'|\"](.*)[\'|\"]/
       const pathStrs = st.match(pathReg)
       if (pathStrs) {
-        path = pathStrs[1]
+        p = pathStrs[1]
       }
       // 用正则匹配出所有 component: () => import( )中的组件
       const reg = /import\([\'|\"](.*)[\'|\"]\)/
       const impStr = st.match(reg)
       if (impStr) {
         routers.push({
-          path,
+          path: p,
           component: impStr[1]
         })
         debug(impStr[1])
@@ -79,7 +79,7 @@ export function getRouter(routerPath:string) {
  * @author: majun
  */
 export function getRouterArrs() {
-  let pathName = rootPath + '/classify.js'
+  const pathName = rootPath + '/classify.js'
   let routers = null
   if (fs.existsSync(pathName)) {
     routers = require(pathName)

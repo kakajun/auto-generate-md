@@ -14,7 +14,7 @@ import { VERSION, PKG_NAME } from '../shared/constant'
 import fs from 'fs'
 import help from '../../script/help/index'
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
-let rootPath = process.cwd().replace(/\\/g, '/')
+const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)
 const { ignores: ignore, includes: include } = handle(options)
 

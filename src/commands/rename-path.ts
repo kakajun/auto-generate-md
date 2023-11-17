@@ -70,36 +70,36 @@ export async function renameFilePath(nodes: ItemType[]) {
   await getNode(nodes)
 }
 
- async function rewriteFile(node: ItemType) {
-    let writeFlag = false
-    const str = fs.readFileSync(node.fullPath, 'utf-8')
-    const sarr = str.split(/[\n]/g)
-    for (let index = 0; index < sarr.length; index++) {
-      const ele = sarr[index]
-      if (ele.indexOf('from') > -1) {
-        let impOldName = getImportName(ele)
-        if (checkCamelFile(impOldName)) {
-          // 取文件名,否则转case会出错
-          let name = path.parse(impOldName).name
-          const newName = toKebabCase(name)
-          // 这里替换有可能把头也替换了, 所以切一下
-          //比如 import moduleName from 'moduleName'  会只替换前一个   "import moduleName from 'moduleName'".split('from')
-          const str = ele.split('from')
-          sarr[index] = `${str[0]}from${str[1].replace(name, newName)}`
-          writeFlag = true
-        }
+async function rewriteFile(node: ItemType) {
+  let writeFlag = false
+  const str = fs.readFileSync(node.fullPath, 'utf-8')
+  const sarr = str.split(/[\n]/g)
+  for (let index = 0; index < sarr.length; index++) {
+    const ele = sarr[index]
+    if (ele.indexOf('from') > -1) {
+      const impOldName = getImportName(ele)
+      if (checkCamelFile(impOldName)) {
+        // 取文件名,否则转case会出错
+        const name = path.parse(impOldName).name
+        const newName = toKebabCase(name)
+        // 这里替换有可能把头也替换了, 所以切一下
+        //比如 import moduleName from 'moduleName'  会只替换前一个   "import moduleName from 'moduleName'".split('from')
+        const s = ele.split('from')
+        sarr[index] = `${s[0]}from${s[1].replace(name, newName)}`
+        writeFlag = true
       }
     }
-    if (writeFlag) {
-      let fileStr = sarr.join('\n')
-      try {
-        // 异步写入数据到文件
-        await fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' })
-         logger.success(`rewriteFile successful-------: ${node.fullPath}` )
-      } catch (error) {
-        logger.error(`写入文件失败,地址不存在: ${node.fullPath}`)
-      }
+  }
+  if (writeFlag) {
+    const fileStr = sarr.join('\n')
+    try {
+      // 异步写入数据到文件
+      await fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' })
+      logger.success(`rewriteFile successful-------: ${node.fullPath}`)
+    } catch (error) {
+      logger.error(`写入文件失败,地址不存在: ${node.fullPath}`)
     }
+  }
 }
 
 /**
@@ -108,7 +108,7 @@ export async function renameFilePath(nodes: ItemType[]) {
  * @param {ItemType} node
  */
 export async function renameFold(node: ItemType) {
-  let filename = path.parse(node.fullPath).base
+  const filename = path.parse(node.fullPath).base
   debug('filename111: ', filename)
   const filter = ['FMEA', 'DVP'] // 把这样子的文件夹过滤
   const falg = filter.some((item) => filename.indexOf(item) > -1)
@@ -170,11 +170,11 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
  * @param {ItemType} node
  */
 export async function renameFile(node: ItemType) {
-  let filename = path.parse(node.fullPath).base
+  const filename = path.parse(node.fullPath).base
   if (checkCamelFile(filename)) {
     const suffix = ['.js', '.vue'] // 这里只重命名js和vue文件
     const lastName = path.extname(node.fullPath)
-    let flag = suffix.some((item) => lastName === item)
+    const flag = suffix.some((item) => lastName === item)
     if (flag) {
       const obj = await replaceName(node.fullPath)
       // 这里一定要更新node,否则后面找不到路径
@@ -188,7 +188,7 @@ export async function renameFile(node: ItemType) {
  * @param node 节点
  */
 export async function replaceName(fullPath: string) {
-  let filename = path.parse(fullPath).base
+  const filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
   debug('newName: ', newName)
   debug('filename: ', filename)
@@ -207,10 +207,10 @@ export async function replaceName(fullPath: string) {
   }
   debug(oldPath, newPath, 'oldPath, newPath')
   try {
-     const flag = fs.existsSync(oldPath)
+    const flag = fs.existsSync(oldPath)
     if (flag) {
-        console.log(oldPath, '改名为: ', newPath ,"成功")
-        await fs.rename(oldPath, newPath)
+      console.log(oldPath, '改名为: ', newPath, '成功')
+      await fs.rename(oldPath, newPath)
     } else {
       logger.error(`文件${oldPath}不存在重命名干嘛?`)
     }

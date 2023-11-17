@@ -12,9 +12,9 @@ debug.enabled = false
  * @param {Array} nodes      整个文件的nodes
  */
 export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
-  async function getNode(nodes: ItemType[]) {
+  async function getNode(objs: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
-      const ele = nodes[index]
+      const ele = objs[index]
       if (ele.children) {
         await getNode(ele.children)
       } else {
@@ -118,7 +118,7 @@ export function getImportName(ele: string) {
  * @param {string} fullPath  文件的全路径
  */
 export function changeImport(ele: string, fullPath: string, nochangePath?: Boolean) {
-  let obj = {
+  const obj = {
     impName: '',
     filePath: '',
     absoluteImport: ''

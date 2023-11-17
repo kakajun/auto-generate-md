@@ -9,7 +9,22 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
     let foldPath = rootPath + '/test/temp'
-    fs.removeSync(foldPath) // 先清空目录
+    function deleteFolderRecursive(path: string) {
+      if (fs.existsSync(path)) {
+        fs.readdirSync(path).forEach((file) => {
+          const curPath = `${path}/${file}`
+          if (fs.lstatSync(curPath).isDirectory()) {
+            deleteFolderRecursive(curPath)
+          } else {
+            fs.unlinkSync(curPath)
+          }
+        })
+        fs.rmdirSync(path)
+      }
+    }
+
+    deleteFolderRecursive(foldPath)
+    // fs.removeSync() // 先清空目录
     debug('删除文件成功%%%%%%%%%%%%%%%%%%%')
     fs.ensureDirSync(foldPath)
     expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
