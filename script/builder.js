@@ -21,7 +21,6 @@ const binBuildParams = {
   bundle: true,
   sourcemap: true,
   logLevel: 'error',
-  incremental: true,
   plugins: []
 }
 const buildParams = {
@@ -33,7 +32,6 @@ const buildParams = {
   bundle: true,
   sourcemap: true,
   logLevel: 'error',
-  incremental: true,
   plugins: [dtsPlugin()]
 }
 async function builder() {
