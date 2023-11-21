@@ -5,13 +5,17 @@ import path from 'path'
 import logger from '../shared/logger'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path')
-debug.enabled = false
+debug.enabled = true
+const rootPath = process.cwd().replace(/\\/g, '/')
+
 /**
  * @desc: 递归循环所有文件
  * @author: majun
  * @param {Array} nodes      整个文件的nodes
  */
 export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
+
+
   async function getNode(objs: ItemType[]) {
     for (let index = 0; index < nodes.length; index++) {
       const ele = objs[index]
@@ -81,27 +85,10 @@ export function makeSuffix(filePath: string, fullPath: string) {
  * @desc: 根据一行代码匹配import的详细内容  TODO 这里还得优化
  * @author: majun
  */
-export function getImportName(ele: string) {
+export function getImportName(ele: string,dependencies:string[]) {
   let str = ''
-  // 注释的不转,其他公共也不转
-  const ignore = [
-    'xiwicloud',
-    'bpmn-js',
-    'element-ui',
-    'lodash',
-    'handsontable',
-    'nprogress',
-    'quill',
-    'qrcodejs2',
-    'echarts'
-  ]
-  const flag = ignore.some((item) => ele.indexOf(item) > -1)
-  // const reg = /import.*[\"|\'](.*)[\'|\"]/
+  const flag = dependencies.some((item) => ele.indexOf(item) > -1)
   const reg = / from [\"|\'](.*)[\'|\"]/
-  //  if (fullPath == 'D:/gitwork/auto-generate-md/unuse/App.vue') {
-  //    debug(!flag, ele.indexOf('/') > -1, "000000000000000000000000")
-  //      debug(ele.match(reg), '11111111111111')
-  //  }
   // 这里只收集组件依赖, 插件依赖排除掉
   if (!flag && ele.indexOf('/') > -1 && ele.indexOf('//') !== 0) {
     const impStr = ele.match(reg)
@@ -117,13 +104,14 @@ export function getImportName(ele: string) {
  * @param {string} ele    找到的行引入
  * @param {string} fullPath  文件的全路径
  */
-export function changeImport(ele: string, fullPath: string, nochangePath?: Boolean) {
+export function changeImport(ele: string, fullPath: string,dependencies:string[], nochangePath?: Boolean) {
+
   const obj = {
     impName: '',
     filePath: '',
     absoluteImport: ''
   }
-  const impName = getImportName(ele)
+  const impName = getImportName(ele,dependencies)
   if (impName) {
     // 依赖的具体名字
     obj.filePath = impName
@@ -147,6 +135,17 @@ export function changeImport(ele: string, fullPath: string, nochangePath?: Boole
    */
 export function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
+  const dependencies =[]
+   if (fs.existsSync(rootPath + '/package.json')) {
+     const pkg = require(rootPath + '/package.json')
+     if (pkg.devDependencies) {
+       dependencies.push(...Object.keys(pkg.devDependencies));
+     } else if (pkg.dependencies) {
+        dependencies.push(...Object.keys(pkg.dependencies))
+     }
+
+
+  }
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')
@@ -154,10 +153,7 @@ export function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Bo
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
       if (ele.indexOf('from') > -1 && isRelative) {
-        const obj = changeImport(ele, fullPath, nochangePath)
-        //  if (node.name === '***') {
-        //   debug(obj,"bbbnnn")
-        //  }
+        const obj = changeImport(ele, fullPath,dependencies, nochangePath)
         if (obj.impName) {
           sarr[index] = ele.replace(obj.filePath, obj.impName)
           debug('node: ', node)

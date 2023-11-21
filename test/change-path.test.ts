@@ -42,7 +42,7 @@ describe('change-path的测试', () => {
       { getRelatPath,
          makeSuffix,
          changeImport
-      } from '@/unuse/components/user-rulerts'`)
+      } from '@/unuse/components/user-rulerts'`,['@types/node'])
     debug('arrs: ', arrs)
     expect(arrs).toEqual('@/unuse/components/user-rulerts')
   })
@@ -51,7 +51,7 @@ describe('change-path的测试', () => {
     expect(
       changeImport(
         "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'",
-        path.resolve('unuse/App.vue').replace(/\\/g, '/')
+        path.resolve('unuse/App.vue').replace(/\\/g, '/'),['@types/node']
       )
     ).toEqual({
       filePath: '@/unuse/components/user-rulerts',

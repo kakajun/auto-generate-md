@@ -5,6 +5,7 @@ import createDebugger from 'debug'
 import { changeImport } from './change-path';
 const debug = createDebugger('get-file')
 debug.enabled = false
+const rootPath = process.cwd().replace(/\\/g, '/')
 import { env } from 'node-environment'
 const isDev = env() === 'development'
 /**
@@ -38,11 +39,22 @@ export function getFile(fullPath: string) {
  * @param {string} fullPath
  */
 export function getImport(sarr: any[], fullPath: string) {
+    const dependencies: string[] =[]
+   if (fs.existsSync(rootPath + '/package.json')) {
+     const pkg = require(rootPath + '/package.json')
+     if (pkg.devDependencies) {
+       dependencies.push(...Object.keys(pkg.devDependencies));
+     } else if (pkg.dependencies) {
+        dependencies.push(...Object.keys(pkg.dependencies))
+     }
+
+
+  }
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
     if (ele.indexOf('from') > -1) {
-      const { absoluteImport } = changeImport(ele, fullPath)
+      const { absoluteImport } = changeImport(ele, fullPath,dependencies)
       if (absoluteImport) {
          imports.push(absoluteImport)
       }
