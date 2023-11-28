@@ -67,7 +67,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
   if (!lastName) {
     debug('!!!!!!!!!!!缺后缀文件: ', absoluteImport)
     // 获取绝对路径
-    const suffix = ['.js', '.ts', '.vue', '/index.js', '/index.vue']
+    const suffix = ['.js', '.ts', '.vue', '.tsx', '/index.js', '/index.vue']
     for (let j = 0; j < suffix.length; j++) {
       const fixStr = suffix[j]
       if (fs.existsSync(absoluteImport + fixStr)) {

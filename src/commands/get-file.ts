@@ -114,7 +114,7 @@ export function getFileNodes(
     'readme-md.js'
   ]
   //File suffix contains only  文件后缀只包含
-  let include = isDev?['.js', '.vue']:['.js', '.vue', '.ts']
+  let include = isDev?['.js', '.vue']:['.js', '.vue', '.ts','.tsx']
   if (option) {
     ignore = option.ignore || ignore
     include = option.include || include

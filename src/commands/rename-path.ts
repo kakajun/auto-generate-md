@@ -172,7 +172,7 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
 export async function renameFile(node: ItemType) {
   const filename = path.parse(node.fullPath).base
   if (checkCamelFile(filename)) {
-    const suffix = ['.js', '.vue'] // 这里只重命名js和vue文件
+    const suffix = ['.js', '.vue',  '.tsx'] // 这里只重命名js和vue文件
     const lastName = path.extname(node.fullPath)
     const flag = suffix.some((item) => lastName === item)
     if (flag) {
