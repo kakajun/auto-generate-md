@@ -171,5 +171,5 @@ $ agmd --ignore lib,node_ modules,dist --include . js,. ts,. vue`
 
 
 0.2.0
-
+1
 Support command-line parsing parameters, and can transfer parameters dynamically
