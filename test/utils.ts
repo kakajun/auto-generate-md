@@ -5,7 +5,7 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('utils')
 debug.enabled = true
 
-export function creatFile(file: string) {
+export  function creatFile(file: string) {
   const str = `// 我就是个注释
 <script setup>
 import UserRuler from './aa'

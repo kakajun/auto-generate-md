@@ -1,4 +1,5 @@
 import createDebugger from 'debug'
+import fs from 'fs-extra'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('get-file.test')
 debug.enabled = false
@@ -9,6 +10,7 @@ describe('mark-write-file.test的测试', () => {
   test('setDispFileNew--找到文件然后copy文件', (done) => {
     const file = rootPath + '/test/temp/app-file-test.vue'
     try {
+      fs.ensureDirSync(file)
       async function get() {
         await setDispFileNew(file, 'base')
         done()

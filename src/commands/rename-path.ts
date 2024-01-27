@@ -5,6 +5,7 @@ import createDebugger from 'debug'
 import path from 'path'
 import logger from '../shared/logger'
 import { getImportName } from './change-path'
+const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-path')
 debug.enabled = false
 
@@ -77,7 +78,17 @@ async function rewriteFile(node: ItemType) {
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
     if (ele.indexOf('from') > -1) {
-      const impOldName = getImportName(ele)
+      // 这里要吧package.json的依赖也拿出来
+      const dependencies = []
+      if (fs.existsSync(rootPath + '/package.json')) {
+        const pkg = require(rootPath + '/package.json')
+        if (pkg.devDependencies) {
+          dependencies.push(...Object.keys(pkg.devDependencies))
+        } else if (pkg.dependencies) {
+          dependencies.push(...Object.keys(pkg.dependencies))
+        }
+      }
+      const impOldName = getImportName(ele, dependencies)
       if (checkCamelFile(impOldName)) {
         // 取文件名,否则转case会出错
         const name = path.parse(impOldName).name
@@ -172,7 +183,7 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
 export async function renameFile(node: ItemType) {
   const filename = path.parse(node.fullPath).base
   if (checkCamelFile(filename)) {
-    const suffix = ['.js', '.vue',  '.tsx'] // 这里只重命名js和vue文件
+    const suffix = ['.js', '.vue', '.tsx'] // 这里只重命名js和vue文件
     const lastName = path.extname(node.fullPath)
     const flag = suffix.some((item) => lastName === item)
     if (flag) {

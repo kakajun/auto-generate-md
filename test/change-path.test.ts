@@ -8,18 +8,18 @@ debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
-    let foldPath = rootPath + '/test/temp'
-    function deleteFolderRecursive(path: string) {
-      if (fs.existsSync(path)) {
-        fs.readdirSync(path).forEach((file) => {
-          const curPath = `${path}/${file}`
+    const foldPath = rootPath + '/test/temp'
+    function deleteFolderRecursive(p: string) {
+      if (fs.existsSync(p)) {
+        fs.readdirSync(p).forEach((file) => {
+          const curPath = `${p}/${file}`
           if (fs.lstatSync(curPath).isDirectory()) {
             deleteFolderRecursive(curPath)
           } else {
             fs.unlinkSync(curPath)
           }
         })
-        fs.rmdirSync(path)
+        fs.rmdirSync(p)
       }
     }
 
@@ -38,7 +38,7 @@ describe('change-path的测试', () => {
     )
   })
   test('makeSuffix--得到import', () => {
-    let arrs = getImportName(`import
+    const arrs = getImportName(`import
       { getRelatPath,
          makeSuffix,
          changeImport

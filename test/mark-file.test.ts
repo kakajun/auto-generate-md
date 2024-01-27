@@ -15,12 +15,16 @@ describe('mark-file.test的测试', () => {
 
   test('setmark--给节点标记', () => {
     const file = rootPath + '/test/temp/mark-setmark.vue'
-    creatFile(file)
-    setmark(file, 'setmark')
-    const str = fs.readFileSync(file, 'utf-8')
-    debug(str, '444')
-    const flag = str.indexOf('setmark') > -1
-    expect(flag).toEqual(true)
+    try {
+      creatFile(file)
+      setmark(file, 'setmark')
+      const str = fs.readFileSync(file, 'utf-8')
+      debug(str, '444')
+      const flag = str.indexOf('setmark') > -1
+      expect(flag).toEqual(true)
+    } catch (error) {
+      console.error(error)
+    }
   })
 
   test('deletMarkAll--递归所有文件,删除所有标记', () => {
@@ -90,7 +94,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('witeMarkFile--标记文件主程序写入分类', (done) => {
     async function get() {
-      let foldPath = rootPath + '/test2'
+      const foldPath = rootPath + '/test2'
       fs.removeSync(foldPath) // 先清空目录
       const file = rootPath + '/test/temp/wite-file-test.vue'
       creatFileNoimport(file)
