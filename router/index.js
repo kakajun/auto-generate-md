@@ -1,6 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-export  const routers = [
+import abcd from './container/index'
+export const routers = [
+  ...abcd,
   {
     path: '/dashboard',
     name: 'dashboard',
