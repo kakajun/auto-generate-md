@@ -31,7 +31,7 @@ describe('rename.test的测试', () => {
       copyed: false,
       imports: [],
       belongTo: [],
-      fullPath: rootPath + '/test/temp/check-test-kable-case',
+      fullPath: rootPath + '/temp/check-test-kable-case',
       children: [
         {
           name: 'check-test-kable-caseInner',
@@ -41,7 +41,7 @@ describe('rename.test的测试', () => {
           copyed: false,
           imports: [],
           belongTo: [],
-          fullPath: rootPath + '/test/temp/check-test-kable-case/checkTestKableCaseInner'
+          fullPath: rootPath + '/temp/check-test-kable-case/checkTestKableCaseInner'
         }
       ]
     }
@@ -57,26 +57,26 @@ describe('rename.test的测试', () => {
       isDir: false,
       level: 2,
       note: ' // 我就是个注释',
-      imports: [rootPath.toLowerCase() + '/test/temp/my-template.vue'],
+      imports: [rootPath.toLowerCase() + '/temp/my-template.vue'],
       belongTo: [],
       size: 96,
       copyed: false,
       rowSize: 4,
       suffix: '.vue',
-      fullPath: rootPath + '/test/temp/TestKableCase/you-template.vue'
+      fullPath: rootPath + '/temp/TestKableCase/you-template.vue'
     }
     expect(fileNode).toMatchObject(finalObj)
   })
 
   test('replaceName --改文件名', (done) => {
-    const foldPath2 = rootPath + '/test/temp/checkTestKableCase2'
-    const file = rootPath + '/test/temp/checkTestKableCase2/testTemplate.vue'
+    const foldPath2 = rootPath + '/temp/checkTestKableCase2'
+    const file = rootPath + '/temp/checkTestKableCase2/testTemplate.vue'
     async function get() {
       try {
         fs.ensureDirSync(foldPath2)
         creatFile(file)
         await replaceName(foldPath2)
-        const flag = fs.existsSync(rootPath + '/test/temp/check-test-kable-case2')
+        const flag = fs.existsSync(rootPath + '/temp/check-test-kable-case2')
         expect(flag).toEqual(true)
         done()
       } catch (error) {
@@ -88,11 +88,11 @@ describe('rename.test的测试', () => {
 
   test('renameFoldPath --改所有文件夹名', (done) => {
     // 自备独立测试数据
-    const foldPath = rootPath + '/test/temp/TestKableCase'
-    const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
-    const file2 = rootPath + '/test/temp/test-kable-case/youTemplate.vue'
-    const foldPath2 = rootPath + '/test/temp/TestKableCase/TestKableCase2'
-    const finalPath = rootPath + '/test/temp/test-kable-case'
+    const foldPath = rootPath + '/temp/TestKableCase'
+    const file = rootPath + '/temp/TestKableCase/youTemplate.vue'
+    const file2 = rootPath + '/temp/test-kable-case/youTemplate.vue'
+    const foldPath2 = rootPath + '/temp/TestKableCase/TestKableCase2'
+    const finalPath = rootPath + '/temp/test-kable-case'
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
@@ -112,9 +112,9 @@ describe('rename.test的测试', () => {
 
   test('renameFoldPath --改所有文件名', (done) => {
     // 自备独立测试数据
-    const foldPath = rootPath + '/test/temp/myVue/myTable'
-    const file = rootPath + '/test/temp/myVue/myTable/testTemplate.vue'
-    const finalPath = rootPath + '/test/temp/myVue/myTable/test-template.vue'
+    const foldPath = rootPath + '/temp/myVue/myTable'
+    const file = rootPath + '/temp/myVue/myTable/testTemplate.vue'
+    const finalPath = rootPath + '/temp/myVue/myTable/test-template.vue'
     async function get() {
       try {
         fs.ensureDirSync(foldPath)

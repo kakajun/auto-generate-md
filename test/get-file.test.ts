@@ -32,8 +32,8 @@ describe('get-file的测试', () => {
     }
   ]
   test('getFile--获取注释', (done) => {
-    const file = rootPath + '/test/temp/app-file-test.vue'
-    const file2 = rootPath + '/test/temp/aa.vue'
+    const file = rootPath + '/temp/app-file-test.vue'
+    const file2 = rootPath + '/temp/aa.vue'
     try {
       creatFile(file)
       creatFile(file2)
@@ -43,7 +43,7 @@ describe('get-file的测试', () => {
         note: '// 我就是个注释',
         rowSize: 4,
         size: 63,
-        imports: [rootPath + '/test/temp/aa.vue']
+        imports: [rootPath + '/temp/aa.vue']
       })
     } catch (error) {
       done(error)
@@ -55,7 +55,7 @@ describe('get-file的测试', () => {
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     const sarr = str.split(/[\n]/g)
-    const arrs =await getImport(sarr, rootPath + '/test/temp/bb.vue')
+    const arrs =await getImport(sarr, rootPath + '/temp/bb.vue')
     expect(arrs).toMatchObject([rootPath + '/unuse/components/user-rulerts.vue'])
   })
 

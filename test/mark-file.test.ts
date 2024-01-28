@@ -9,12 +9,12 @@ debug.enabled = false
 
 describe('mark-file.test的测试', () => {
   test('findNodes--查node', () => {
-    const node = findNodes(nodeOne, rootPath + '/test/temp/app-file-test.vue')
+    const node = findNodes(nodeOne, rootPath + '/temp/app-file-test.vue')
     expect(node).toMatchObject(nodeOne[0])
   })
 
   test('setmark--给节点标记', () => {
-    const file = rootPath + '/test/temp/mark-setmark.vue'
+    const file = rootPath + '/temp/mark-setmark.vue'
     try {
       creatFile(file)
       setmark(file, 'setmark')
@@ -28,7 +28,7 @@ describe('mark-file.test的测试', () => {
   })
 
   test('deletMarkAll--递归所有文件,删除所有标记', () => {
-    const file = rootPath + '/test/temp/delet-mark-all.vue'
+    const file = rootPath + '/temp/delet-mark-all.vue'
     creatFile(file)
     setmark(file, 'setmark')
     const nodes = [
@@ -43,7 +43,7 @@ describe('mark-file.test的测试', () => {
         copyed: false,
         rowSize: 4,
         suffix: '.vue',
-        fullPath: rootPath + '/test/temp/delet-mark-all.vue'
+        fullPath: rootPath + '/temp/delet-mark-all.vue'
       }
     ]
     deletMarkAll(nodes, 'setmark')
@@ -59,7 +59,7 @@ describe('mark-file.test的测试', () => {
 <script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
-    const file = rootPath + '/test/temp/bb.vue'
+    const file = rootPath + '/temp/bb.vue'
     const finalStr = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
@@ -76,7 +76,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
 
   test('setNodeMark--给节点标记', (done) => {
     async function get() {
-      const file = rootPath + '/test/temp/app2-file-test.vue'
+      const file = rootPath + '/temp/app2-file-test.vue'
       creatFile(file)
       try {
         deletMark(file, 'mark')
@@ -96,17 +96,17 @@ import UserRuler from '@/unuse/components/user-rulerts'
     async function get() {
       const foldPath = rootPath + '/test2'
       fs.removeSync(foldPath) // 先清空目录
-      const file = rootPath + '/test/temp/wite-file-test.vue'
+      const file = rootPath + '/temp/wite-file-test.vue'
       creatFileNoimport(file)
-      const fold = rootPath + '/test/temp/my'
+      const fold = rootPath + '/temp/my'
       fs.ensureDirSync(fold)
-      const file2 = rootPath + '/test/temp/my/wite-file2.vue'
+      const file2 = rootPath + '/temp/my/wite-file2.vue'
       creatFile(file2)
-      const file3 = rootPath + '/test/temp/my/aa.vue'
+      const file3 = rootPath + '/temp/my/aa.vue'
       creatFileNoimport(file3)
       try {
         await witeMarkFile(nodesMark, routersMarg)
-        const finalPath = rootPath + '/test2/test/temp/wite-file-test.vue'
+        const finalPath = rootPath + '/test2/temp/wite-file-test.vue'
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)
         done()

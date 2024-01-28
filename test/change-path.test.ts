@@ -8,24 +8,7 @@ debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
-    const foldPath = rootPath + '/test/temp'
-    function deleteFolderRecursive(p: string) {
-      if (fs.existsSync(p)) {
-        fs.readdirSync(p).forEach((file) => {
-          const curPath = `${p}/${file}`
-          if (fs.lstatSync(curPath).isDirectory()) {
-            deleteFolderRecursive(curPath)
-          } else {
-            fs.unlinkSync(curPath)
-          }
-        })
-        fs.rmdirSync(p)
-      }
-    }
-
-    deleteFolderRecursive(foldPath)
-    // fs.removeSync() // 先清空目录
-    debug('删除文件成功%%%%%%%%%%%%%%%%%%%')
+    const foldPath = rootPath + '/temp'
     fs.ensureDirSync(foldPath)
     expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
       './components/user-rulerts.vue'

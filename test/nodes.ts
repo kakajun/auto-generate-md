@@ -5,26 +5,26 @@ export const nodeOne = [
     isDir: false,
     level: 2,
     note: ' // 我就是个注释',
-    imports: [rootPath + '/test/temp/aa.vue'],
+    imports: [rootPath + '/temp/aa.vue'],
     belongTo: ['mark'],
     size: 96,
     copyed: false,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: rootPath + '/test/temp/app-file-test.vue'
+    fullPath: rootPath + '/temp/app-file-test.vue'
   },
   {
     name: 'app2-file-test.vue',
     isDir: false,
     level: 2,
     note: ' // 我就是个注释',
-    imports: [rootPath + '/test/temp/aa.vue'],
+    imports: [rootPath + '/temp/aa.vue'],
     belongTo: ['mark'],
     size: 96,
     copyed: false,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: rootPath + '/test/temp/app2-file-test.vue'
+    fullPath: rootPath + '/temp/app2-file-test.vue'
   },
   {
     name: 'aa.vue',
@@ -37,7 +37,7 @@ export const nodeOne = [
     size: 96,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: rootPath + '/test/temp/aa.vue'
+    fullPath: rootPath + '/temp/aa.vue'
   }
 ]
 
@@ -49,7 +49,7 @@ export const foldNode = {
   copyed: false,
   imports: [],
   belongTo: [],
-  fullPath: rootPath + '/test/temp/checkTestKableCase',
+  fullPath: rootPath + '/temp/checkTestKableCase',
   children: [
     {
       name: 'checkTestKableCaseInner',
@@ -59,7 +59,7 @@ export const foldNode = {
       copyed: false,
       imports: [],
       belongTo: [],
-      fullPath: rootPath + '/test/temp/checkTestKableCase/checkTestKableCaseInner'
+      fullPath: rootPath + '/temp/checkTestKableCase/checkTestKableCaseInner'
     }
   ]
 }
@@ -69,13 +69,13 @@ export const fileNode = {
   isDir: false,
   level: 2,
   note: ' // 我就是个注释',
-  imports: [rootPath + '/test/temp/myTemplate.vue'],
+  imports: [rootPath + '/temp/myTemplate.vue'],
   belongTo: [],
   size: 96,
   copyed: false,
   rowSize: 4,
   suffix: '.vue',
-  fullPath: rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+  fullPath: rootPath + '/temp/TestKableCase/youTemplate.vue'
 }
 
 export const nodesTwo = [
@@ -87,7 +87,7 @@ export const nodesTwo = [
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/TestKableCase',
+    fullPath: rootPath + '/temp/TestKableCase',
     children: [
       fileNode,
       {
@@ -98,7 +98,7 @@ export const nodesTwo = [
         copyed: false,
         imports: [],
         belongTo: [],
-        fullPath: rootPath + '/test/temp/TestKableCase/TestKableCase2'
+        fullPath: rootPath + '/temp/TestKableCase/TestKableCase2'
       }
     ]
   }
@@ -116,7 +116,7 @@ export   const nodesMark = [
     copyed: false,
     rowSize: 4,
     suffix: '.vue',
-    fullPath: rootPath + '/test/temp/wite-file-test.vue'
+    fullPath: rootPath + '/temp/wite-file-test.vue'
   },
   {
     name: 'my',
@@ -126,7 +126,7 @@ export   const nodesMark = [
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/my',
+    fullPath: rootPath + '/temp/my',
     children: [
       {
         name: 'aa',
@@ -139,20 +139,20 @@ export   const nodesMark = [
         copyed: false,
         rowSize: 4,
         suffix: '.vue',
-        fullPath: rootPath + '/test/temp/my/aa.vue'
+        fullPath: rootPath + '/temp/my/aa.vue'
       },
       {
         name: 'wite-file2',
         isDir: false,
         level: 2,
         note: ' // 我就是个注释',
-        imports: [rootPath + '/test/temp/my/aa.vue'],
+        imports: [rootPath + '/temp/my/aa.vue'],
         belongTo: ['test2'],
         size: 96,
         copyed: false,
         rowSize: 4,
         suffix: '.vue',
-        fullPath: rootPath + '/test/temp/my/wite-file2.vue'
+        fullPath: rootPath + '/temp/my/wite-file2.vue'
       }
     ]
   }
@@ -164,11 +164,11 @@ export   const nodesMark = [
          router: [
            {
              path: '/wite-file-test',
-             component: '@/test/temp/wite-file-test.vue'
+             component: '@/temp/wite-file-test.vue'
            },
            {
              path: '/wite-file2',
-             component: '@/test/temp/my/wite-file2.vue'
+             component: '@/temp/my/wite-file2.vue'
            }
          ]
        }
@@ -183,7 +183,7 @@ export const nodesThree = [
     copyed: false,
     imports: [],
     belongTo: [],
-    fullPath: rootPath + '/test/temp/myVue',
+    fullPath: rootPath + '/temp/myVue',
     children: [
       {
         name: 'myTable',
@@ -193,20 +193,20 @@ export const nodesThree = [
         copyed: false,
         imports: [],
         belongTo: [],
-        fullPath: rootPath + '/test/temp/myVue/myTable',
+        fullPath: rootPath + '/temp/myVue/myTable',
         children: [
           {
             name: 'testTemplate',
             isDir: false,
             level: 2,
             note: ' // 我就是个注释',
-            imports: ['/test/temp/myTemplate.vue'],
+            imports: ['/temp/myTemplate.vue'],
             belongTo: [],
             size: 96,
             copyed: false,
             rowSize: 4,
             suffix: '.vue',
-            fullPath: rootPath + '/test/temp/myVue/myTable/testTemplate.vue'
+            fullPath: rootPath + '/temp/myVue/myTable/testTemplate.vue'
           }
         ]
       }

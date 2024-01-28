@@ -21,7 +21,7 @@ export function creatFileNoimport(file: string) {
 }
 
 export function setFile() {
-  const file = rootPath + '/test/temp/TestKableCase/youTemplate.vue'
+  const file = rootPath + '/temp/TestKableCase/youTemplate.vue'
   const str = `<template>
   <div class=""></div>
 </template>
