@@ -1,4 +1,4 @@
-import { foldNode, fileNode, nodesTwo, nodesThree } from './nodes'
+import { foldNode, fileNode, nodesTwo, nodesThree } from './utils/nodes'
 import fs from 'fs-extra'
 import {
   renameFilePath,
@@ -8,7 +8,7 @@ import {
   replaceName,
   checkCamelFile
 } from '../src/commands/rename-path'
-import { creatFile } from './utils'
+import { creatFile } from './utils/utils'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename.test')

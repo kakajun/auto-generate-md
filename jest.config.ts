@@ -16,7 +16,8 @@ export default {
 
   // 如果使用 ESM，则设置此选项
   extensionsToTreatAsEsm: ['.ts'],
-  globalSetup: './test/jest-global-setup.ts', // 更新这里的路径
+  globalSetup: './test/config/jest-global-setup.ts', // 全局
+  setupFilesAfterEnv: ['./test/config/jest.setup.ts'],
   // 配置 Jest 如何解析模块，特别是对于 ESM
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',

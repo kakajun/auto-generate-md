@@ -1,7 +1,7 @@
 import { findNodes, deletMark, setNodeMark, witeMarkFile, setmark, deletMarkAll } from '../src/commands/mark-file'
-import { nodeOne, nodesMark, routersMarg } from './nodes'
+import { nodeOne, nodesMark, routersMarg } from './utils/nodes'
 import fs from 'fs-extra'
-import { creatFile, creatFileNoimport } from './utils'
+import { creatFile, creatFileNoimport } from './utils/utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
 import createDebugger from 'debug'
 const debug = createDebugger('mark-file.test')

@@ -1,15 +1,14 @@
 import path from 'path'
 import fs from 'fs-extra'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
-import { nodeOne } from './nodes'
+import { nodeOne } from './utils/nodes'
 import createDebugger from 'debug'
 const debug = createDebugger('change-path.test')
 debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
-    const foldPath = rootPath + '/temp'
-    fs.ensureDirSync(foldPath)
+
     expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
       './components/user-rulerts.vue'
     )

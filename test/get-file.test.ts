@@ -1,5 +1,5 @@
 import { getFile, getImport, getFileNodes, getNote } from '../src/commands/get-file'
-import { creatFile } from './utils'
+import { creatFile } from './utils/utils'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('get-file.test')
