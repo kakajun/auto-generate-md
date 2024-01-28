@@ -1,11 +1,15 @@
-const { build } = require('esbuild')
-const fs = require('fs-extra')
-const pkg = require('../package.json')
-const { dtsPlugin } = require('esbuild-plugin-d.ts')
+import { build } from 'esbuild'
+import fs from 'fs-extra'
+// import { name, version, author } from '../package.json'
+import { dtsPlugin } from 'esbuild-plugin-d.ts'
+import packageJson from '../package.json' assert { type: 'json' };
+
+const { name, version, author } = packageJson;
+
 const banner = {
   js: `/*!
-* ${pkg.name} v${pkg.version}
-* author:${pkg.author}
+* ${name} v${version}
+* author:${author}
 * ${new Date()}
 */`
 }
@@ -45,4 +49,4 @@ async function builder() {
   await build(binBuildParams)
   process.exit(0)
 }
-module.exports = builder
+export default builder

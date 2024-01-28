@@ -1,4 +1,4 @@
-const builder = require('./builder.js')
+import builder from './builder.js'
 try {
   builder()
   console.log('Packed! Generated bin and lib files')
