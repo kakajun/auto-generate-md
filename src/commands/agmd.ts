@@ -8,7 +8,7 @@ import handle from '../../script/cli/handle'
   const options = stringToArgs(process.argv)
   const { ignores: ignore, includes: include } = handle(options)
   const { md, nodes } =await getMd({ ignore, include })
-  generateAllAction(nodes, md)
+  await generateAllAction(nodes, md)
 }
 
 main()

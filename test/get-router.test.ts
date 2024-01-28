@@ -1,5 +1,5 @@
 import { getRouter, getRouterFilePath, getAllRouter } from '../src/commands/get-router'
-import { parseRouterPath, parseComponentPath } from '../src/utils/routerUtils'
+import { parseRouterPath, parseComponentPath } from '../src/utils/router-utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const dir = rootPath + '/router'
 describe('getRouter的测试', () => {

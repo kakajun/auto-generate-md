@@ -19,6 +19,7 @@
     "agmd": "./bin/bin.js"
   },
   "scripts": {
+    "tsc": "tsc",
     "cli": "ts-node src/bin.ts",
     "dev": "npx nodemon src/commands/agmd.ts",
     "agmd": "npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue",
