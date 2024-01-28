@@ -8,7 +8,6 @@ debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
-
     expect(getRelatPath('/unuse/components/user-rulerts.vue', '/unuse/App.vue')).toEqual(
       './components/user-rulerts.vue'
     )
@@ -57,7 +56,7 @@ import {
 import {
   UserRuler,
   aa
-} from '../../unuse/components/user-rulerts.vue'
+} from '../unuse/components/user-rulerts.vue'
 </script>`
 
       const file = path.resolve(rootPath, node.fullPath)
