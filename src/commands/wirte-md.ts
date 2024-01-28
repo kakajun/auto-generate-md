@@ -2,7 +2,7 @@
 import fs from 'fs'
 import path from 'path'
 import { getFileNodes, getNote } from './get-file'
-import { ItemType } from './get-file'
+import type { ItemType } from '../types'
 import logger from '../shared/logger'
 import createDebugger from 'debug'
 const rootPath = process.cwd().replace(/\\/g, '/')

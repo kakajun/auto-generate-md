@@ -1,7 +1,9 @@
-import fs from 'fs'
+import { readdir, readFile, stat, access } from 'fs/promises'
 import createDebugger from 'debug'
 import logger from '../shared/logger'
 import path from 'path'
+import { parseRouterPath, parseComponentPath } from '../utils/routerUtils'
+import type { Router, RouterItem } from '../types'
 const debug = createDebugger('get-file')
 debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -10,19 +12,23 @@ const rootPath = process.cwd().replace(/\\/g, '/')
  * @desc: 递归获取路由数组
  * @author: majun
  */
-export function getRouterFilePath() {
-  const dir = rootPath + '/router'
-  const routes: any[] = []
-  function finder(p: string) {
-    const files = fs.readdirSync(p)
-    files.forEach((val) => {
+export async function getRouterFilePath(dir: string): Promise<string[]> {
+  const routes: string[] = []
+
+  async function finder(p: string): Promise<void> {
+    const files = await readdir(p)
+    for (const val of files) {
       const fPath = path.join(p, val).replace(/\\/g, '/')
-      const stats = fs.statSync(fPath)
-      if (stats.isDirectory()) finder(fPath)
-      if (stats.isFile()) routes.push(fPath)
-    })
+      const stats = await stat(fPath)
+      if (stats.isDirectory()) {
+        await finder(fPath)
+      } else if (stats.isFile()) {
+        routes.push(fPath)
+      }
+    }
   }
-  finder(dir)
+
+  await finder(dir)
   return routes
 }
 
@@ -30,47 +36,52 @@ export function getRouterFilePath() {
  * @desc: 获取所有路由
  * @author: majun
  */
-export function getAllRouter() {
-  const arrs = getRouterFilePath()
-  const routers: { path: string; component: string }[] = []
-  for (let index = 0; index < arrs.length; index++) {
-    const p = arrs[index]
-    const itemArrs = getRouter(p)
-    routers.push(...itemArrs)
+export async function getAllRouter(dir: string): Promise<Router[]> {
+  const filePaths = await getRouterFilePath(dir)
+  const routers: Router[] = []
+
+  for (const filePath of filePaths) {
+    const routerItems = await getRouter(filePath)
+    routers.push(...routerItems)
   }
+
   return routers
 }
 /**
  * @desc: 得到路由
  * @author: majun
  */
-export function getRouter(routerPath: string) {
-  const routers = []
-  let p = ''
-  if (fs.existsSync(routerPath)) {
-    const str = fs.readFileSync(routerPath, 'utf-8')
-    const sarrs = str.split(/[\n]/g)
-    for (let index = 0; index < sarrs.length; index++) {
-      const st = sarrs[index]
-      if (st.indexOf('//') > -1) continue // 打了注释的不要
-      //  path: '/form/base-form'  匹配这样子的path
-      const pathReg = /path: [\'|\"](.*)[\'|\"]/
-      const pathStrs = st.match(pathReg)
-      if (pathStrs) {
-        p = pathStrs[1]
+export async function getRouter(routerPath: string): Promise<Router[]> {
+  const routers: Router[] = []
+  try {
+    // 检查文件是否存在
+    await access(routerPath)
+
+    const fileContent = await readFile(routerPath, 'utf-8')
+    const lines = fileContent.split(/\n/g)
+    let currentPath = ''
+    let currentComponent = ''
+
+    lines.forEach((line) => {
+      if (line.includes('//')) return // 跳过注释行
+
+      const tempPath = parseRouterPath(line)
+      if (tempPath) currentPath = tempPath
+
+      const tempComponent = parseComponentPath(line)
+      if (tempComponent) currentComponent = tempComponent
+
+      if (currentPath && currentComponent) {
+        routers.push({ path: currentPath, component: currentComponent })
+        currentPath = ''
+        currentComponent = ''
       }
-      // 用正则匹配出所有 component: () => import( )中的组件
-      const reg = /import\([\'|\"](.*)[\'|\"]\)/
-      const impStr = st.match(reg)
-      if (impStr) {
-        routers.push({
-          path: p,
-          component: impStr[1]
-        })
-        debug(impStr[1])
-      }
-    }
+    })
+  } catch (error) {
+    console.error('读取路由配置时出错:', error)
+    // 可以根据需要处理或抛出错误
   }
+
   return routers
 }
 
@@ -78,23 +89,27 @@ export function getRouter(routerPath: string) {
  * @desc: 获取要操作的路由
  * @author: majun
  */
-export function getRouterArrs() {
-  const pathName = rootPath + '/classify.js'
-  let routers = null
-  if (fs.existsSync(pathName)) {
-    routers = require(pathName)
-  } else {
-    // 如果没有classify,那么直接找路由
-    routers = [
-      {
-        name: 'mark',
-        router: getAllRouter()
-      }
-    ]
-  }
-  if (!routers) {
-    logger.error('跟路径没发现有classify.js,并且src里面没有router文件, 现在退出')
+export async function getRouterArrs(): Promise<RouterItem[] | null> {
+  const pathName = `${rootPath}/classify.js`
+  const dir = `${rootPath}/router`
+  let routers: RouterItem[] | null = null
+
+  try {
+    if (await stat(pathName)) {
+      routers = require(pathName)
+    } else {
+      // 如果没有classify.js，则直接找路由
+      routers = [
+        {
+          name: 'mark',
+          router: await getAllRouter(dir)
+        }
+      ]
+    }
+  } catch (error) {
+    logger.error('根路径没有发现 classify.js，并且 src 里面没有 router 文件，现在退出')
     process.exit(1)
   }
+
   return routers
 }

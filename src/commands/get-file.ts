@@ -2,7 +2,8 @@
 import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
-import { changeImport } from './change-path';
+import { changeImport } from './change-path'
+import type { ItemType } from '../types'
 const debug = createDebugger('get-file')
 debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -25,7 +26,7 @@ export function getFile(fullPath: string) {
       ? sarr[0]
       : ''
   return {
-    note: f.replace(/<\/?[^>]*>|(\n|\r)/g, ''),  // 去掉尾巴换行符号
+    note: f.replace(/<\/?[^>]*>|(\n|\r)/g, ''), // 去掉尾巴换行符号
     size,
     rowSize,
     imports
@@ -39,44 +40,26 @@ export function getFile(fullPath: string) {
  * @param {string} fullPath
  */
 export function getImport(sarr: any[], fullPath: string) {
-    const dependencies: string[] =[]
-   if (fs.existsSync(rootPath + '/package.json')) {
-     const pkg = require(rootPath + '/package.json')
-     if (pkg.devDependencies) {
-       dependencies.push(...Object.keys(pkg.devDependencies));
-     } else if (pkg.dependencies) {
-        dependencies.push(...Object.keys(pkg.dependencies))
-     }
-
-
+  const dependencies: string[] = []
+  if (fs.existsSync(rootPath + '/package.json')) {
+    const pkg = require(rootPath + '/package.json')
+    if (pkg.devDependencies) {
+      dependencies.push(...Object.keys(pkg.devDependencies))
+    } else if (pkg.dependencies) {
+      dependencies.push(...Object.keys(pkg.dependencies))
+    }
   }
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
     if (ele.indexOf('from') > -1) {
-      const { absoluteImport } = changeImport(ele, fullPath,dependencies)
+      const { absoluteImport } = changeImport(ele, fullPath, dependencies)
       if (absoluteImport) {
-         imports.push(absoluteImport)
+        imports.push(absoluteImport)
       }
-
     }
   })
   return imports
-}
-
-export type ItemType = {
-  name: string
-  copyed?: boolean
-  isDir: boolean
-  level: number
-  note: string
-  size?: number
-  suffix?: string
-  rowSize?: number
-  fullPath: string
-  belongTo: string[] // 标记归属设置 分类用
-  imports: string[] // 依赖收集
-  children?: ItemType[]
 }
 
 /**
@@ -114,7 +97,7 @@ export function getFileNodes(
     'readme-md.js'
   ]
   //File suffix contains only  文件后缀只包含
-  let include = isDev?['.js', '.vue']:['.js', '.vue', '.ts','.tsx']
+  let include = isDev ? ['.js', '.vue'] : ['.js', '.vue', '.ts', '.tsx']
   if (option) {
     ignore = option.ignore || ignore
     include = option.include || include
@@ -196,7 +179,7 @@ export function getNote(datas: ItemType[], keys?: string[]) {
  * @param {Boolean} last  Is it the last one  是不是最后一个
  * @return {*}
  */
- function setMd(obj: ItemType, last: Boolean): string {
+function setMd(obj: ItemType, last: Boolean): string {
   let filesString = ''
   const blank = '│ '.repeat(obj.level) // 重复空白
   const pre = `${blank}${last ? '└──' : '├──'} ${obj.name}`

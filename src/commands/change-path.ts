@@ -1,5 +1,5 @@
 /* 整个文件主要把绝对路径修改为相对路径 */
-import { ItemType } from './get-file'
+import type { ItemType } from '../types'
 import fs from 'fs'
 import path from 'path'
 import logger from '../shared/logger'

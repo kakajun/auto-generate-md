@@ -1,6 +1,6 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs-extra'
-import { ItemType } from './get-file'
+import type { ItemType } from '../types'
 import createDebugger from 'debug'
 import path from 'path'
 import logger from '../shared/logger'

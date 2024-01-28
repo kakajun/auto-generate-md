@@ -1,66 +1,55 @@
-/* 对打上标记的文件进行分类写入, 分步骤写方法, 虽然对于性能有影响, 但一点点算什么, 能够分步骤调试最好, 不要这个步骤, 直接注释掉这个方法就行 */
 import createDebugger from 'debug'
 import { findNodes } from './mark-file'
-import { ItemType } from './get-file'
+import type { ItemType } from '../types'
 import fs from 'fs-extra'
 import logger from '../shared/logger'
+
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')
 debug.enabled = false
+
 /**
- * @desc:  递归文件子依赖创建文件- 文件外递归
- * @author: majun
- * @param {ItemType} nodes
- * @param {string} name
- * @param {string} path  绝对路径
- * @param {string} rootPath   确定哪一级开始创建文件夹
+ * 递归文件子依赖创建文件。文件外递归。
+ * @param nodes - 节点列表
+ * @param name - 文件名
+ * @param path - 绝对路径
  */
-export async function markWriteFile(nodes: ItemType[], name: string, path: string) {
+export async function markWriteFile(nodes: ItemType[], name: string, path: string): Promise<void> {
   debug('入参: ', name, path)
-  // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   debug('查找的node: ', node)
-  if (node) {
-    if (node.copyed) return // 如果这个文件已经被分析过了,那么跳过, 否则会无限分析
-    node.copyed = true
-    // 得到标记
-    const belongTo = node.belongTo
-    if (belongTo.length > 0) {
-      await setDispFileNew(path, name)
-    }
-    if (node.imports) {
-      // 找到有子文件了,循环它
-      for (let index = 0; index < node.imports.length; index++) {
-        const element = node.imports[index]
-        // debug('依赖文件: ', element)
-        // 如果文件存在
-        if (fs.existsSync(path)) {
-          // 继续递归,直到子文件没有子文件
-          await markWriteFile(nodes, name, element)
-        } else {
-          logger.error( `${path}文件不存在`, )
-        }
+
+  if (!node || node.copyed) return
+  node.copyed = true
+
+  if (node.belongTo.length > 0) {
+    await setDispFileNew(path, name)
+  }
+
+  if (node.imports) {
+    for (const element of node.imports) {
+      if (await fs.pathExists(element)) {
+        await markWriteFile(nodes, name, element)
+      } else {
+        logger.error(`${element} 文件不存在`)
       }
     }
   }
 }
 
 /**
- * @desc: 功能就是找到文件然后copy文件,
- * @author: majun
- * @param {string} pathN
- * @param {string} name
- * @param {string} rootPath
+ * 复制文件到指定位置。
+ * @param pathN - 源文件路径
+ * @param name - 目标文件夹名
  */
-export async function setDispFileNew(pathN: string, name: string) {
+export async function setDispFileNew(pathN: string, name: string): Promise<void> {
   const relative = pathN.replace(rootPath, '')
-  const originPath = pathN
-  const writeFileName = rootPath + '/' + name + relative
+  const writeFileName = `${rootPath}/${name}${relative}`
   try {
-    if (fs.existsSync(writeFileName)) return // 如果文件都存在那算了
-    await fs.copy(originPath, writeFileName)
+    if (await fs.pathExists(writeFileName)) return
+    await fs.copy(pathN, writeFileName)
     debug('写入文件success! : ', writeFileName)
   } catch (err) {
-    console.error(err)
+    logger.error('文件写入失败')
   }
 }

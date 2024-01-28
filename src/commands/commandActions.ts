@@ -1,5 +1,5 @@
 /* 界面命令注册在这里 */
-import { ItemType } from './get-file'
+import type { ItemType } from '../types'
 import { wirteMd } from './wirte-md'
 import { renameFoldPath, renameFilePath } from './rename-path'
 import logger from '../shared/logger'
@@ -66,7 +66,7 @@ export async function changesuffixAction(nodes: ItemType[], nochangePath: Boolea
  */
 export async function markFileAction(nodes: ItemType[]) {
   checkFold()
-  const routers = getRouterArrs()
+  const routers = await getRouterArrs()
   fs.writeFileSync(rootPath + '/router-file.js', 'const router=' + JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
     await markFile(nodes, routers)
@@ -80,7 +80,7 @@ export async function markFileAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 export async function witeFileAction(nodes: ItemType[]) {
-  const routers = getRouterArrs()
+  const routers = await getRouterArrs()
   if (routers) {
     await markFile(nodes, routers)
     // copy文件一定是建立在打标记的基础上
@@ -133,7 +133,7 @@ export async function renameFileAction(nodes: ItemType[]) {
  */
 export async function generateAllAction(nodes: ItemType[], md: string) {
   checkFold()
-  const routers = getRouterArrs()
+  const routers = await getRouterArrs()
   if (routers) {
     getMdAction(md)
     await changePathAction(nodes)

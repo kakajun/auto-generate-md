@@ -1,27 +1,20 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
-import { ItemType } from './get-file'
+import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
 import logger from '../shared/logger'
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = false
-type classifyType = Array<{
-  name: string
-  router: Array<{
-    path: string
-    // 路由必须都是绝对路径
-    component: string
-  }>
-}>
+type Routers = Array<RouterItem>
 /**
  * @desc: 标记文件主程序
  * @author: majun
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export async function markFile(nodes: ItemType[], routers: classifyType) {
+export async function markFile(nodes: ItemType[], routers: Routers) {
   for (let i = 0; i < routers.length; i++) {
     const ele = routers[i]
     for (let j = 0; j < ele.router.length; j++) {
@@ -42,7 +35,7 @@ export async function markFile(nodes: ItemType[], routers: classifyType) {
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
-export async function witeMarkFile(nodes: ItemType[], routers: classifyType) {
+export async function witeMarkFile(nodes: ItemType[], routers: Routers) {
   for (let index = 0; index < routers.length; index++) {
     const ele = routers[index]
     // 这里循环打标记的路由
