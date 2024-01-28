@@ -42,7 +42,7 @@ describe('change-path的测试', () => {
       { getRelatPath,
          makeSuffix,
          changeImport
-      } from '@/unuse/components/user-rulerts'`,['@types/node'])
+      } from '@/unuse/components/user-rulerts'`, ['@types/node'])
     debug('arrs: ', arrs)
     expect(arrs).toEqual('@/unuse/components/user-rulerts')
   })
@@ -51,7 +51,7 @@ describe('change-path的测试', () => {
     expect(
       changeImport(
         "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'",
-        path.resolve('unuse/App.vue').replace(/\\/g, '/'),['@types/node']
+        path.resolve('unuse/App.vue').replace(/\\/g, '/'), ['@types/node']
       )
     ).toEqual({
       filePath: '@/unuse/components/user-rulerts',
@@ -77,14 +77,16 @@ import {
   aa
 } from '../../unuse/components/user-rulerts.vue'
 </script>`
+
       const file = path.resolve(rootPath, node.fullPath)
       // 异步写入数据到文件
       fs.writeFileSync(file, str, { encoding: 'utf8' })
       debug('Write successful')
-      witeFile(node, true)
-      done()
-      const getStr = fs.readFileSync(file, 'utf-8')
-      expect(getStr).toEqual(finalStr)
+      witeFile(node, true).then(() => {
+        done()
+        const getStr = fs.readFileSync(file, 'utf-8')
+        expect(getStr).toEqual(finalStr)
+      })
     } catch (error) {
       done(error)
     }

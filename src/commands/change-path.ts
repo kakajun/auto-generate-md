@@ -1,6 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import logger from '../shared/logger'
+import {getDependencies} from '../utils/routerUtils';
 import createDebugger from 'debug'
 import type { ItemType } from '../types'
 
@@ -109,17 +110,10 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
 
    * @param {string} file  目标地址
    */
-export function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
+export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
-  const dependencies = []
-  if (fs.existsSync(rootPath + '/package.json')) {
-    const pkg = require(rootPath + '/package.json')
-    if (pkg.devDependencies) {
-      dependencies.push(...Object.keys(pkg.devDependencies))
-    } else if (pkg.dependencies) {
-      dependencies.push(...Object.keys(pkg.dependencies))
-    }
-  }
+  const packageJsonPath = path.join(rootPath, 'package.json');
+  let  dependencies=await getDependencies(packageJsonPath)
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')

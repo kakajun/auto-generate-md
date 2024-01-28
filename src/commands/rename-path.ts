@@ -4,6 +4,7 @@ import type { ItemType } from '../types'
 import createDebugger from 'debug'
 import path from 'path'
 import logger from '../shared/logger'
+import {getDependencies} from '../utils/routerUtils';
 import { getImportName } from './change-path'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-path')
@@ -75,19 +76,12 @@ async function rewriteFile(node: ItemType) {
   let writeFlag = false
   const str = fs.readFileSync(node.fullPath, 'utf-8')
   const sarr = str.split(/[\n]/g)
+   const packageJsonPath = path.join(rootPath, 'package.json');
+   let  dependencies=await getDependencies(packageJsonPath)
+    // 循环处理每一行
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
     if (ele.indexOf('from') > -1) {
-      // 这里要吧package.json的依赖也拿出来
-      const dependencies = []
-      if (fs.existsSync(rootPath + '/package.json')) {
-        const pkg = require(rootPath + '/package.json')
-        if (pkg.devDependencies) {
-          dependencies.push(...Object.keys(pkg.devDependencies))
-        } else if (pkg.dependencies) {
-          dependencies.push(...Object.keys(pkg.dependencies))
-        }
-      }
       const impOldName = getImportName(ele, dependencies)
       if (checkCamelFile(impOldName)) {
         // 取文件名,否则转case会出错

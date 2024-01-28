@@ -28,7 +28,7 @@ const { ignores: ignore, includes: include } = handle(options)
 export async function selectCommand() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
   //1. 这里只读文件, ------------>不写
-  const { md, nodes } = getMd({ ignore, include })
+  const { md, nodes } =await getMd({ ignore, include })
   actionMap.set('help', {
     title: '🙏  帮助',
     value: 'help',

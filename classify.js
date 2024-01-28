@@ -1,4 +1,4 @@
-module.exports = [
+export default [
   {
     name: '2工程',
     router: [

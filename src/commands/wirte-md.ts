@@ -10,11 +10,10 @@ const debug = createDebugger('wirte-md')
 debug.enabled = false
 type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { [key: string]: number } }
 /**
- * @description:Write the result to JS file 把结果写入到js文件
- * @param {data}  要写的数据
- * @return {fileName}  要写入文件地址
+ * @description :Write the result to JS file
+ * @param {data} data
  */
-export function wirteMd(data: string, filePath: string) {
+export function wirteMd(data: string, filePath: string): void {
   const file = path.resolve(rootPath, filePath)
   // 异步写入数据到文件
   fs.writeFile(file, data, { encoding: 'utf8' }, () => {
@@ -23,11 +22,11 @@ export function wirteMd(data: string, filePath: string) {
 }
 
 /**
- * @description: Get statistics 得到统计
- * @param {Array} nodes
- * @return {*}
+ * @description: Get statistics
+ * @param {Array} datas
+ * @return {Object}
  */
-function getCountMd(datas: ItemType[]) {
+function getCountMd(datas: ItemType[]): secoutType {
   let rowTotleNumber = 0
   let sizeTotleNumber = 0
   const coutObj: { [key: string]: number } = {}
@@ -52,20 +51,20 @@ function getCountMd(datas: ItemType[]) {
 
 /**
  * @description:Thousands format 千分位格式化
- * @param {num} To format a number 要格式化数字
+ * @param {num} num format a number 要格式化数字
  * @return {string}
  */
-function format(num: number) {
+function format(num: number): string {
   var reg = /\d{1,3}(?=(\d{3})+$)/g
   return (num + '').replace(reg, '$&,')
 }
 
 /**
  * @description: Generate statistics MD 生成统计md
- * @param {object} option
- * @return {*}
+ * @param {object} obj
+ * @return {string}
  */
-function setCountMd(obj: secoutType) {
+function setCountMd(obj: secoutType): string {
   const { rowTotleNumber, sizeTotleNumber, coutObj } = obj
   let countMd = '😍  代码总数统计：\n'
   let totle = 0
@@ -83,11 +82,10 @@ function setCountMd(obj: secoutType) {
 /**
  * @description: Generate MD 生成md
  * @param {object} option
- * @return {*}
  */
-export function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
+export async function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
   logger.success('👉  命令运行位置: ' + process.cwd() + '\n')
-  const nodes = getFileNodes(rootPath, option)
+  const nodes =await getFileNodes(rootPath, option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   logger.success(coutMd)

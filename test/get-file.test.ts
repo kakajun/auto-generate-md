@@ -50,17 +50,17 @@ describe('get-file的测试', () => {
     }
   })
 
-  test('getImport--获取每个文件依赖的方法', () => {
+  test('getImport--获取每个文件依赖的方法',async () => {
     const str = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
     const sarr = str.split(/[\n]/g)
-    const arrs = getImport(sarr, rootPath + '/test/temp/bb.vue')
+    const arrs =await getImport(sarr, rootPath + '/test/temp/bb.vue')
     expect(arrs).toMatchObject([rootPath + '/unuse/components/user-rulerts.vue'])
   })
 
-  test('getFileNodes--生成所有文件的node信息', () => {
-    const arrs = getFileNodes(rootPath + '/src/shared')
+  test('getFileNodes--生成所有文件的node信息',async () => {
+    const arrs =await getFileNodes(rootPath + '/src/shared')
     // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
     arrs.forEach((item => {
       item.size = 0

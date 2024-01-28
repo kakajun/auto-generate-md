@@ -4,7 +4,11 @@ import { generateAllAction } from './commandActions'
 import { getMd } from './wirte-md'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
-const options = stringToArgs(process.argv)
-const { ignores: ignore, includes: include } = handle(options)
-const { md, nodes } = getMd({ ignore, include })
-generateAllAction(nodes, md)
+ async function main() {
+  const options = stringToArgs(process.argv)
+  const { ignores: ignore, includes: include } = handle(options)
+  const { md, nodes } =await getMd({ ignore, include })
+  generateAllAction(nodes, md)
+}
+
+main()

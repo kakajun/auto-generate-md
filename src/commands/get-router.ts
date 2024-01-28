@@ -96,7 +96,7 @@ export async function getRouterArrs(): Promise<RouterItem[] | null> {
 
   try {
     if (await stat(pathName)) {
-      routers = require(pathName)
+      routers =await import(pathName)
     } else {
       // 如果没有classify.js，则直接找路由
       routers = [
