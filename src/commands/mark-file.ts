@@ -3,7 +3,10 @@ import fs from 'fs'
 import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
 debug.enabled = false

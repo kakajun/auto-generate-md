@@ -1,12 +1,12 @@
 import fs from 'fs'
 import path from 'path'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
 import {getDependencies} from '../utils/routerUtils';
-import createDebugger from 'debug'
 import type { ItemType } from '../types'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 
-const debug = createDebugger('change-path')
-debug.enabled = true
 const rootPath = process.cwd().replace(/\\/g, '/')
 
 /**
@@ -53,7 +53,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
     ? filePath.replace('@', process.cwd())
     : path.resolve(path.dirname(fullPath), filePath)
 
-  debug('makeSuffix 入参: absoluteImport', absoluteImport)
+  logger.info('makeSuffix 入参: absoluteImport', absoluteImport)
   const lastName = path.extname(absoluteImport)
 
   if (!lastName) {
@@ -124,7 +124,7 @@ export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePat
         const obj = changeImport(ele, fullPath, dependencies, nochangePath)
         if (obj && obj.impName) {
           sarr[index] = ele.replace(obj.filePath, obj.impName)
-          debug('node: ', node)
+          logger.info('node: ', node)
           writeFlag = true
         }
       }

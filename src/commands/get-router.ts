@@ -1,9 +1,12 @@
 import { readdir, readFile, stat, access } from 'fs/promises'
 import createDebugger from 'debug'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
 import path from 'path'
 import { parseRouterPath, parseComponentPath } from '../utils/routerUtils'
 import type { Router, RouterItem } from '../types'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 const debug = createDebugger('get-file')
 debug.enabled = false
 const rootPath = process.cwd().replace(/\\/g, '/')

@@ -1,10 +1,15 @@
 import fs from 'fs-extra'
+import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
-// 在所有测试之前运行一次
-beforeAll(() => {
-  console.log("Global setup before all tests.");
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
+
+module.exports = async () => {
+  logger.start("清空测试文件夹");
   // 你可以在这里执行一些全局初始化代码
   const foldPath = rootPath + '/temp'
+  const foldPath2 = rootPath + '/test2'
   function deleteFolderRecursive(p: string) {
     if (fs.existsSync(p)) {
       fs.readdirSync(p).forEach((file) => {
@@ -20,10 +25,5 @@ beforeAll(() => {
   }
 
   deleteFolderRecursive(foldPath)
-});
-
-// 在每个测试之前运行
-beforeEach(() => {
-  // console.log("Global setup before each test.");
-  // 例如，重置全局状态等
-});
+  deleteFolderRecursive(foldPath2)
+};

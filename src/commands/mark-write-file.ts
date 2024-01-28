@@ -2,8 +2,10 @@ import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import type { ItemType } from '../types'
 import fs from 'fs-extra'
-import logger from '../shared/logger'
-
+import { createConsola } from 'consola'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')
 debug.enabled = false

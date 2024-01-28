@@ -3,9 +3,12 @@ import fs from 'fs-extra'
 import type { ItemType } from '../types'
 import createDebugger from 'debug'
 import path from 'path'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
 import {getDependencies} from '../utils/routerUtils';
 import { getImportName } from './change-path'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-path')
 debug.enabled = false

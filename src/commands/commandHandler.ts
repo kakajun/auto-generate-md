@@ -19,7 +19,10 @@ import { wirteJsNodes } from './change-path'
 import { getMd } from './wirte-md'
 import handle from '../../script/cli/handle'
 
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
 const options = stringToArgs(process.argv)

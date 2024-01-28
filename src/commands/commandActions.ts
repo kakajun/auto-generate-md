@@ -2,12 +2,15 @@
 import type { ItemType } from '../types'
 import { wirteMd } from './wirte-md'
 import { renameFoldPath, renameFilePath } from './rename-path'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
 import path from 'path'
 import fs from 'fs'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
 

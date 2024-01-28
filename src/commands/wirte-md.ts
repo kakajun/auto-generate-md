@@ -3,8 +3,11 @@ import fs from 'fs'
 import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import type { ItemType } from '../types'
-import logger from '../shared/logger'
+import { createConsola } from 'consola'
 import createDebugger from 'debug'
+const logger = createConsola({
+  level: 4 // 设置日志级别为 silent
+})
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('wirte-md')
 debug.enabled = false
