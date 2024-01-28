@@ -53,9 +53,12 @@ export function getImport(sarr: any[], fullPath: string) {
   const imports: string[] = []
   sarr.forEach((ele: string) => {
     if (ele.indexOf('from') > -1) {
-      const { absoluteImport } = changeImport(ele, fullPath, dependencies)
-      if (absoluteImport) {
-        imports.push(absoluteImport)
+      const obj=changeImport(ele, fullPath, dependencies)
+      if (obj) {
+        const { absoluteImport } =obj
+        if (absoluteImport) {
+          imports.push(absoluteImport)
+        }
       }
     }
   })
