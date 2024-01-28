@@ -11,7 +11,7 @@ import {
   renameFoldAction,
   renameFileAction,
   generateAllAction
-} from './commandActions'
+} from './command-actions'
 import { VERSION, PKG_NAME } from '../shared/constant'
 import help from '../../script/help/index'
 import stringToArgs from '../../script/cli'

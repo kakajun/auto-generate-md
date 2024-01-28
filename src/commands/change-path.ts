@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { createConsola } from 'consola'
-import {getDependencies} from '../utils/routerUtils';
+import {getDependencies} from '../utils/router-utils';
 import type { ItemType } from '../types'
 const logger = createConsola({
   level: 4 // 设置日志级别为 silent

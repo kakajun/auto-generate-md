@@ -3,7 +3,7 @@ import fs from 'fs'
 import path from 'path'
 import createDebugger from 'debug'
 import { changeImport } from './change-path'
-import {getDependencies} from '../utils/routerUtils';
+import {getDependencies} from '../utils/router-utils';
 import type { ItemType } from '../types'
 const debug = createDebugger('get-file')
 debug.enabled = false

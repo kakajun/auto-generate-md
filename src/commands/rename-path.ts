@@ -4,7 +4,7 @@ import type { ItemType } from '../types'
 import createDebugger from 'debug'
 import path from 'path'
 import { createConsola } from 'consola'
-import {getDependencies} from '../utils/routerUtils';
+import {getDependencies} from '../utils/router-utils';
 import { getImportName } from './change-path'
 const logger = createConsola({
   level: 4 // 设置日志级别为 silent
