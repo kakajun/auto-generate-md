@@ -1,5 +1,6 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
+// import { readFile, writeFile } from 'fs/promises';
 import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
 import createDebugger from 'debug'

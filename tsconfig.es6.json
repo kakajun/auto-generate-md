@@ -1,10 +1,10 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "module": "commonjs",
+    "module": "es2020",
     "skipLibCheck": true,
     "sourceMap": true,
-    "outDir": "lib",
+    "outDir": "es6",
     "moduleResolution": "node",
     "removeComments": true,
     "noImplicitAny": true,

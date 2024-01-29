@@ -15,15 +15,15 @@
   "module": "lib/index.esm.js",
   "typings": "lib/index.d.ts",
   "bin": {
-    "agmd": "./bin/bin.js"
+    "agmd": "./lib/src/bin.js"
   },
   "scripts": {
-    "tsc": "tsc",
+    "build": "tsc&&tsc --project tsconfig.es6.json",
+    "devtsc": "tsc --watch src/commands/agmd.ts",
     "cli": "ts-node src/bin.ts",
-    "dev": "npx nodemon src/commands/agmd.ts",
+    "dev": "ts-node-dev src/commands/agmd.ts",
     "agmd": "npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue",
     "lint": "eslint --fix --ext .js,.ts ./src",
-    "build": "node script/build.js",
     "prepare": "husky install",
     "test": "jest",
     "test:coverage": "jest --coverage",
@@ -47,8 +47,6 @@
     "arg": "5.0.2",
     "commander": "^11.1.0",
     "debug": "^4.3.4",
-    "esbuild": "^0.20.0",
-    "esbuild-plugin-d.ts": "^1.2.3",
     "eslint": "^8.56.0",
     "eslint-config-prettier": "^9.1.0",
     "fs-extra": "^11.2.0",
@@ -62,7 +60,8 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "consola": "^3.2.3",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "ts-node-dev":"^2.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js}": "prettier --write",
@@ -74,7 +73,7 @@
   },
   "homepage": "https://github.com/kakajun/auto-generate-md",
   "files": [
-    "bin",
+    "es6",
     "lib"
   ],
   "dependencies": {

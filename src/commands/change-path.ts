@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { readFile } from 'fs/promises'
 import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
@@ -42,7 +43,6 @@ export function getRelatPath(absoluteImport: string, fullPath: string) {
 
 /**
  * @desc: 补后缀的方法+替换前缀
-
  * @param {string} filePath  正则匹配到的依赖路径
  * @param {string} fullPath  本身文件名路径
  * @param {string} impName   正确的名字
@@ -52,7 +52,6 @@ export function makeSuffix(filePath: string, fullPath: string) {
     ? filePath.replace('@', process.cwd())
     : path.resolve(path.dirname(fullPath), filePath)
 
-  logger.info('makeSuffix 入参: absoluteImport', absoluteImport)
   const lastName = path.extname(absoluteImport)
 
   if (!lastName) {
@@ -60,6 +59,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
     for (const suffix of suffixes) {
       if (fs.existsSync(absoluteImport + suffix)) {
         absoluteImport += suffix
+        logger.info('补充后缀:', absoluteImport + suffix)
         break
       }
     }
@@ -112,7 +112,7 @@ export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePat
   let dependencies = await getDependencies(packageJsonPath)
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
-    let fileStr = fs.readFileSync(fullPath, 'utf-8')
+    let fileStr = await readFile(fullPath, 'utf-8')
     const sarr = fileStr.split(/[\n]/g)
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]

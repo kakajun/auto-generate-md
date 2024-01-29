@@ -1,9 +1,10 @@
 /* 获取文件相关方法 */
 import fs from 'fs'
 import path from 'path'
+import { readFile } from 'fs/promises'
 import createDebugger from 'debug'
 import { changeImport } from './change-path'
-import {getDependencies} from '../utils/router-utils';
+import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
 const debug = createDebugger('get-file')
 debug.enabled = false
@@ -16,11 +17,11 @@ const isDev = env() === 'development'
  * @return {*}
  */
 export async function getFile(fullPath: string) {
-  const str = fs.readFileSync(fullPath, 'utf-8')
+  const str = await readFile(fullPath, 'utf-8')
   const size = str.length
   const sarr = str.split(/[\n]/g)
   const rowSize = sarr.length
-  const imports =await getImport(sarr, fullPath)
+  const imports = await getImport(sarr, fullPath)
   const f =
     sarr[0].indexOf('eslint') === -1 &&
     (sarr[0].indexOf('-->') > -1 || sarr[0].indexOf('*/') > -1 || sarr[0].indexOf('//') > -1)
@@ -39,16 +40,16 @@ export async function getFile(fullPath: string) {
  * @param {any} sarr
  * @param {string} fullPath
  */
-export async function  getImport(sarr: any[], fullPath: string) {
-  const packageJsonPath = path.join(rootPath, 'package.json');
-  let  dependencies=await getDependencies(packageJsonPath)
+export async function getImport(sarr: any[], fullPath: string) {
+  const packageJsonPath = path.join(rootPath, 'package.json')
+  let dependencies = await getDependencies(packageJsonPath)
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
     if (ele.indexOf('from') > -1) {
-      const obj=changeImport(ele, fullPath, dependencies)
+      const obj = changeImport(ele, fullPath, dependencies)
       if (obj) {
-        const { absoluteImport } =obj
+        const { absoluteImport } = obj
         if (absoluteImport) {
           imports.push(absoluteImport)
         }
@@ -65,7 +66,7 @@ export async function  getImport(sarr: any[], fullPath: string) {
  * @param {Number} level
  * @return {*}
  */
-export  async function getFileNodes(
+export async function getFileNodes(
   dir: any = process.cwd(),
   option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined,
   nodes: ItemType[] = [],
@@ -129,7 +130,7 @@ export  async function getFileNodes(
       const isDir = fs.lstatSync(fullPath).isDirectory()
       if (isDir) {
         //recursion 递归
-      await  getFileNodes(fullPath, option, (item.children = []), level + 1)
+        await getFileNodes(fullPath, option, (item.children = []), level + 1)
         item.fullPath = fullPath.replace(/\\/g, '/')
         nodes.push(item)
       } else {
@@ -137,7 +138,7 @@ export  async function getFileNodes(
         const lastName = fullPath.substring(i)
         //File filtering is handled here 这里处理文件过滤
         if (include.includes(lastName)) {
-          const obj =await getFile(fullPath)
+          const obj = await getFile(fullPath)
           Object.assign(item, obj)
           item.suffix = lastName
           item.fullPath = fullPath.replace(/\\/g, '/')
