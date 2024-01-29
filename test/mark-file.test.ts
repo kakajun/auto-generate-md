@@ -1,11 +1,12 @@
 import { findNodes, deletMark, setNodeMark, witeMarkFile, setmark, deletMarkAll } from '../src/commands/mark-file'
 import { nodeOne, nodesMark, routersMarg } from './utils/nodes'
 import fs from 'fs-extra'
+import { createConsola } from 'consola'
 import { creatFile, creatFileNoimport } from './utils/utils'
 const rootPath = process.cwd().replace(/\\/g, '/')
-import createDebugger from 'debug'
-const debug = createDebugger('mark-file.test')
-debug.enabled = false
+const logger = createConsola({
+  level: 4
+})
 
 describe('mark-file.test的测试', () => {
   test('findNodes--查node', () => {
@@ -19,7 +20,7 @@ describe('mark-file.test的测试', () => {
       creatFile(file)
       setmark(file, 'setmark')
       const str = fs.readFileSync(file, 'utf-8')
-      debug(str, '444')
+      logger.info(str, '444')
       const flag = str.indexOf('setmark') > -1
       expect(flag).toEqual(true)
     } catch (error) {
@@ -48,7 +49,7 @@ describe('mark-file.test的测试', () => {
     ]
     deletMarkAll(nodes, 'setmark')
     const str = fs.readFileSync(file, 'utf-8')
-    debug(str, '444')
+    logger.info(str, '444')
     const flag = str.indexOf('setmark') > -1
     expect(flag).toEqual(false)
   })

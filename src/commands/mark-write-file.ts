@@ -1,4 +1,3 @@
-import createDebugger from 'debug'
 import { findNodes } from './mark-file'
 import type { ItemType } from '../types'
 import fs from 'fs-extra'
@@ -7,8 +6,6 @@ const logger = createConsola({
   level: 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
-const debug = createDebugger('mark-write-file')
-debug.enabled = false
 
 /**
  * 递归文件子依赖创建文件。文件外递归。
@@ -17,9 +14,9 @@ debug.enabled = false
  * @param path - 绝对路径
  */
 export async function markWriteFile(nodes: ItemType[], name: string, path: string): Promise<void> {
-  debug('入参: ', name, path)
+  logger.info('入参: ', name, path)
   const node = findNodes(nodes, path)
-  debug('查找的node: ', node)
+  logger.info('查找的node: ', node)
   if (!node || node.copyed) return
   node.copyed = true
   if (node.belongTo.length > 0) {
@@ -47,7 +44,7 @@ export async function setDispFileNew(pathN: string, name: string): Promise<void>
   try {
     if (await fs.pathExists(writeFileName)) return
     await fs.copy(pathN, writeFileName)
-    debug('写入文件success! : ', writeFileName)
+    logger.success('写入文件success! : ', writeFileName)
   } catch (err) {
     logger.error('文件写入失败')
   }

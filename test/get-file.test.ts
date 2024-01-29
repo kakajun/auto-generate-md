@@ -1,9 +1,10 @@
 import { getFile, getImport, getFileNodes, getNote } from '../src/commands/get-file'
 import { creatFile } from './utils/utils'
-import createDebugger from 'debug'
+import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
-const debug = createDebugger('get-file.test')
-debug.enabled = false
+const logger = createConsola({
+  level: 4
+})
 describe('get-file的测试', () => {
   const nodes = [
     {
@@ -39,13 +40,13 @@ describe('get-file的测试', () => {
       creatFile(file2)
       async function get() {
         const obj = await getFile(file)
-        done()
         expect(obj).toEqual({
           note: '// 我就是个注释',
           rowSize: 4,
           size: 63,
           imports: [rootPath + '/temp/aa.vue']
         })
+        done()
       }
       get()
     } catch (error) {
@@ -53,28 +54,46 @@ describe('get-file的测试', () => {
     }
   })
 
-  test('getImport--获取每个文件依赖的方法', async () => {
+  test('getImport--获取每个文件依赖的方法', (done) => {
     const str = `<script setup>
 import UserRuler from '@/unuse/components/user-rulerts'
 </script>`
-    const sarr = str.split(/[\n]/g)
-    const arrs = await getImport(sarr, rootPath + '/temp/bb.vue')
-    expect(arrs).toMatchObject([rootPath + '/unuse/components/user-rulerts.vue'])
+    try {
+      async function get() {
+        const sarr = str.split(/[\n]/g)
+        const arrs = await getImport(sarr, rootPath + '/temp/bb.vue')
+        expect(arrs).toMatchObject([rootPath + '/unuse/components/user-rulerts.vue'])
+        done()
+      }
+      get()
+    } catch (error) {
+      done(error)
+    }
   })
 
-  test('getFileNodes--生成所有文件的node信息', () => {
-    async function get() {
-      const arrs = await getFileNodes(rootPath + '/src/shared')
-      // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
-      arrs.forEach((item) => {
-        item.size = 0
-      })
-      nodes.forEach((item) => {
-        item.size = 0
-      })
-      expect(arrs).toMatchObject(nodes)
+  test('getFileNodes--生成所有文件的node信息', (done) => {
+    logger.info('我这里来了!!!')
+    // done()
+    try {
+      async function get() {
+        logger.info('我这里来了!!!')
+        const arrs = await getFileNodes(rootPath + '/src/shared')
+        logger.info('我这里来了!!!')
+        // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
+        arrs.forEach((item) => {
+          item.size = 0
+        })
+        nodes.forEach((item) => {
+          item.size = 0
+        })
+        expect(arrs).toMatchObject(nodes)
+        done()
+      }
+      get()
+    } catch (error) {
+      logger.error(error)
+      done(error)
     }
-    get()
   })
 
   test('getImport--获取每个文件依赖的方法', () => {

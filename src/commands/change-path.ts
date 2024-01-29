@@ -55,7 +55,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
   const lastName = path.extname(absoluteImport)
 
   if (!lastName) {
-    const suffixes = ['.js', '.ts', '.vue', '.tsx', '/index.js', '/index.vue']
+    const suffixes = ['.ts', '.vue', '.tsx', '.js', '/index.js', '/index.vue']
     for (const suffix of suffixes) {
       if (fs.existsSync(absoluteImport + suffix)) {
         absoluteImport += suffix
@@ -120,7 +120,7 @@ export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePat
         const obj = changeImport(ele, fullPath, dependencies, nochangePath)
         if (obj && obj.impName) {
           sarr[index] = ele.replace(obj.filePath, obj.impName)
-          logger.info('node: ', node)
+          // logger.info('node: ', node)
           writeFlag = true
         }
       }

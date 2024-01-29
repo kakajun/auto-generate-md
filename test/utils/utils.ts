@@ -1,11 +1,12 @@
 /* 测试公共方法 */
 import fs from 'fs'
-import createDebugger from 'debug'
+import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
-const debug = createDebugger('utils')
-debug.enabled = true
+const logger = createConsola({
+  level: 4
+})
 
-export  function creatFile(file: string) {
+export function creatFile(file: string) {
   const str = `// 我就是个注释
 <script setup>
 import UserRuler from './aa'
@@ -35,6 +36,6 @@ export default {
   try {
     fs.writeFileSync(file, str, { encoding: 'utf8' })
   } catch (error) {
-    debug(error)
+    logger.error(error)
   }
 }

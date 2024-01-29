@@ -1,7 +1,6 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs-extra'
 import type { ItemType } from '../types'
-import createDebugger from 'debug'
 import path from 'path'
 import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
@@ -10,9 +9,6 @@ const logger = createConsola({
   level: 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
-const debug = createDebugger('rename-path')
-debug.enabled = false
-
 /**
  * 将单个字符串的首字母小写
  * @param str 字符串
@@ -114,7 +110,7 @@ async function rewriteFile(node: ItemType) {
  */
 export async function renameFold(node: ItemType) {
   const filename = path.parse(node.fullPath).base
-  debug('filename111: ', filename)
+  logger.info('filename111: ', filename)
   const filter = ['FMEA', 'DVP'] // 把这样子的文件夹过滤
   const falg = filter.some((item) => filename.indexOf(item) > -1)
   if (!falg && checkCamelFile(filename)) {
@@ -140,7 +136,7 @@ export function changePathFold(node: ItemType, obj: { newName: string; filename:
     }
   }
   node.fullPath = node.fullPath.replace(filename, newName)
-  debug(node.fullPath, newName)
+  logger.info(node.fullPath, newName)
   node.name = node.name.replace(filename, newName)
 }
 /**
@@ -156,14 +152,14 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
       const array = node.imports
       for (let j = 0; j < array.length; j++) {
         const ele = array[j]
-        debug('import-ele: ', ele)
+        logger.info('import-ele: ', ele)
         array[j] = toKebabCase(ele)
-        debug('更换import: ', array[j])
+        logger.info('更换import: ', array[j])
       }
     }
     node.fullPath = node.fullPath.replace(filename, newName)
     node.name = node.name.replace(filename, newName)
-    debug('替换后的 node.fullPath:', node.fullPath)
+    logger.success('替换后的 node.fullPath:', node.fullPath)
   }
 }
 
@@ -192,8 +188,8 @@ export async function renameFile(node: ItemType) {
 export async function replaceName(fullPath: string) {
   const filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
-  debug('newName: ', newName)
-  debug('filename: ', filename)
+  // logger.info('newName: ', newName)
+  // logger.info('filename: ', filename)
   const oldPath = fullPath
   const newPath = oldPath.replace(filename, newName)
   // rename之前要判断一下,假如已经有了,那么直接拷贝过去,并且删除原来的
@@ -201,18 +197,18 @@ export async function replaceName(fullPath: string) {
   if (!lastName) {
     // 文件夹, 特殊处理,要copy文件
     if (fs.existsSync(newPath)) {
-      // debug('newPath: ', newPath)
+      // logger.info('newPath: ', newPath)
       await fs.copy(fullPath, newPath)
       fs.removeSync(fullPath) // 删除目录
       return { newName, filename }
     }
   }
-  debug(oldPath, newPath, 'oldPath, newPath')
+  // logger.info(oldPath, newPath, 'oldPath, newPath')
   try {
     const flag = fs.existsSync(oldPath)
     if (flag) {
-      console.log(oldPath, '改名为: ', newPath, '成功')
       await fs.rename(oldPath, newPath)
+      logger.success(oldPath, '改名为: ', newPath)
     } else {
       logger.error(`文件${oldPath}不存在重命名干嘛?`)
     }

@@ -3,14 +3,11 @@ import fs from 'fs'
 // import { readFile, writeFile } from 'fs/promises';
 import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
-import createDebugger from 'debug'
 import { createConsola } from 'consola'
 const logger = createConsola({
   level: 4
 })
-const debug = createDebugger('mark-file')
 const rootPath = process.cwd().replace(/\\/g, '/')
-debug.enabled = false
 type Routers = Array<RouterItem>
 /**
  * @desc: 标记文件主程序
@@ -56,15 +53,14 @@ export async function witeMarkFile(nodes: ItemType[], routers: Routers) {
  * @desc: 分离一个递归调用的mark函数
  */
 export async function setNodeMark(nodes: ItemType[], name: string, path: string) {
-  debug('setNodeMark入参: ', name, path)
-  // debug('nodes: ', nodes)
+  logger.info('setNodeMark入参: ', name, path)
   // 通过文件地址, 找到nodes的依赖地址, 把依赖文件也打标记
   const node = findNodes(nodes, path)
   if (node) {
     // 打标记
     setmark(path, name)
   }
-  // debug('查找的node: ', node)
+  // logger.info('查找的node: ', node)
   if (node && node.imports) {
     // 标记归属设置
     if (node.belongTo.indexOf(name) > -1) return // 已经分析过该文件了, 就不再分析,否则会死循环
@@ -72,7 +68,7 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
     // 找到有子文件了,循环它
     for (let index = 0; index < node.imports.length; index++) {
       const element = node.imports[index]
-      debug('依赖文件: ', element)
+      // logger.info('依赖文件: ', element)
       // 如果文件存在
       if (fs.existsSync(path)) {
         // 继续递归,直到子文件没有子文件
@@ -110,7 +106,7 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
  */
 export function setmark(file: string, name: string) {
   try {
-    debug(`mark preper ${file}`)
+    // logger.info(`mark preper ${file}`)
     let fileStr = fs.readFileSync(file, 'utf-8')
     if (fileStr.indexOf('//' + name + '\n') === 0) {
       // 打过标记了,就不打了
@@ -162,10 +158,10 @@ export function deletMark(file: string, name: string) {
     }
     fileStr = sarr.join('\n')
     fs.writeFileSync(file, fileStr, { encoding: 'utf8' })
-    debug('delete mark successful-------' + file)
+    logger.success('delete mark successful-------' + file)
     return fileStr
   } catch (error) {
-    console.error('删除标记的文件不存在: ', file)
+    logger.error('删除标记的文件不存在: ', file)
   }
   return ''
 }

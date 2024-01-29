@@ -9,15 +9,15 @@ import {
   checkCamelFile
 } from '../src/commands/rename-path'
 import { creatFile } from './utils/utils'
-import createDebugger from 'debug'
+import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
-const debug = createDebugger('rename.test')
-debug.enabled = true
-
+const logger = createConsola({
+  level: 4
+})
 describe('rename.test的测试', () => {
   test('checkCamelFile --检测kebab-case', () => {
     const flag = checkCamelFile('MyTemplate.vue')
-    debug('flag:', flag)
+    logger.info('flag:', flag)
     expect(flag).toEqual(true)
   })
 
@@ -51,7 +51,7 @@ describe('rename.test的测试', () => {
 
   test('changePathName --递归修改文件里面的import', () => {
     changePathName(fileNode, { newName: 'you-template', filename: 'youTemplate' })
-    // debug('tempNode', JSON.stringify(fileNode))
+    // logger.info('tempNode', JSON.stringify(fileNode))
     const finalObj = {
       name: 'you-template',
       isDir: false,

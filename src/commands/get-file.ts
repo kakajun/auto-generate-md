@@ -1,16 +1,37 @@
 /* 获取文件相关方法 */
 import fs from 'fs'
 import path from 'path'
-import { readFile } from 'fs/promises'
-import createDebugger from 'debug'
+import { readFile, readdir } from 'fs/promises'
+import { createConsola } from 'consola'
 import { changeImport } from './change-path'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
-const debug = createDebugger('get-file')
-debug.enabled = false
-const rootPath = process.cwd().replace(/\\/g, '/')
 import { env } from 'node-environment'
+const rootPath = process.cwd().replace(/\\/g, '/')
 const isDev = env() === 'development'
+const logger = createConsola({
+  level: 4
+})
+//File filtering -- full name with suffix required  文件过滤--需要全称带后缀
+const ignore = [
+  'es6',
+  'lib',
+  'jest.config.js',
+  'router',
+  'img',
+  'styles',
+  'node_modules',
+  'LICENSE',
+  '.git',
+  '.github',
+  'dist',
+  '.husky',
+  '.vscode',
+  '.eslintrc.js',
+  'readme-file.js',
+  'readme-md.js'
+]
+
 /**
  * @description:Gets the header comment of the file  获取文件的头部注释
  * @param {*} fullPath
@@ -59,6 +80,56 @@ export async function getImport(sarr: any[], fullPath: string) {
   return imports
 }
 
+// 获取文件或目录的信息
+function getFileInfo(dir: string, item: string, level: number): ItemType {
+  const fullPath = path.join(dir, item)
+  const isDir = fs.lstatSync(fullPath).isDirectory()
+  return {
+    name: item,
+    isDir,
+    level,
+    note: '',
+    imports: new Array(),
+    belongTo: new Array()
+  } as ItemType
+}
+
+// 对文件和目录进行排序
+function sortFiles(files: ItemType[]): ItemType[] {
+  return files.sort((a, b) => {
+    if (!a.isDir && b.isDir) return 1
+    if (a.isDir && !b.isDir) return -1
+    return 0
+  })
+}
+
+// 处理目录
+async function handleDirectory(
+  dir: string,
+  item: ItemType,
+  option: OptionType | undefined,
+  level: number,
+  nodes: ItemType[]
+): Promise<void> {
+  await getFileNodes(path.join(dir, item.name), option, (item.children = []), level + 1)
+  item.fullPath = path.join(dir, item.name).replace(/\\/g, '/')
+  nodes.push(item)
+}
+
+// 处理文件
+async function handleFile(dir: string, item: ItemType, include: string[], nodes: ItemType[]): Promise<void> {
+  const fullPath = path.join(dir, item.name)
+  const suffix = path.extname(fullPath)
+  if (include.includes(suffix)) {
+    const obj = await getFile(fullPath)
+    Object.assign(item, obj)
+    item.suffix = suffix
+    item.fullPath = fullPath.replace(/\\/g, '/')
+    nodes.push(item)
+  }
+}
+
+type OptionType = { ignore: string[]; include: string[] }
 /**
  * @description:Generate node information for all files 生成所有文件的node信息
  * @param {*} dir   要解析的路径
@@ -67,86 +138,32 @@ export async function getImport(sarr: any[], fullPath: string) {
  * @return {*}
  */
 export async function getFileNodes(
-  dir: any = process.cwd(),
-  option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined,
+  dir: string = process.cwd(),
+  option?: OptionType,
   nodes: ItemType[] = [],
   level: number = 0
 ): Promise<ItemType[]> {
-  //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
-  let ignore = [
-    // 'api',
-    // 'src',
-    'bin',
-    'lib',
-    'jest.config.js',
-    'router',
-    'img',
-    'styles',
-    'node_modules',
-    'LICENSE',
-    '.git',
-    '.github',
-    'dist',
-    '.husky',
-    '.vscode',
-    '.eslintrc.js',
-    'readme-file.js',
-    'readme-md.js'
-  ]
-  //File suffix contains only  文件后缀只包含
   let include = isDev ? ['.js', '.vue'] : ['.js', '.vue', '.ts', '.tsx']
+  let finalIgnore: string[] = ignore
   if (option) {
-    ignore = option.ignore || ignore
+    finalIgnore = option.ignore
     include = option.include || include
   }
 
-  const files = fs
-    .readdirSync(dir)
-    .map((item) => {
-      const fullPath = path.join(dir, item)
-      const isDir = fs.lstatSync(fullPath).isDirectory()
-      return {
-        name: item,
-        isDir,
-        level,
-        note: '',
-        imports: new Array(),
-        belongTo: new Array()
-      } as ItemType
-    })
-    //Sort folders and files, otherwise the generated will not correspond to the opening order of the editor 对文件夹和文件进行排序,要不然生成的和编辑器打开的顺序不对应
-    .sort((a, b) => {
-      if (!a.isDir && b.isDir) return 1
-      if (a.isDir && !b.isDir) return -1
-      if ((a.isDir && b.isDir) || (!a.isDir && !b.isDir)) return 0
-      return 0
-    })
-  for (let index = 0; index < files.length; index += 1) {
-    const item = files[index]
-    //Folder filtering is handled here  这里处理文件夹过滤
-    const foldFlag = ignore.findIndex((obj: string) => obj === item.name)
-    if (foldFlag === -1) {
-      const fullPath = path.join(dir, item.name)
-      const isDir = fs.lstatSync(fullPath).isDirectory()
-      if (isDir) {
-        //recursion 递归
-        await getFileNodes(fullPath, option, (item.children = []), level + 1)
-        item.fullPath = fullPath.replace(/\\/g, '/')
-        nodes.push(item)
+  let files = await readdir(dir)
+  const tempFiles = await Promise.all(files.map((item) => getFileInfo(dir, item, level)))
+  sortFiles(tempFiles)
+
+  for (const item of tempFiles) {
+    if (!finalIgnore.includes(item.name)) {
+      if (item.isDir) {
+        await handleDirectory(dir, item, option, level, nodes)
       } else {
-        const i = fullPath.lastIndexOf('.')
-        const lastName = fullPath.substring(i)
-        //File filtering is handled here 这里处理文件过滤
-        if (include.includes(lastName)) {
-          const obj = await getFile(fullPath)
-          Object.assign(item, obj)
-          item.suffix = lastName
-          item.fullPath = fullPath.replace(/\\/g, '/')
-          nodes.push(item)
-        }
+        await handleFile(dir, item, include, nodes)
       }
     }
   }
+  logger.info('nodes: ', nodes)
   return nodes
 }
 

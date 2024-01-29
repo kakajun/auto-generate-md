@@ -2,9 +2,10 @@ import path from 'path'
 import fs from 'fs-extra'
 import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './utils/nodes'
-import createDebugger from 'debug'
-const debug = createDebugger('change-path.test')
-debug.enabled = false
+import { createConsola } from 'consola'
+const logger = createConsola({
+  level: 4
+})
 const rootPath = process.cwd().replace(/\\/g, '/')
 describe('change-path的测试', () => {
   test('getRelatPath--获取相对地址', () => {
@@ -27,7 +28,7 @@ describe('change-path的测试', () => {
       } from '@/unuse/components/user-rulerts'`,
       ['@types/node']
     )
-    debug('arrs: ', arrs)
+    logger.info('arrs: ', arrs)
     expect(arrs).toEqual('@/unuse/components/user-rulerts')
   })
 
@@ -64,10 +65,10 @@ import {
 </script>`
 
       const file = path.resolve(rootPath, node.fullPath)
-      debug('file: ', file)
+      logger.info('file: ', file)
       // 异步写入数据到文件
       fs.writeFileSync(file, str, { encoding: 'utf8' })
-      debug('Write successful')
+      logger.success('Write successful')
       witeFile(node, true).then(() => {
         done()
         const getStr = fs.readFileSync(file, 'utf-8')
