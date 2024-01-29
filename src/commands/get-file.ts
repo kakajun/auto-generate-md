@@ -5,7 +5,7 @@ import { readFile, readdir } from 'fs/promises'
 import { createConsola } from 'consola'
 import { changeImport } from './change-path'
 import { getDependencies } from '../utils/router-utils'
-import type { ItemType } from '../types'
+import type { ItemType, OptionType } from '../types'
 import { env } from 'node-environment'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const isDev = env() === 'development'
@@ -129,7 +129,6 @@ async function handleFile(dir: string, item: ItemType, include: string[], nodes:
   }
 }
 
-type OptionType = { ignore: string[]; include: string[] }
 /**
  * @description:Generate node information for all files 生成所有文件的node信息
  * @param {*} dir   要解析的路径
@@ -146,7 +145,7 @@ export async function getFileNodes(
   let include = isDev ? ['.js', '.vue'] : ['.js', '.vue', '.ts', '.tsx']
   let finalIgnore: string[] = ignore
   if (option) {
-    finalIgnore = option.ignore
+    finalIgnore = option.ignore || ignore
     include = option.include || include
   }
 

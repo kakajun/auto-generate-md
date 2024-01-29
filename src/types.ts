@@ -9,6 +9,11 @@ export interface RouterItem {
   router: Router[]
 }
 
+export interface OptionType {
+  ignore?: string[]
+  include?: string[]
+}
+
 export type ItemType = {
   name: string
   copyed?: boolean

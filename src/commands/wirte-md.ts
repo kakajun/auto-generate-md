@@ -4,6 +4,7 @@ import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import type { ItemType } from '../types'
 import { createConsola } from 'consola'
+
 const logger = createConsola({
   level: 4
 })
@@ -84,7 +85,7 @@ function setCountMd(obj: secoutType): string {
  * @description: Generate MD 生成md
  * @param {object} option
  */
-export async function getMd(option?: { ignore: string[]; include: string[] } | undefined) {
+export async function getMd(option?: { ignore?: string[]; include?: string[] }) {
   logger.success('👉  命令运行位置: ' + process.cwd() + '\n')
   const nodes = await getFileNodes(rootPath, option)
   const countMdObj = getCountMd(nodes)

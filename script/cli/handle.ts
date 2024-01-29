@@ -4,9 +4,9 @@ interface parseType {
   version?: Boolean | undefined
   includes?: string[]
   ignores?: string[]
-  help: Boolean | undefined
-  ignore: string | undefined
-  include: string | undefined
+  help?: Boolean | undefined
+  ignore?: string | undefined
+  include?: string | undefined
 }
 function handle(settings: parseType) {
   if (settings.help) {
