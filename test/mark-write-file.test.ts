@@ -10,7 +10,7 @@ describe('mark-write-file.test的测试', () => {
   test('setDispFileNew--找到文件然后copy文件', (done) => {
     const file = rootPath + '/temp/app-file-test.vue'
     try {
-      fs.ensureDirSync(file)
+      fs.ensureFileSync(file)
       async function get() {
         await setDispFileNew(file, 'base')
         done()

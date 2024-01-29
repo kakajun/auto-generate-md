@@ -19,11 +19,14 @@ describe('change-path的测试', () => {
     )
   })
   test('makeSuffix--得到import', () => {
-    const arrs = getImportName(`import
+    const arrs = getImportName(
+      `import
       { getRelatPath,
          makeSuffix,
          changeImport
-      } from '@/unuse/components/user-rulerts'`, ['@types/node'])
+      } from '@/unuse/components/user-rulerts'`,
+      ['@types/node']
+    )
     debug('arrs: ', arrs)
     expect(arrs).toEqual('@/unuse/components/user-rulerts')
   })
@@ -32,7 +35,8 @@ describe('change-path的测试', () => {
     expect(
       changeImport(
         "import { getRelatPath, makeSuffix, changeImport } from '@/unuse/components/user-rulerts'",
-        path.resolve('unuse/App.vue').replace(/\\/g, '/'), ['@types/node']
+        path.resolve('unuse/App.vue').replace(/\\/g, '/'),
+        ['@types/node']
       )
     ).toEqual({
       filePath: '@/unuse/components/user-rulerts',
@@ -60,6 +64,7 @@ import {
 </script>`
 
       const file = path.resolve(rootPath, node.fullPath)
+      debug('file: ', file)
       // 异步写入数据到文件
       fs.writeFileSync(file, str, { encoding: 'utf8' })
       debug('Write successful')
