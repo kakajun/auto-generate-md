@@ -37,7 +37,6 @@ export function checkCamelFile(fileName: string) {
 
 /**
  * @desc: 循环node, 改文件夹, 并把import 里面不合格的命名改合格
- * @author: majun
  */
 export async function renameFoldPath(nodes: ItemType[]) {
   async function getNode(cpNodes: ItemType[]) {
@@ -55,7 +54,6 @@ export async function renameFoldPath(nodes: ItemType[]) {
 
 /**
  * @desc: 循环node, 改文件, 改依赖, 思路:循环每个文件, 并把import 里面不合格的命名改合格
- * @author: majun
  */
 export async function renameFilePath(nodes: ItemType[]) {
   async function getNode(cpNodes: ItemType[]) {
@@ -112,7 +110,6 @@ async function rewriteFile(node: ItemType) {
 
 /**
  * @desc: 重命名文件夹
- * @author: majun
  * @param {ItemType} node
  */
 export async function renameFold(node: ItemType) {
@@ -132,7 +129,6 @@ export async function renameFold(node: ItemType) {
 
 /**
  * @desc: 重命名后, 子文件都会存在路径的更改,也就要递归处理(既可以处理文件夹, 也可以处理文件)
- * @author: majun
  */
 export function changePathFold(node: ItemType, obj: { newName: string; filename: string }) {
   const { newName, filename } = obj
@@ -149,7 +145,6 @@ export function changePathFold(node: ItemType, obj: { newName: string; filename:
 }
 /**
  * @desc: 递归改所有路径名字
- * @author: majun
  * @param {ItemType} node
  * @param {object} obj
  */
@@ -174,7 +169,6 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
 
 /**
  * @desc: 重命名文件
- * @author: majun
  * @param {ItemType} node
  */
 export async function renameFile(node: ItemType) {

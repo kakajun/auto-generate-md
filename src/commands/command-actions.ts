@@ -16,7 +16,6 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 
 /**
  * @desc: //2.  得到md文档,------------>会写(只生成一个md)
- * @author: majun
  * @param {string} md
  */
 export function getMdAction(md: string) {
@@ -26,7 +25,6 @@ export function getMdAction(md: string) {
 
 /**
  * @desc: 这里做一个前置判断, 如果父路径不是src, 报错, 因为有changepath@符号是指向src的
- * @author: majun
  */
 function checkFold() {
   const foldPath = path.resolve('./').replace(/\\/g, '/')
@@ -43,7 +41,6 @@ function checkFold() {
 
 /**
  * @desc:   //3. 更改所有为绝对路径+ 后缀补全------------>会写(会操作代码)
- * @author: majun
  * @param {Array} nodes
  */
 export async function changePathAction(nodes: ItemType[]) {
@@ -53,7 +50,6 @@ export async function changePathAction(nodes: ItemType[]) {
 
 /**
  * @desc: 修改绝对路径
- * @author: majun
  */
 export async function changeAbsolutePathAction() {}
 
@@ -64,7 +60,7 @@ export async function changesuffixAction(nodes: ItemType[], nochangePath: Boolea
 
 /**
  * @desc:   //4. 打标记 ------------> 会写(会操作代码)   //5. 分文件 ------------> 会写(会另外生成包文件)
- * @author: majun
+
  * @param {Array} nodes
  */
 export async function markFileAction(nodes: ItemType[]) {
@@ -79,7 +75,6 @@ export async function markFileAction(nodes: ItemType[]) {
 
 /**
  * @desc: 5,将打标记的进行copy
- * @author: majun
  * @param {Array} nodes
  */
 export async function witeFileAction(nodes: ItemType[]) {
@@ -92,7 +87,6 @@ export async function witeFileAction(nodes: ItemType[]) {
 }
 // /**
 //  * @desc://6. 得到md对象(只生成一个md)
-//  * @author: majun
 //  * @param {Array} nodes
 //  */
 // async function wirteJsNodesAction(nodes: ItemType[]) {
@@ -103,7 +97,7 @@ export async function witeFileAction(nodes: ItemType[]) {
 
 /**
  * @desc://7. 删除标记
- * @author: majun
+
  * @param {Array} nodes
  */
 export async function deletMarkAction(nodes: ItemType[]) {
@@ -112,7 +106,6 @@ export async function deletMarkAction(nodes: ItemType[]) {
 
 /**
  * @desc://8. 规范命名文件夹kabel-case
- * @author: majun
  * @param {Array} nodes
  */
 export async function renameFoldAction(nodes: ItemType[]) {
@@ -121,7 +114,7 @@ export async function renameFoldAction(nodes: ItemType[]) {
 
 /**
  * @desc://9. 规范命名文件kabel-case
- * @author: majun
+
  * @param {Array} nodes
  */
 export async function renameFileAction(nodes: ItemType[]) {
@@ -130,7 +123,6 @@ export async function renameFileAction(nodes: ItemType[]) {
 
 /**
  * @desc: 执行所有操作
- * @author: majun
  * @param {Array} nodes
  * @param {string} md
  */

@@ -13,7 +13,6 @@ debug.enabled = false
 type Routers = Array<RouterItem>
 /**
  * @desc: 标记文件主程序
- * @author: majun
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
@@ -34,7 +33,6 @@ export async function markFile(nodes: ItemType[], routers: Routers) {
 
 /**
  * @desc: 标记文件主程序
- * @author: majun
  * @param {ItemType} nodes
  * @param {string} rootPath
  */
@@ -55,7 +53,6 @@ export async function witeMarkFile(nodes: ItemType[], routers: Routers) {
 
 /**
  * @desc: 分离一个递归调用的mark函数
- * @author: majun
  */
 export async function setNodeMark(nodes: ItemType[], name: string, path: string) {
   debug('setNodeMark入参: ', name, path)
@@ -88,7 +85,6 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
 
 /**
  * @desc: 递归通过文件全名找节点
- * @author: majun
  * @param {*} nodes
  * @param {*} path
  */
@@ -107,7 +103,7 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
 
 /**
  * @desc: 给文件标记
- * @author: majun
+
  * @param {string} file
  * @param {string} name
  */
@@ -131,7 +127,7 @@ export function setmark(file: string, name: string) {
 
 /**
  * @desc: 递归所有文件,删除所有标记
- * @author: majun
+
  * @param {Array} nodes
  */
 export function deletMarkAll(nodes: ItemType[], name: string) {
@@ -147,7 +143,7 @@ export function deletMarkAll(nodes: ItemType[], name: string) {
 
 /**
  * @desc: 给文件标记
- * @author: majun
+
  * @param {string} file
  * @param {string} name
  */

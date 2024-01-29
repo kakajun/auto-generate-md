@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 import { createConsola } from 'consola'
-import {getDependencies} from '../utils/router-utils';
+import { getDependencies } from '../utils/router-utils';
 import type { ItemType } from '../types'
 const logger = createConsola({
   level: 4 // 设置日志级别为 silent
@@ -11,7 +11,7 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 
 /**
  * @desc: 递归循环所有文件
- * @author: majun
+
  * @param {Array} nodes      整个文件的nodes
  */
 export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
@@ -29,7 +29,6 @@ export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
 
 /**
  * @desc: 这里返回没有@ 符号的路径
- * @author: majun
  * @param {string} absoluteImport  依赖本身名字
  * @param {string} fullPath  文件本身绝对地址
  */
@@ -43,7 +42,7 @@ export function getRelatPath(absoluteImport: string, fullPath: string) {
 
 /**
  * @desc: 补后缀的方法+替换前缀
- * @author: majun
+
  * @param {string} filePath  正则匹配到的依赖路径
  * @param {string} fullPath  本身文件名路径
  * @param {string} impName   正确的名字
@@ -70,7 +69,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
 
 /**
  * @desc: 根据一行代码匹配import的详细内容  TODO 这里还得优化
- * @author: majun
+
  */
 export function getImportName(ele: string, dependencies: string[]) {
   let str = ''
@@ -87,7 +86,6 @@ export function getImportName(ele: string, dependencies: string[]) {
 
 /**
  * @desc: 找到import并返回全路径和原始路径
- * @author: majun
  * @param {string} ele    找到的行引入
  * @param {string} fullPath  文件的全路径
  */
@@ -106,14 +104,12 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
 
 /**
    * @desc:  写文件
-   * @author: majun
-
    * @param {string} file  目标地址
    */
 export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
   const packageJsonPath = path.join(rootPath, 'package.json');
-  let  dependencies=await getDependencies(packageJsonPath)
+  let dependencies = await getDependencies(packageJsonPath)
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = fs.readFileSync(fullPath, 'utf-8')

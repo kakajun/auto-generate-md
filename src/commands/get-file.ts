@@ -36,7 +36,6 @@ export async function getFile(fullPath: string) {
 
 /**
  * @desc: 这是初始化时就获取每个文件依赖的方法, 但要求先补全后缀,否则不灵
- * @author: majun
  * @param {any} sarr
  * @param {string} fullPath
  */

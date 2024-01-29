@@ -13,7 +13,6 @@ const rootPath = process.cwd().replace(/\\/g, '/')
 
 /**
  * @desc: 递归获取路由数组
- * @author: majun
  */
 export async function getRouterFilePath(dir: string): Promise<string[]> {
   const routes: string[] = []
@@ -37,7 +36,7 @@ export async function getRouterFilePath(dir: string): Promise<string[]> {
 
 /**
  * @desc: 获取所有路由
- * @author: majun
+
  */
 export async function getAllRouter(dir: string): Promise<Router[]> {
   const filePaths = await getRouterFilePath(dir)
@@ -52,28 +51,23 @@ export async function getAllRouter(dir: string): Promise<Router[]> {
 }
 /**
  * @desc: 得到路由
- * @author: majun
+
  */
 export async function getRouter(routerPath: string): Promise<Router[]> {
   const routers: Router[] = []
   try {
     // 检查文件是否存在
     await access(routerPath)
-
     const fileContent = await readFile(routerPath, 'utf-8')
     const lines = fileContent.split(/\n/g)
     let currentPath = ''
     let currentComponent = ''
-
     lines.forEach((line) => {
       if (line.includes('//')) return // 跳过注释行
-
       const tempPath = parseRouterPath(line)
       if (tempPath) currentPath = tempPath
-
       const tempComponent = parseComponentPath(line)
       if (tempComponent) currentComponent = tempComponent
-
       if (currentPath && currentComponent) {
         routers.push({ path: currentPath, component: currentComponent })
         currentPath = ''
@@ -90,13 +84,11 @@ export async function getRouter(routerPath: string): Promise<Router[]> {
 
 /**
  * @desc: 获取要操作的路由
- * @author: majun
  */
 export async function getRouterArrs(): Promise<RouterItem[] | null> {
   const pathName = `${rootPath}/classify.js`
   const dir = `${rootPath}/router`
   let routers: RouterItem[] | null = null
-
   try {
     if (await stat(pathName)) {
       routers =await import(pathName)
@@ -113,6 +105,5 @@ export async function getRouterArrs(): Promise<RouterItem[] | null> {
     logger.error('根路径没有发现 classify.js，并且 src 里面没有 router 文件，现在退出')
     process.exit(1)
   }
-
   return routers
 }

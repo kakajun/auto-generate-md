@@ -20,14 +20,11 @@ export async function markWriteFile(nodes: ItemType[], name: string, path: strin
   debug('入参: ', name, path)
   const node = findNodes(nodes, path)
   debug('查找的node: ', node)
-
   if (!node || node.copyed) return
   node.copyed = true
-
   if (node.belongTo.length > 0) {
     await setDispFileNew(path, name)
   }
-
   if (node.imports) {
     for (const element of node.imports) {
       if (await fs.pathExists(element)) {
