@@ -1,10 +1,10 @@
 import fs from 'fs'
 import path from 'path'
 import { createConsola } from 'consola'
-import { getDependencies } from '../utils/router-utils';
+import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -103,12 +103,12 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
 }
 
 /**
-   * @desc:  写文件
-   * @param {string} file  目标地址
-   */
+ * @desc:  写文件
+ * @param {string} file  目标地址
+ */
 export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
-  const packageJsonPath = path.join(rootPath, 'package.json');
+  const packageJsonPath = path.join(rootPath, 'package.json')
   let dependencies = await getDependencies(packageJsonPath)
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件

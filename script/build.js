@@ -1,7 +1,11 @@
 import builder from './builder.js'
+import { createConsola } from 'consola'
+const logger = createConsola({
+  level: 4
+})
 try {
   builder()
-  console.log('Packed! Generated bin and lib files')
+  logger.success('Packed! Generated bin and lib files')
 } catch (error) {
-  console.log('Packaging failed')
+  logger.error('Packaging failed')
 }

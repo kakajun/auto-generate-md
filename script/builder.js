@@ -1,6 +1,5 @@
 import { build } from 'esbuild'
 import fs from 'fs-extra'
-// import { name, version, author } from '../package.json'
 import { dtsPlugin } from 'esbuild-plugin-d.ts'
 import packageJson from '../package.json' assert { type: 'json' };
 

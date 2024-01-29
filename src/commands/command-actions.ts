@@ -9,7 +9,7 @@ import { getRouterArrs } from './get-router'
 import path from 'path'
 import fs from 'fs'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')

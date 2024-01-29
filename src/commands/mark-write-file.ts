@@ -4,7 +4,7 @@ import type { ItemType } from '../types'
 import fs from 'fs-extra'
 import { createConsola } from 'consola'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('mark-write-file')

@@ -5,7 +5,7 @@ import path from 'path'
 import { parseRouterPath, parseComponentPath } from '../utils/router-utils'
 import type { Router, RouterItem } from '../types'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 const debug = createDebugger('get-file')
 debug.enabled = false
@@ -91,7 +91,7 @@ export async function getRouterArrs(): Promise<RouterItem[] | null> {
   let routers: RouterItem[] | null = null
   try {
     if (await stat(pathName)) {
-      routers =await import(pathName)
+      routers = await import(pathName)
     } else {
       // 如果没有classify.js，则直接找路由
       routers = [

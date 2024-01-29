@@ -6,7 +6,7 @@ import type { ItemType } from '../types'
 import { createConsola } from 'consola'
 import createDebugger from 'debug'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('wirte-md')
@@ -88,7 +88,7 @@ function setCountMd(obj: secoutType): string {
  */
 export async function getMd(option?: { ignore: string[] | undefined; include: string[] | undefined } | undefined) {
   logger.success('👉  命令运行位置: ' + process.cwd() + '\n')
-  const nodes =await getFileNodes(rootPath, option)
+  const nodes = await getFileNodes(rootPath, option)
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   logger.success(coutMd)

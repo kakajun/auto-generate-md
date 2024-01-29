@@ -21,7 +21,7 @@ import handle from '../../script/cli/handle'
 
 import { createConsola } from 'consola'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -31,7 +31,7 @@ const { ignores: ignore, includes: include } = handle(options)
 export async function selectCommand() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
   //1. 这里只读文件, ------------>不写
-  const { md, nodes } =await getMd({ ignore, include })
+  const { md, nodes } = await getMd({ ignore, include })
   actionMap.set('help', {
     title: '🙏  帮助',
     value: 'help',

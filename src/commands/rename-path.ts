@@ -4,10 +4,10 @@ import type { ItemType } from '../types'
 import createDebugger from 'debug'
 import path from 'path'
 import { createConsola } from 'consola'
-import {getDependencies} from '../utils/router-utils';
+import { getDependencies } from '../utils/router-utils'
 import { getImportName } from './change-path'
 const logger = createConsola({
-  level: 4 // 设置日志级别为 silent
+  level: 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 const debug = createDebugger('rename-path')
@@ -77,9 +77,9 @@ async function rewriteFile(node: ItemType) {
   let writeFlag = false
   const str = fs.readFileSync(node.fullPath, 'utf-8')
   const sarr = str.split(/[\n]/g)
-   const packageJsonPath = path.join(rootPath, 'package.json');
-   let  dependencies=await getDependencies(packageJsonPath)
-    // 循环处理每一行
+  const packageJsonPath = path.join(rootPath, 'package.json')
+  let dependencies = await getDependencies(packageJsonPath)
+  // 循环处理每一行
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
     if (ele.indexOf('from') > -1) {
