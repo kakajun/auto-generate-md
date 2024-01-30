@@ -14,9 +14,9 @@ const rootPath = process.cwd().replace(/\\/g, '/')
  * @param path - 绝对路径
  */
 export async function markWriteFile(nodes: ItemType[], name: string, path: string): Promise<void> {
-  logger.info('入参: ', name, path)
+  // logger.info('入参: ', name, path)
   const node = findNodes(nodes, path)
-  logger.info('查找的node: ', node)
+  // logger.info('查找的node: ', node)
   if (!node || node.copyed) return
   node.copyed = true
   if (node.belongTo.length > 0) {
