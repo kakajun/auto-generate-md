@@ -6,8 +6,8 @@ const logger = createConsola({
 })
 
 async function get() {
-  const arrs = await getFileNodes(rootPath + '/unuse/test')
-  logger.info('arrs: ', arrs)
+  const arrs = await getFileNodes(rootPath + '/unuse/components')
+  logger.info('arrs: ', JSON.stringify(arrs))
   logger.info('我这里来了!!!')
 }
 get()

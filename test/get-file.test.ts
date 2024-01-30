@@ -1,37 +1,57 @@
-import { getFile, getImport, getFileNodes, getNote } from '../src/commands/get-file'
+import { getFile, getImport, getFileNodes, getNote, setMd } from '../src/commands/get-file'
 import { creatFile } from './utils/utils'
+import type { ItemType } from '../src/types'
+import deepNodes from './utils/deep-nodes'
 import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const logger = createConsola({
   level: 4
 })
-describe('get-file的测试', () => {
-  const nodes = [
-    {
-      name: 'index.js',
-      isDir: false,
-      level: 0,
-      note: '/* 我就是个测试 */',
-      imports: ['D:/gitwork/auto-generate-md/unuse/app.vue'],
-      belongTo: [],
-      size: 62,
-      rowSize: 4,
-      suffix: '.js',
-      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/index.js'
-    },
-    {
-      name: 'user-rulerts.vue',
-      isDir: false,
-      level: 0,
-      note: '',
-      imports: ['D:/gitwork/auto-generate-md/unuse/test/test/deep/user.vue'],
-      belongTo: [],
-      size: 2503,
-      rowSize: 105,
-      suffix: '.vue',
-      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/user-rulerts.vue'
+
+// 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
+// 递归树结构设置size为0
+function setSize(temparrs: any[]) {
+  temparrs.forEach((item) => {
+    item.size = 0
+    if (item.children) {
+      setSize(item.children)
     }
-  ]
+  })
+}
+
+describe('setMd', () => {
+  it('should correctly format the string for a directory', () => {
+    const obj: ItemType = {
+      name: 'dir',
+      isDir: true,
+      level: 1,
+      note: '',
+      fullPath: '',
+      belongTo: [],
+      imports: []
+    }
+
+    const result = setMd(obj, false)
+
+    expect(result).toEqual('│ ├── dir\n')
+  })
+
+  it('should correctly format the string for a file', () => {
+    const obj: ItemType = {
+      name: 'file.js',
+      isDir: false,
+      level: 1,
+      note: 'note',
+      fullPath: '',
+      belongTo: [],
+      imports: []
+    }
+    const result = setMd(obj, true)
+    expect(result).toEqual('│ └── file.js            note\n')
+  })
+})
+
+describe('get-file的测试', () => {
   test('getFile--获取注释', (done) => {
     const file = rootPath + '/temp/app-file-test.vue'
     const file2 = rootPath + '/temp/aa.vue'
@@ -74,16 +94,12 @@ import UserRuler from '@/unuse/components/user-rulerts'
   test('getFileNodes--生成所有文件的node信息', (done) => {
     try {
       async function get() {
-        const arrs = await getFileNodes(rootPath + '/unuse/test')
-        // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
-        arrs.forEach((item) => {
-          item.size = 0
-        })
-        nodes.forEach((item) => {
-          item.size = 0
-        })
-        console.log(JSON.stringify(nodes), 'arrs')
-        expect(arrs).toMatchObject(nodes)
+        const arrs = await getFileNodes(rootPath + '/unuse/components')
+        setSize(arrs)
+        setSize(deepNodes)
+        // console.log(JSON.stringify(deepNodes), 'arrs')
+        expect(arrs).toMatchObject(deepNodes)
+
         done()
       }
       get()
@@ -93,10 +109,20 @@ import UserRuler from '@/unuse/components/user-rulerts'
     }
   })
 
-  test('getImport--获取每个文件依赖的方法', () => {
-    const notes = ['├── index.js            /* 我就是个测试 */\n', '└── user-rulerts.vue            \n']
-    const arrs = getNote(nodes)
-    console.log(JSON.stringify(arrs), 'arrs')
-    expect(arrs).toMatchObject(notes)
+  test('getImport--获取每个文件依赖的方法', (done) => {
+    try {
+      async function get() {
+        const notes = await getFileNodes(rootPath + '/unuse/components')
+        setSize(notes)
+        const arrs = getNote(notes)
+        console.log(JSON.stringify(arrs), 'arrs')
+        expect(arrs).toMatchObject(notes)
+        done()
+      }
+      get()
+    } catch (error) {
+      logger.error(error)
+      done(error)
+    }
   })
 })

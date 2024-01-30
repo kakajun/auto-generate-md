@@ -6,9 +6,9 @@ import { readFile, readdir } from 'fs/promises'
 import { changeImport } from './change-path'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType, OptionType } from '../types'
-import { env } from 'node-environment'
+// import { env } from 'node-environment'
 const rootPath = process.cwd().replace(/\\/g, '/')
-const isDev = env() === 'development'
+// const isDev = env() === 'development'
 // import { createConsola } from 'consola'
 // const logger = createConsola({
 //   level: 4
@@ -143,7 +143,7 @@ export async function getFileNodes(
   nodes: ItemType[] = [],
   level: number = 0
 ): Promise<ItemType[]> {
-  let include = isDev ? ['.js', '.vue'] : ['.js', '.vue', '.ts', '.tsx']
+  let include = ['.js', '.vue', '.ts', '.tsx']
   let finalIgnore: string[] = ignore
   if (option) {
     finalIgnore = option.ignore || ignore
@@ -173,17 +173,18 @@ export async function getFileNodes(
  * @param {string} keys
  * @return {*}
  */
-export function getNote(datas: ItemType[], keys?: string[]) {
+export function getNote(datas: ItemType[], keys?: string[]): string[] {
   const nodes = keys || []
-  datas.forEach((obj: ItemType, index: Number) => {
+  for (let index = 0; index < datas.length; index++) {
+    const obj = datas[index]
     const last = index === datas.length - 1
+    const md = setMd(obj, last)
+    nodes.push(md)
     if (obj.children) {
       //fold
       getNote(obj.children, nodes)
     }
-    const md = setMd(obj, last)
-    nodes.push(md)
-  })
+  }
   return nodes
 }
 
@@ -193,7 +194,7 @@ export function getNote(datas: ItemType[], keys?: string[]) {
  * @param {Boolean} last  Is it the last one  是不是最后一个
  * @return {*}
  */
-function setMd(obj: ItemType, last: Boolean): string {
+export function setMd(obj: ItemType, last: Boolean): string {
   let filesString = ''
   const blank = '│ '.repeat(obj.level) // 重复空白
   const pre = `${blank}${last ? '└──' : '├──'} ${obj.name}`
