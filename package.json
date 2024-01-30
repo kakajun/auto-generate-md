@@ -14,11 +14,11 @@
   "main": "lib/src/index.js",
   "module": "es6/src/index.js",
   "bin": {
-    "agmd": "./lib/src/bin.js"
+    "agmd": "lib/src/bin.js"
   },
   "scripts": {
     "build": "tsc&&tsc --project tsconfig.es6.json",
-    "devtsc": "tsc --watch src/commands/agmd.ts",
+    "devtsc": "tsc --watch --noEmit --strict src/commands/agmd.ts",
     "cli": "ts-node src/bin.ts",
     "dev": "ts-node-dev src/commands/agmd.ts",
     "agmd": "npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue",

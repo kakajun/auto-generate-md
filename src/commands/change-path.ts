@@ -109,7 +109,7 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
 export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
   const packageJsonPath = path.join(rootPath, 'package.json')
-  let dependencies = await getDependencies(packageJsonPath)
+  const dependencies = await getDependencies(packageJsonPath)
   try {
     let writeFlag = false // 如果啥都没改, 不更新文件
     let fileStr = await readFile(fullPath, 'utf-8')

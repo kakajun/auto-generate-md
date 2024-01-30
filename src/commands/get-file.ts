@@ -63,7 +63,7 @@ export async function getFile(fullPath: string) {
  */
 export async function getImport(sarr: any[], fullPath: string) {
   const packageJsonPath = path.join(rootPath, 'package.json')
-  let dependencies = await getDependencies(packageJsonPath)
+  const dependencies = await getDependencies(packageJsonPath)
   // 这里获取每个文件的import路径
   const imports: string[] = []
   sarr.forEach((ele: string) => {
@@ -149,7 +149,7 @@ export async function getFileNodes(
     include = option.include || include
   }
 
-  let files = await readdir(dir)
+  const files = await readdir(dir)
   const tempFiles = await Promise.all(files.map((item) => getFileInfo(dir, item, level)))
   sortFiles(tempFiles)
 

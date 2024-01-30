@@ -74,7 +74,7 @@ async function rewriteFile(node: ItemType) {
   const str = fs.readFileSync(node.fullPath, 'utf-8')
   const sarr = str.split(/[\n]/g)
   const packageJsonPath = path.join(rootPath, 'package.json')
-  let dependencies = await getDependencies(packageJsonPath)
+  const dependencies = await getDependencies(packageJsonPath)
   // 循环处理每一行
   for (let index = 0; index < sarr.length; index++) {
     const ele = sarr[index]
