@@ -1,6 +1,10 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs-extra'
 import type { ItemType } from '../types'
+import {
+  readFile
+  //  writeFile
+} from 'fs/promises'
 import path from 'path'
 import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
@@ -71,7 +75,7 @@ export async function renameFilePath(nodes: ItemType[]) {
 
 async function rewriteFile(node: ItemType) {
   let writeFlag = false
-  const str = fs.readFileSync(node.fullPath, 'utf-8')
+  const str = await readFile(node.fullPath, 'utf-8')
   const sarr = str.split(/[\n]/g)
   const packageJsonPath = path.join(rootPath, 'package.json')
   const dependencies = await getDependencies(packageJsonPath)

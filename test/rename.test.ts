@@ -74,7 +74,7 @@ describe('rename.test的测试', () => {
     async function get() {
       try {
         fs.ensureDirSync(foldPath2)
-        creatFile(file)
+        await  creatFile(file)
         await replaceName(foldPath2)
         const flag = fs.existsSync(rootPath + '/temp/check-test-kable-case2')
         expect(flag).toEqual(true)
@@ -97,7 +97,7 @@ describe('rename.test的测试', () => {
       try {
         fs.ensureDirSync(foldPath)
         fs.ensureDirSync(foldPath2)
-        creatFile(file)
+        await  creatFile(file)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
         const flag2 = fs.existsSync(file2)
@@ -118,7 +118,7 @@ describe('rename.test的测试', () => {
     async function get() {
       try {
         fs.ensureDirSync(foldPath)
-        creatFile(file)
+        await creatFile(file)
         await renameFilePath(nodesThree)
         const flag = fs.existsSync(finalPath)
         expect(flag).toEqual(true)

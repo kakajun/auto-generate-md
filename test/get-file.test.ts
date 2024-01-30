@@ -56,9 +56,9 @@ describe('get-file的测试', () => {
     const file = rootPath + '/temp/app-file-test.vue'
     const file2 = rootPath + '/temp/aa.vue'
     try {
-      creatFile(file)
-      creatFile(file2)
       async function get() {
+        await creatFile(file)
+        await creatFile(file2)
         const obj = await getFile(file)
         expect(obj).toEqual({
           note: '// 我就是个注释',

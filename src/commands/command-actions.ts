@@ -1,13 +1,14 @@
 /* 界面命令注册在这里 */
 import type { ItemType } from '../types'
 import { wirteMd } from './wirte-md'
+import { writeFile } from 'fs/promises'
 import { renameFoldPath, renameFilePath } from './rename-path'
 import { createConsola } from 'consola'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
 import { getRouterArrs } from './get-router'
 import path from 'path'
-import fs from 'fs'
+
 const logger = createConsola({
   level: 4
 })
@@ -66,7 +67,7 @@ export async function changesuffixAction(nodes: ItemType[], nochangePath: Boolea
 export async function markFileAction(nodes: ItemType[]) {
   checkFold()
   const routers = await getRouterArrs()
-  fs.writeFileSync(rootPath + '/router-file.js', 'const router=' + JSON.stringify(routers), { encoding: 'utf8' })
+  await writeFile(rootPath + '/router-file.js', 'const router=' + JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
     await markFile(nodes, routers)
     await wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
@@ -101,7 +102,7 @@ export async function witeFileAction(nodes: ItemType[]) {
  * @param {Array} nodes
  */
 export async function deletMarkAction(nodes: ItemType[]) {
-  deletMarkAll(nodes, 'mark')
+  await deletMarkAll(nodes, 'mark')
 }
 
 /**

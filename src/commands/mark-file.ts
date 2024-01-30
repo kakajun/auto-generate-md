@@ -1,6 +1,6 @@
 /* 给路由文件打标记, 把标记打到最后,因为头部已经给了注释 */
 import fs from 'fs'
-// import { readFile, writeFile } from 'fs/promises';
+import { readFile, writeFile } from 'fs/promises'
 import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
 import { createConsola } from 'consola'
@@ -12,7 +12,7 @@ type Routers = Array<RouterItem>
 /**
  * @desc: 标记文件主程序
  * @param {ItemType} nodes
- * @param {string} rootPath
+ * @param {string} routers
  */
 export async function markFile(nodes: ItemType[], routers: Routers) {
   for (let i = 0; i < routers.length; i++) {
@@ -58,7 +58,7 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
   const node = findNodes(nodes, path)
   if (node) {
     // 打标记
-    setmark(path, name)
+    await setmark(path, name)
   }
   // logger.info('查找的node: ', node)
   if (node && node.imports) {
@@ -99,26 +99,26 @@ export function findNodes(nodes: ItemType[], path: string): ItemType | null {
 }
 
 /**
- * @desc: 给文件标记
-
- * @param {string} file
- * @param {string} name
+ * 给文件添加标记
+ * @param {string} file - 文件路径
+ * @param {string} name - 标记名称
  */
-export function setmark(file: string, name: string) {
+export async function setmark(file: string, name: string): Promise<void> {
   try {
-    // logger.info(`mark preper ${file}`)
-    let fileStr = fs.readFileSync(file, 'utf-8')
-    if (fileStr.indexOf('//' + name + '\n') === 0) {
-      // 打过标记了,就不打了
-      return
+    // 读取文件内容
+    let fileStr = await readFile(file, 'utf-8')
+    const mark = `//${name}\n`
+
+    // 检查文件是否已经包含标记
+    if (!fileStr.startsWith(mark)) {
+      // 在文件内容前添加标记
+      fileStr = mark + fileStr
+      await writeFile(file, fileStr)
+      logger.info(`Mark added successfully to: ${file}`)
     }
-    // 直接打上标记
-    fileStr = '//' + name + '\n' + fileStr
-    fs.writeFileSync(file, fileStr)
-    logger.info(`mark successful-------: ${file}`)
   } catch (error) {
-    logger.error(`给文件打标记的文件不存在: ${file}`)
-    return
+    // 提供详细的错误信息
+    logger.error(`Error marking file: ${file}, Error: ${error}`)
   }
 }
 
@@ -127,15 +127,15 @@ export function setmark(file: string, name: string) {
 
  * @param {Array} nodes
  */
-export function deletMarkAll(nodes: ItemType[], name: string) {
-  function find(objs: ItemType[]) {
+export async function deletMarkAll(nodes: ItemType[], name: string): Promise<void> {
+  async function find(objs: ItemType[]) {
     for (let index = 0; index < objs.length; index++) {
       const element = objs[index]
       if (element.children) find(element.children)
-      else deletMark(element.fullPath, name)
+      else await deletMark(element.fullPath, name)
     }
   }
-  find(nodes)
+  await find(nodes)
 }
 
 /**
@@ -144,10 +144,10 @@ export function deletMarkAll(nodes: ItemType[], name: string) {
  * @param {string} file
  * @param {string} name
  */
-export function deletMark(file: string, name: string) {
+export async function deletMark(file: string, name: string): Promise<string> {
   let fileStr = ''
   try {
-    fileStr = fs.readFileSync(file, 'utf-8')
+    fileStr = await readFile(file, 'utf-8')
     const sarr = fileStr.split(/[\n]/g)
     for (let index = 0; index < sarr.length; index++) {
       const ele = sarr[index]
@@ -157,7 +157,7 @@ export function deletMark(file: string, name: string) {
       }
     }
     fileStr = sarr.join('\n')
-    fs.writeFileSync(file, fileStr, { encoding: 'utf8' })
+    await writeFile(file, fileStr, { encoding: 'utf8' })
     logger.success('delete mark successful-------' + file)
     return fileStr
   } catch (error) {

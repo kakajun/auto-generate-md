@@ -1,5 +1,5 @@
 import path from 'path'
-import fs from 'fs-extra'
+import { readFile, writeFile } from 'fs/promises'
 import { getRelatPath, makeSuffix, changeImport, writeToFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './utils/nodes'
 import { createConsola } from 'consola'
@@ -66,14 +66,17 @@ import {
 
       const file = path.resolve(rootPath, node.fullPath)
       logger.info('file: ', file)
-      // 异步写入数据到文件
-      fs.writeFileSync(file, str, { encoding: 'utf8' })
-      logger.success('Write successful')
-      writeToFile(node, true).then(() => {
-        done()
-        const getStr = fs.readFileSync(file, 'utf-8')
+
+      async function get() {
+        // 异步写入数据到文件
+        await writeFile(file, str, { encoding: 'utf8' })
+        logger.success('Write successful')
+        await writeToFile(node, true)
+        const getStr = await readFile(file, 'utf-8')
         expect(getStr).toEqual(finalStr)
-      })
+        done()
+      }
+      get()
     } catch (error) {
       done(error)
     }
