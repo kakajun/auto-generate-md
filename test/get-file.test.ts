@@ -115,8 +115,16 @@ import UserRuler from '@/unuse/components/user-rulerts'
         const notes = await getFileNodes(rootPath + '/unuse/components')
         setSize(notes)
         const arrs = getNote(notes)
-        console.log(JSON.stringify(arrs), 'arrs')
-        expect(arrs).toMatchObject(notes)
+        const final = [
+          '├── test\n',
+          '│ └── deep\n',
+          '│ │ └── user.vue            //2工程\n',
+          '├── test2\n',
+          '│ └── HelloWorld.vue            //2工程\n',
+          '└── user-rulerts.vue            \n'
+        ]
+        // console.log(JSON.stringify(arrs), 'arrs')
+        expect(arrs).toMatchObject(final)
         done()
       }
       get()
