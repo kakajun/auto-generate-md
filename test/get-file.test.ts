@@ -1,7 +1,7 @@
 import { getFile, getImport, getFileNodes, getNote, setMd } from '../src/commands/get-file'
 import { creatFile } from './utils/utils'
 import type { ItemType } from '../src/types'
-import deepNodes from './utils/deep-nodes'
+import deepNodes from './utils/deep-nodes-test'
 import { createConsola } from 'consola'
 const rootPath = process.cwd().replace(/\\/g, '/')
 const logger = createConsola({

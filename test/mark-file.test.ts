@@ -1,5 +1,5 @@
 import { findNodes, deletMark, setNodeMark, witeMarkFile, setmark, deletMarkAll } from '../src/commands/mark-file'
-import { nodeOne, nodesMark, routersMarg } from './utils/nodes'
+import { nodeOne, nodesMark, routersMarg } from './utils/nodes-test'
 import fs from 'fs-extra'
 import {
   readFile

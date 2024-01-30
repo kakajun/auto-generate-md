@@ -3,7 +3,7 @@ import fs from 'fs-extra'
 const rootPath = process.cwd().replace(/\\/g, '/')
 
 import { setDispFileNew, markWriteFile } from '../src/commands/mark-write-file'
-import { nodeOne } from './utils/nodes'
+import { nodeOne } from './utils/nodes-test'
 // const logger = createConsola({
 //   level: 4
 // })

@@ -4,6 +4,7 @@ import { generateAllAction } from './command-actions'
 import { getMd } from './wirte-md'
 import stringToArgs from '../../script/cli'
 import handle from '../../script/cli/handle'
+
  async function main() {
   const options = stringToArgs(process.argv)
   const { ignores: ignore, includes: include } = handle(options)

@@ -1,7 +1,7 @@
 import type { ItemType } from '../src/types'
 
 import { getCountMd, setCountMd } from '../src/commands/wirte-md'
-import { nodeOne } from './utils/nodes'
+import { nodeOne } from './utils/nodes-test'
 
 describe('getCountMd', () => {
   it('should correctly count the total number of rows and size', () => {

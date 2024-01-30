@@ -1,7 +1,7 @@
 import path from 'path'
 import { readFile, writeFile } from 'fs/promises'
 import { getRelatPath, makeSuffix, changeImport, writeToFile, getImportName } from '../src/commands/change-path'
-import { nodeOne } from './utils/nodes'
+import { nodeOne } from './utils/nodes-test'
 import { createConsola } from 'consola'
 const logger = createConsola({
   level: 4

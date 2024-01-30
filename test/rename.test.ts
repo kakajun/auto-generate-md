@@ -1,4 +1,4 @@
-import { foldNode, fileNode, nodesTwo, nodesThree } from './utils/nodes'
+import { foldNode, fileNode, nodesTwo, nodesThree } from './utils/nodes-test'
 import fs from 'fs-extra'
 import {
   renameFilePath,
@@ -74,7 +74,7 @@ describe('rename.test的测试', () => {
     async function get() {
       try {
         fs.ensureDirSync(foldPath2)
-        await  creatFile(file)
+        await creatFile(file)
         await replaceName(foldPath2)
         const flag = fs.existsSync(rootPath + '/temp/check-test-kable-case2')
         expect(flag).toEqual(true)
@@ -97,7 +97,7 @@ describe('rename.test的测试', () => {
       try {
         fs.ensureDirSync(foldPath)
         fs.ensureDirSync(foldPath2)
-        await  creatFile(file)
+        await creatFile(file)
         await renameFoldPath(nodesTwo)
         const flag = fs.existsSync(finalPath)
         const flag2 = fs.existsSync(file2)
