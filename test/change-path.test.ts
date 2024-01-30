@@ -1,6 +1,6 @@
 import path from 'path'
 import fs from 'fs-extra'
-import { getRelatPath, makeSuffix, changeImport, witeFile, getImportName } from '../src/commands/change-path'
+import { getRelatPath, makeSuffix, changeImport, writeToFile, getImportName } from '../src/commands/change-path'
 import { nodeOne } from './utils/nodes'
 import { createConsola } from 'consola'
 const logger = createConsola({
@@ -46,7 +46,7 @@ describe('change-path的测试', () => {
     })
   })
 
-  test('witeFile--更改不规范path', (done) => {
+  test('writeToFile--更改不规范path', (done) => {
     try {
       const node = nodeOne[0]
       // 1. 随机创建一个文件
@@ -69,7 +69,7 @@ import {
       // 异步写入数据到文件
       fs.writeFileSync(file, str, { encoding: 'utf8' })
       logger.success('Write successful')
-      witeFile(node, true).then(() => {
+      writeToFile(node, true).then(() => {
         done()
         const getStr = fs.readFileSync(file, 'utf-8')
         expect(getStr).toEqual(finalStr)

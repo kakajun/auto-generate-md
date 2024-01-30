@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile } from 'fs/promises'
 import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
@@ -21,7 +21,7 @@ export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
       if (ele.children) {
         await getNode(ele.children)
       } else {
-        await witeFile(ele, true, nochangePath)
+        await writeToFile(ele, true, nochangePath)
       }
     }
   }
@@ -106,44 +106,46 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
  * @desc:  写文件
  * @param {string} file  目标地址
  */
-export async function witeFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
+export async function writeToFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
   const { fullPath } = node
   const packageJsonPath = path.join(rootPath, 'package.json')
   const dependencies = await getDependencies(packageJsonPath)
+
   try {
-    let writeFlag = false // 如果啥都没改, 不更新文件
-    let fileStr = await readFile(fullPath, 'utf-8')
-    const sarr = fileStr.split(/[\n]/g)
-    for (let index = 0; index < sarr.length; index++) {
-      const ele = sarr[index]
-      if (ele.indexOf('from') > -1 && isRelative) {
-        const obj = changeImport(ele, fullPath, dependencies, nochangePath)
+    const fileStr = await readFile(fullPath, 'utf-8')
+    const lines = fileStr.split(/[\n]/g)
+
+    // 使用 map() 来处理每一行
+    const updatedLines = lines.map((line) => {
+      if (line.includes('from') && isRelative) {
+        const obj = changeImport(line, fullPath, dependencies, nochangePath)
         if (obj && obj.impName) {
-          sarr[index] = ele.replace(obj.filePath, obj.impName)
-          // logger.info('node: ', node)
-          writeFlag = true
+          // 使用模板字符串来增加可读性
+          logger.info(`Updating import in node: ${node}`)
+          return line.replace(obj.filePath, obj.impName)
         }
       }
-    }
-    if (writeFlag) {
-      fileStr = sarr.join('\n')
-      // 异步写入数据到文件
-      fs.writeFileSync(fullPath, fileStr, { encoding: 'utf8' })
+      return line
+    })
+
+    // 检查是否有任何变化
+    if (updatedLines.join('\n') !== fileStr) {
+      await writeFile(fullPath, updatedLines.join('\n'), 'utf-8')
       logger.success(`Write file successful: ${fullPath}`)
     }
   } catch (error) {
-    logger.error(`读取文件失败,文件名: ${fullPath} `)
+    // 提供更详细的错误信息
+    logger.error(`Error reading file: ${fullPath}, Error: ${error}`)
   }
 }
-
 /**
  * @description: Write the result to JS file 把结果写入到js文件
  * @param {data}  要写的数据
  * @return {fileName}  要写入文件地址
  */
-export function wirteJsNodes(data: string, filePath: string): void {
+export async function wirteJsNodes(data: string, filePath: string): Promise<void> {
   const file = path.resolve(rootPath, filePath)
   const content = `export default ${data}`
-  fs.writeFileSync(file, content, { encoding: 'utf8' })
+  await writeFile(file, content, { encoding: 'utf8' })
   logger.success(`Write file successful: ${filePath}`)
 }

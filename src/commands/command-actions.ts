@@ -69,7 +69,7 @@ export async function markFileAction(nodes: ItemType[]) {
   fs.writeFileSync(rootPath + '/router-file.js', 'const router=' + JSON.stringify(routers), { encoding: 'utf8' })
   if (routers) {
     await markFile(nodes, routers)
-    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
+    await wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   }
 }
 
@@ -135,6 +135,6 @@ export async function generateAllAction(nodes: ItemType[], md: string) {
     await markFileAction(nodes)
     // copy文件一定是建立在打标记的基础上
     await witeMarkFile(nodes, routers)
-    wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
+    await wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   }
 }

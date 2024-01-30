@@ -7,7 +7,6 @@ import { access, readFile } from 'fs/promises';
  */
 export function parseRouterPath(line: string): string {
   const pathRegex = /path:\s*['"]([^'"]+)['"]/
-  // const pathRegex = /path: [\'|\"](.*)[\'|\"]/
   const match = line.match(pathRegex)
   return match ? match[1] : ''
 }
