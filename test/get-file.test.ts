@@ -12,12 +12,12 @@ describe('get-file的测试', () => {
       isDir: false,
       level: 0,
       note: '/* 我就是个测试 */',
-      imports: ['D:/gitwork/auto-generate-md/unuse/app.vue'],
+      imports: rootPath + ['/unuse/app.vue'],
       belongTo: [],
       size: 0,
       rowSize: 4,
       suffix: '.js',
-      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/index.js'
+      fullPath: rootPath + '/unuse/test/index.js'
     }
   ]
   test('getFile--获取注释', (done) => {
