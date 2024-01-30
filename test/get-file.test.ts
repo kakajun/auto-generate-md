@@ -12,7 +12,7 @@ describe('get-file的测试', () => {
       isDir: false,
       level: 0,
       note: '/* 我就是个测试 */',
-      imports: rootPath + ['/unuse/app.vue'],
+      imports: [rootPath + '/unuse/app.vue'],
       belongTo: [],
       size: 0,
       rowSize: 4,
@@ -70,7 +70,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
         nodes.forEach((item) => {
           item.size = 0
         })
-        console.log(JSON.stringify(nodes), 'arrs')
+        // console.log(JSON.stringify(nodes), 'arrs')
         expect(arrs).toMatchObject(nodes)
         done()
       }
@@ -84,7 +84,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
   test('getImport--获取每个文件依赖的方法', () => {
     const notes = ['└── index.js            /* 我就是个测试 */\n']
     const arrs = getNote(nodes)
-    console.log(JSON.stringify(arrs), 'arrs')
+    // console.log(JSON.stringify(arrs), 'arrs')
     expect(arrs).toMatchObject(notes)
   })
 })
