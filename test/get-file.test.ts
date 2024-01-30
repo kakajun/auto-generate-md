@@ -8,28 +8,16 @@ const logger = createConsola({
 describe('get-file的测试', () => {
   const nodes = [
     {
-      name: 'constant.ts',
+      name: 'index.js',
       isDir: false,
       level: 0,
-      note: '/* 解析package */',
-      imports: [rootPath + '/package.json'],
+      note: '/* 我就是个测试 */',
+      imports: ['D:/gitwork/auto-generate-md/unuse/app.vue'],
       belongTo: [],
-      size: 175,
-      rowSize: 9,
-      suffix: '.ts',
-      fullPath: rootPath + '/src/shared/constant.ts'
-    },
-    {
-      name: 'logger.ts',
-      isDir: false,
-      level: 0,
-      note: '/* 打个漂亮日志 */',
-      imports: [],
-      belongTo: [],
-      size: 440,
-      rowSize: 20,
-      suffix: '.ts',
-      fullPath: rootPath + '/src/shared/logger.ts'
+      size: 0,
+      rowSize: 4,
+      suffix: '.js',
+      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/index.js'
     }
   ]
   test('getFile--获取注释', (done) => {
@@ -72,13 +60,9 @@ import UserRuler from '@/unuse/components/user-rulerts'
   })
 
   test('getFileNodes--生成所有文件的node信息', (done) => {
-    logger.info('我这里来了!!!')
-    // done()
     try {
       async function get() {
-        logger.info('我这里来了!!!')
-        const arrs = await getFileNodes(rootPath + '/src/shared')
-        logger.info('我这里来了!!!')
+        const arrs = await getFileNodes(rootPath + '/unuse/test')
         // 由于linux的空格数和window的空格数不一样, 所以size始终不一样, 无法测试, 所以这里干掉size
         arrs.forEach((item) => {
           item.size = 0
@@ -86,6 +70,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
         nodes.forEach((item) => {
           item.size = 0
         })
+        console.log(JSON.stringify(nodes), 'arrs')
         expect(arrs).toMatchObject(nodes)
         done()
       }
@@ -97,9 +82,9 @@ import UserRuler from '@/unuse/components/user-rulerts'
   })
 
   test('getImport--获取每个文件依赖的方法', () => {
-    const notes = ['├── constant.ts            /* 解析package */\n', '└── logger.ts            /* 打个漂亮日志 */\n']
+    const notes = ['└── index.js            /* 我就是个测试 */\n']
     const arrs = getNote(nodes)
-    // console.log(JSON.stringify(arrs), 'arrs')
+    console.log(JSON.stringify(arrs), 'arrs')
     expect(arrs).toMatchObject(notes)
   })
 })
