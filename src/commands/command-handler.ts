@@ -9,8 +9,8 @@ import {
   witeFileAction,
   deletMarkAction,
   renameFoldAction,
-  renameFileAction,
-  generateAllAction
+  renameFileAction
+  // generateAllAction
 } from './command-actions'
 import { VERSION, PKG_NAME } from '../shared/constant'
 import help from '../../script/help/index'
@@ -38,12 +38,12 @@ export async function selectCommand() {
     selected: true,
     action: () => help()
   })
-  actionMap.set('Generate All', {
-    title: '🚘  执行所有操作',
-    value: 'Generate All',
-    selected: true,
-    action: () => generateAllAction(nodes, md)
-  })
+  // actionMap.set('Generate All', {
+  //   title: '🚘  执行所有操作',
+  //   value: 'Generate All',
+  //   selected: true,
+  //   action: () => generateAllAction(nodes, md)
+  // })
   actionMap.set('Generate MD', {
     title: '📅  生成结构树文档',
     value: 'Generate MD',

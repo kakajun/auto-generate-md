@@ -12,12 +12,24 @@ describe('get-file的测试', () => {
       isDir: false,
       level: 0,
       note: '/* 我就是个测试 */',
-      imports: [rootPath + '/unuse/app.vue'],
+      imports: ['D:/gitwork/auto-generate-md/unuse/app.vue'],
       belongTo: [],
-      size: 0,
+      size: 62,
       rowSize: 4,
       suffix: '.js',
-      fullPath: rootPath + '/unuse/test/index.js'
+      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/index.js'
+    },
+    {
+      name: 'user-rulerts.vue',
+      isDir: false,
+      level: 0,
+      note: '',
+      imports: ['D:/gitwork/auto-generate-md/unuse/test/test/deep/user.vue'],
+      belongTo: [],
+      size: 2503,
+      rowSize: 105,
+      suffix: '.vue',
+      fullPath: 'D:/gitwork/auto-generate-md/unuse/test/user-rulerts.vue'
     }
   ]
   test('getFile--获取注释', (done) => {
@@ -70,7 +82,7 @@ import UserRuler from '@/unuse/components/user-rulerts'
         nodes.forEach((item) => {
           item.size = 0
         })
-        // console.log(JSON.stringify(nodes), 'arrs')
+        console.log(JSON.stringify(nodes), 'arrs')
         expect(arrs).toMatchObject(nodes)
         done()
       }
@@ -82,9 +94,9 @@ import UserRuler from '@/unuse/components/user-rulerts'
   })
 
   test('getImport--获取每个文件依赖的方法', () => {
-    const notes = ['└── index.js            /* 我就是个测试 */\n']
+    const notes = ['├── index.js            /* 我就是个测试 */\n', '└── user-rulerts.vue            \n']
     const arrs = getNote(nodes)
-    // console.log(JSON.stringify(arrs), 'arrs')
+    console.log(JSON.stringify(arrs), 'arrs')
     expect(arrs).toMatchObject(notes)
   })
 })

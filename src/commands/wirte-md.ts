@@ -28,7 +28,7 @@ export function wirteMd(data: string, filePath: string): void {
  * @param {Array} datas
  * @return {Object}
  */
-function getCountMd(datas: ItemType[]): secoutType {
+export function getCountMd(datas: ItemType[]): secoutType {
   let rowTotleNumber = 0
   let sizeTotleNumber = 0
   const coutObj: { [key: string]: number } = {}
@@ -66,9 +66,9 @@ function format(num: number): string {
  * @param {object} obj
  * @return {string}
  */
-function setCountMd(obj: secoutType): string {
+export function setCountMd(obj: secoutType): string {
   const { rowTotleNumber, sizeTotleNumber, coutObj } = obj
-  let countMd = '😍  代码总数统计：\n'
+  let countMd = '😍 代码总数统计：\n'
   let totle = 0
   for (const key in coutObj) {
     const ele = coutObj[key]
