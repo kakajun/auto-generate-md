@@ -59,7 +59,7 @@
 This project includes 26 tests for easy expansion and modification. Contributions and PRs are welcome.
 
 ### Changelog
-*   **0.3.14**: Code refactoring and updates.
+*   **0.3.15**: Code refactoring and updates.
 *   **0.3.8**: Interface improvements and feature additions.
 *   **0.3.0**: Major feature updates and UI improvements.
 *   **0.2.9**: File statistic feature added.
