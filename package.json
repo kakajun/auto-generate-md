@@ -1,9 +1,9 @@
 {
   "name": "agmd",
   "version": "0.3.14",
-  "description": "auto generate markdown for node, Classification of engineering documents, Absolute path to relative path",
+  "description": "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths.",
   "keywords": [
-    "node",
+    "directory",
     "auto",
     "generate",
     "relative path",
