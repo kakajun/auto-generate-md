@@ -59,7 +59,7 @@ export function makeSuffix(filePath: string, fullPath: string) {
     for (const suffix of suffixes) {
       if (fs.existsSync(absoluteImport + suffix)) {
         absoluteImport += suffix
-        logger.info('补充后缀:', absoluteImport + suffix)
+        // logger.info('补充后缀:', absoluteImport + suffix)
         break
       }
     }

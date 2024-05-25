@@ -36,6 +36,14 @@ export function checkCamelFile(fileName: string) {
 }
 
 /**
+ * 检测大驼峰文件名
+ * @param fileName 文件名
+ */
+export function checkUperCamelFile(fileName: string) {
+  return /([A-Z])/.test(fileName)
+}
+
+/**
  * @desc: 循环node, 改文件夹, 并把import 里面不合格的命名改合格
  */
 export async function renameFoldPath(nodes: ItemType[]) {
@@ -73,38 +81,57 @@ export async function renameFilePath(nodes: ItemType[]) {
   await getNode(nodes)
 }
 
-async function rewriteFile(node: ItemType) {
-  let writeFlag = false
-  const str = await readFile(node.fullPath, 'utf-8')
-  const sarr = str.split(/[\n]/g)
-  const packageJsonPath = path.join(rootPath, 'package.json')
-  const dependencies = await getDependencies(packageJsonPath)
-  // 循环处理每一行
-  for (let index = 0; index < sarr.length; index++) {
-    const ele = sarr[index]
-    if (ele.indexOf('from') > -1) {
-      const impOldName = getImportName(ele, dependencies)
-      if (checkCamelFile(impOldName)) {
-        // 取文件名,否则转case会出错
-        const name = path.parse(impOldName).name
-        const newName = toKebabCase(name)
-        // 这里替换有可能把头也替换了, 所以切一下
-        //比如 import moduleName from 'moduleName'  会只替换前一个   "import moduleName from 'moduleName'".split('from')
-        const s = ele.split('from')
-        sarr[index] = `${s[0]}from${s[1].replace(name, newName)}`
-        writeFlag = true
+export async function renameCamelCaseFilePath(nodes: ItemType[]) {
+  async function getNode(cpNodes: ItemType[]) {
+    for (let index = 0; index < cpNodes.length; index++) {
+      const ele = cpNodes[index]
+      if (ele.children) {
+        // 递归
+        await getNode(ele.children)
+      } else {
+        // 重命名文件
+        await renameCamelCaseFile(ele)
+        // 重写文件的import
+        await rewriteFile(ele)
       }
     }
   }
-  if (writeFlag) {
-    const fileStr = sarr.join('\n')
-    try {
-      // 异步写入数据到文件
-      await fs.writeFile(node.fullPath, fileStr, { encoding: 'utf8' })
-      logger.success(`rewriteFile successful-------: ${node.fullPath}`)
-    } catch (error) {
-      logger.error(`写入文件失败,地址不存在: ${node.fullPath}`)
+  await getNode(nodes)
+}
+
+async function rewriteFile(node: ItemType) {
+  let writeFlag = false
+  try {
+    const fileContent = await readFile(node.fullPath, 'utf-8')
+    const lines = fileContent.split(/\n/g)
+
+    const packageJsonPath = path.join(rootPath, 'package.json')
+    const dependencies = await getDependencies(packageJsonPath)
+
+    for (let index = 0; index < lines.length; index++) {
+      const importLine = lines[index]
+      if (importLine.includes('from')) {
+        const importModuleName = getImportName(importLine, dependencies)
+        if (checkCamelFile(importModuleName)) {
+          const newName = toKebabCase(path.parse(importModuleName).name)
+          const [beforeFrom, afterFrom] = importLine.split('from')
+          lines[index] = `${beforeFrom}from${afterFrom.replace(importModuleName, newName)}`
+          writeFlag = true
+        }
+      }
     }
+
+    if (writeFlag) {
+      const updatedFileContent = lines.join('\n')
+      try {
+        await fs.writeFile(node.fullPath, updatedFileContent, { encoding: 'utf8' })
+        logger.success(`Rewrote file successfully: ${node.fullPath}`)
+      } catch (writeError) {
+        logger.error(`Failed to write file: ${node.fullPath}`, writeError)
+      }
+    }
+  } catch (readError) {
+    logger.error(`Failed to read file: ${node.fullPath}`, readError)
   }
 }
 
@@ -130,19 +157,27 @@ export async function renameFold(node: ItemType) {
 /**
  * @desc: 重命名后, 子文件都会存在路径的更改,也就要递归处理(既可以处理文件夹, 也可以处理文件)
  */
-export function changePathFold(node: ItemType, obj: { newName: string; filename: string }) {
-  const { newName, filename } = obj
+export function changePathFold(node: ItemType, renameInfo: { newName: string; filename: string }): void {
+  const { newName, filename } = renameInfo
+
+  // If the node has children, recursively call this function on each child.
   if (node.children) {
-    for (let index = 0; index < node.children.length; index++) {
-      const ele = node.children[index]
-      // 递归处理
-      changePathFold(ele, obj)
+    for (const childNode of node.children as ItemType[]) {
+      changePathFold(childNode, renameInfo)
     }
   }
+
+  // Update the full path and name of the current node.
   node.fullPath = node.fullPath.replace(filename, newName)
-  logger.info(node.fullPath, newName)
   node.name = node.name.replace(filename, newName)
+
+  // Optionally, log once at the outermost call instead of in every recursion.
+  // This can be controlled by a flag or condition check if needed.
+  // if (isOutermostCall) {
+  //   logger.info(node.fullPath, newName);
+  // }
 }
+
 /**
  * @desc: 递归改所有路径名字
  * @param {ItemType} node
@@ -185,6 +220,20 @@ export async function renameFile(node: ItemType) {
   }
 }
 
+export async function renameCamelCaseFile(node: ItemType) {
+  const filename = path.parse(node.fullPath).base
+  if (!checkUperCamelFile(filename)) {
+    const suffix = ['.vue']
+    const lastName = path.extname(node.fullPath)
+    const flag = suffix.some((item) => lastName === item)
+    if (flag) {
+      const obj = await replaceName(node.fullPath)
+      // 这里一定要更新node,否则后面找不到路径
+      changePathName(node, obj)
+    }
+  }
+}
+
 /**
  * 重命名文件夹 CamelCase || PascalCase => kebab-case
  * @param node 节点
@@ -192,33 +241,31 @@ export async function renameFile(node: ItemType) {
 export async function replaceName(fullPath: string) {
   const filename = path.parse(fullPath).base
   const newName = toKebabCase(filename)
-  // logger.info('newName: ', newName)
-  // logger.info('filename: ', filename)
-  const oldPath = fullPath
-  const newPath = oldPath.replace(filename, newName)
-  // rename之前要判断一下,假如已经有了,那么直接拷贝过去,并且删除原来的
-  const lastName = path.extname(newPath)
-  if (!lastName) {
-    // 文件夹, 特殊处理,要copy文件
-    if (fs.existsSync(newPath)) {
-      // logger.info('newPath: ', newPath)
-      await fs.copy(fullPath, newPath)
-      fs.removeSync(fullPath) // 删除目录
-      return { newName, filename }
-    }
-  }
-  // logger.info(oldPath, newPath, 'oldPath, newPath')
+
   try {
-    const flag = fs.existsSync(oldPath)
-    if (flag) {
-      await fs.rename(oldPath, newPath)
-      logger.success(oldPath, '改名为: ', newPath)
-    } else {
-      logger.error(`文件${oldPath}不存在重命名干嘛?`)
+    const oldPath = fullPath
+    const newPath = oldPath.replace(filename, newName)
+    const lastName = path.extname(newPath)
+    if (!lastName) {
+      // 处理目录
+      if (await fs.pathExists(newPath)) {
+        await fs.copy(fullPath, newPath)
+        await fs.rm(fullPath, { recursive: true }) // 删除目录
+        return { newName, filename }
+      }
     }
-    logger.info(filename + ' is reneme done')
+    // 处理文件
+    if (await fs.pathExists(oldPath)) {
+      await fs.rename(oldPath, newPath)
+      logger.success(`${oldPath} renamed to: ${newPath}`)
+    } else {
+      logger.error(`File ${oldPath} does not exist.`)
+    }
+
+    logger.info(`${filename} is renamed done`)
     return { newName, filename }
   } catch (error) {
+    logger.error(`Error renaming file/directory: ${error}`)
     throw error
   }
 }

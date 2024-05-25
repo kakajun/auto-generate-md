@@ -94,7 +94,7 @@ export async function getMd(option?: { ignore?: string[]; include?: string[] }) 
   const note = getNote(nodes) // 得到所有note的数组
   const md = note.join('') + '\n' // 数组转字符串
   if (md.length > 0) {
-    logger.success('🀄️  生成MarkDown完毕 !')
+    // logger.success('🀄️  生成MarkDown完毕 !')
   }
   return { md: md + coutMd, nodes }
 }

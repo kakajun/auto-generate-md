@@ -2,7 +2,7 @@
 import type { ItemType } from '../types'
 import { wirteMd } from './wirte-md'
 import { writeFile } from 'fs/promises'
-import { renameFoldPath, renameFilePath } from './rename-path'
+import { renameFoldPath, renameFilePath, renameCamelCaseFilePath } from './rename-path'
 import { createConsola } from 'consola'
 import { changePath, wirteJsNodes } from './change-path'
 import { markFile, deletMarkAll, witeMarkFile } from './mark-file'
@@ -120,6 +120,10 @@ export async function renameFoldAction(nodes: ItemType[]) {
  */
 export async function renameFileAction(nodes: ItemType[]) {
   renameFilePath(nodes)
+}
+
+export async function renameUpperCamelCaseAction(nodes: ItemType[]) {
+  renameCamelCaseFilePath(nodes)
 }
 
 /**

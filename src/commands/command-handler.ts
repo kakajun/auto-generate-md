@@ -9,8 +9,8 @@ import {
   witeFileAction,
   deletMarkAction,
   renameFoldAction,
-  renameFileAction
-  // generateAllAction
+  renameFileAction,
+  renameUpperCamelCaseAction
 } from './command-actions'
 import { VERSION, PKG_NAME } from '../shared/constant'
 import help from '../../script/help/index'
@@ -30,20 +30,9 @@ const { ignores: ignore, includes: include } = handle(options)
 
 export async function selectCommand() {
   const actionMap = new Map<string, prompts.Choice & { action: Function }>()
-  //1. 这里只读文件, ------------>不写
+
   const { md, nodes } = await getMd({ ignore, include })
-  actionMap.set('help', {
-    title: '🙏  帮助',
-    value: 'help',
-    selected: true,
-    action: () => help()
-  })
-  // actionMap.set('Generate All', {
-  //   title: '🚘  执行所有操作',
-  //   value: 'Generate All',
-  //   selected: true,
-  //   action: () => generateAllAction(nodes, md)
-  // })
+
   actionMap.set('Generate MD', {
     title: '📅  生成结构树文档',
     value: 'Generate MD',
@@ -77,6 +66,12 @@ export async function selectCommand() {
     action: () => renameFileAction(nodes)
   })
 
+  actionMap.set('RenameFoldUpperCamelCase', {
+    title: '🎁  统一命名文件为UpperCamelCase',
+    value: 'RenameFoldKebabCase',
+    action: () => renameUpperCamelCaseAction(nodes)
+  })
+
   actionMap.set('Wirte Json Nodes', {
     title: '🔱  记录节点Json',
     value: 'Wirte Json Nodes',
@@ -97,6 +92,13 @@ export async function selectCommand() {
     title: '💫  分类',
     value: 'Classification',
     action: () => witeFileAction(nodes)
+  })
+
+  actionMap.set('help', {
+    title: '🙏  帮助',
+    value: 'help',
+    selected: true,
+    action: () => help()
   })
   return actionMap
 }

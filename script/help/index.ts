@@ -8,7 +8,7 @@ agmd  --include str  --ignore str
 
   各选项的默认配置:
   --ignore  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
-  --include  .js,.vue,.ts
+  --include  .js,.vue,.ts,.tsx
 
   说明:
   配置中的字符串之间不应有空格

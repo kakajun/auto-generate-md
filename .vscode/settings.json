@@ -99,8 +99,8 @@
   "[scss]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": false,
-      "source.fixAll.stylelint": true
+      "source.fixAll.eslint": "never",
+      "source.fixAll.stylelint": "explicit"
     }
   },
   "[json]": {
@@ -110,12 +110,12 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "[vue]": {
     "editor.codeActionsOnSave": {
-      "source.fixAll.eslint": false,
-      "source.fixAll.stylelint": true
+      "source.fixAll.eslint": "never",
+      "source.fixAll.stylelint": "explicit"
     }
   },
   "svn.ignoreMissingSvnWarning": true,
