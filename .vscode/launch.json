@@ -1,12 +1,28 @@
+// {
+//   "version": "0.2.0",
+//   "configurations": [
+//     {
+//       "type": "node",
+//       "request": "launch",
+//       "name": "funtion-test",
+//       "runtimeExecutable": "nodemon",
+//       "program": "${workspaceFolder}\\test\\utils\\function-test.ts",
+//       "restart": true,
+//       "console": "integratedTerminal",
+//       "internalConsoleOptions": "neverOpen"
+//     }
+//   ]
+// }
+
 {
   "version": "0.2.0",
   "configurations": [
     {
       "type": "node",
       "request": "launch",
-      "name": "funtion-test",
+      "name": "creat",
       "runtimeExecutable": "nodemon",
-      "program": "${workspaceFolder}\\test\\utils\\function-test.ts",
+      "program": "${workspaceFolder}\\test\\utils\\creat.js",
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen"

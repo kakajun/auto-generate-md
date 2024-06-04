@@ -8,8 +8,9 @@ import {
   markFileAction,
   witeFileAction,
   deletMarkAction,
-  renameFoldAction,
+  renameKebFoldAction,
   renameFileAction,
+  renameCamFoldAction,
   renameUpperCamelCaseAction
 } from './command-actions'
 import { VERSION, PKG_NAME } from '../shared/constant'
@@ -58,12 +59,18 @@ export async function selectCommand() {
   actionMap.set('RenameFoldKebabCase', {
     title: '🎁  统一命名文件夹为KebabCase',
     value: 'RenameFoldKebabCase',
-    action: () => renameFoldAction(nodes)
+    action: () => renameKebFoldAction(nodes)
   })
   actionMap.set('RenameFielKebabCase', {
     title: '🍰  统一命名文件为KebabCase',
     value: 'RenameFielKebabCase',
     action: () => renameFileAction(nodes)
+  })
+
+  actionMap.set('RenameFoldCameCase', {
+    title: '🎁  统一命名文件夹为CameCase',
+    value: 'RenameFoldKebabCase',
+    action: () => renameCamFoldAction(nodes)
   })
 
   actionMap.set('RenameFoldUpperCamelCase', {

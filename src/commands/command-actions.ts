@@ -109,17 +109,24 @@ export async function deletMarkAction(nodes: ItemType[]) {
  * @desc://8. 规范命名文件夹kabel-case
  * @param {Array} nodes
  */
-export async function renameFoldAction(nodes: ItemType[]) {
+export async function renameKebFoldAction(nodes: ItemType[]) {
   renameFoldPath(nodes)
 }
 
 /**
  * @desc://9. 规范命名文件kabel-case
-
  * @param {Array} nodes
  */
 export async function renameFileAction(nodes: ItemType[]) {
   renameFilePath(nodes)
+}
+
+/**
+ * @desc://10. 规范命名文件夹Upercamecase
+ * @param {Array} nodes
+ */
+export async function renameCamFoldAction(nodes: ItemType[]) {
+  renameFoldPath(nodes, true)
 }
 
 export async function renameUpperCamelCaseAction(nodes: ItemType[]) {

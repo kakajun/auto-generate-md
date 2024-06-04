@@ -1,13 +1,13 @@
-import { getFileNodes } from '../../src/commands/get-file'
+import { replaceName } from '../../src/commands/rename-path'
 import { createConsola } from 'consola'
-const rootPath = process.cwd().replace(/\\/g, '/')
+// const rootPath = process.cwd().replace(/\\/g, '/')
 const logger = createConsola({
   level: 4
 })
 
 async function get() {
-  const arrs = await getFileNodes(rootPath + '/unuse/components')
-  logger.info('arrs: ', JSON.stringify(arrs))
+  const p = await replaceName('/path/to/myFile.txt')
+  logger.info('p: ', p)
   logger.info('我这里来了!!!')
 }
 get()

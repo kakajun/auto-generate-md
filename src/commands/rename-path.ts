@@ -27,6 +27,18 @@ export function toKebabCase(str: string) {
     return '-' + word.toLowerCase()
   })
 }
+
+export function toCameCase(name: string) {
+  // 使用正则表达式匹配中划线和随后的字符，同时将它们转换为大写
+  let formattedName = name.replace(/-([a-z])/g, (_match, letter) => letter.toUpperCase())
+
+  // 如果第一个字母不是大写，创建一个新的字符串并将其转换为大写
+  if (formattedName[0] === formattedName[0].toLowerCase()) {
+    formattedName = formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
+  }
+
+  return formattedName
+}
 /**
  * 检测驼峰文件名
  * @param fileName 文件名
@@ -46,11 +58,11 @@ export function checkUperCamelFile(fileName: string) {
 /**
  * @desc: 循环node, 改文件夹, 并把import 里面不合格的命名改合格
  */
-export async function renameFoldPath(nodes: ItemType[]) {
+export async function renameFoldPath(nodes: ItemType[], isCamelCase?: Boolean) {
   async function getNode(cpNodes: ItemType[]) {
     for (let index = 0; index < cpNodes.length; index++) {
       const ele = cpNodes[index]
-      await renameFold(ele) // 下面已递归
+      isCamelCase ? await renameFold(ele, true) : await renameFold(ele) // 下面已递归
       if (ele.children) {
         // 递归
         await getNode(ele.children)
@@ -92,14 +104,14 @@ export async function renameCamelCaseFilePath(nodes: ItemType[]) {
         // 重命名文件
         await renameCamelCaseFile(ele)
         // 重写文件的import
-        await rewriteFile(ele)
+        await rewriteFile(ele, true)
       }
     }
   }
   await getNode(nodes)
 }
 
-async function rewriteFile(node: ItemType) {
+async function rewriteFile(node: ItemType, isCamelCase?: Boolean) {
   let writeFlag = false
   try {
     const fileContent = await readFile(node.fullPath, 'utf-8')
@@ -112,7 +124,15 @@ async function rewriteFile(node: ItemType) {
       const importLine = lines[index]
       if (importLine.includes('from')) {
         const importModuleName = getImportName(importLine, dependencies)
-        if (checkCamelFile(importModuleName)) {
+
+        if (isCamelCase) {
+          if (checkUperCamelFile(importModuleName)) {
+            const newName = toCameCase(path.parse(importModuleName).name)
+            const [beforeFrom, afterFrom] = importLine.split('from')
+            lines[index] = `${beforeFrom}from${afterFrom.replace(importModuleName, newName)}`
+            writeFlag = true
+          }
+        } else if (checkCamelFile(importModuleName)) {
           const newName = toKebabCase(path.parse(importModuleName).name)
           const [beforeFrom, afterFrom] = importLine.split('from')
           lines[index] = `${beforeFrom}from${afterFrom.replace(importModuleName, newName)}`
@@ -139,18 +159,13 @@ async function rewriteFile(node: ItemType) {
  * @desc: 重命名文件夹
  * @param {ItemType} node
  */
-export async function renameFold(node: ItemType) {
+export async function renameFold(node: ItemType, isCamelCase?: boolean) {
   const filename = path.parse(node.fullPath).base
-  logger.info('filename111: ', filename)
-  const filter = ['FMEA', 'DVP'] // 把这样子的文件夹过滤
-  const falg = filter.some((item) => filename.indexOf(item) > -1)
-  if (!falg && checkCamelFile(filename)) {
-    // 这里只处理文件夹
-    if (node.isDir) {
-      const obj = await replaceName(node.fullPath)
-      // 这里一定要更新node,否则后面找不到路径
-      changePathFold(node, obj)
-    }
+
+  const shouldRename = isCamelCase ? checkUperCamelFile(filename) : checkCamelFile(filename)
+  if (shouldRename && node.isDir) {
+    const obj = await replaceName(node.fullPath, isCamelCase)
+    changePathFold(node, obj)
   }
 }
 
@@ -183,7 +198,7 @@ export function changePathFold(node: ItemType, renameInfo: { newName: string; fi
  * @param {ItemType} node
  * @param {object} obj
  */
-export function changePathName(node: ItemType, obj: { newName: string; filename: string }) {
+export function changePathName(node: ItemType, obj: { newName: string; filename: string }, isCamelCase?: Boolean) {
   const { newName, filename } = obj
   if (node.fullPath.indexOf(filename) > -1) {
     if (node.imports.length > 0) {
@@ -192,7 +207,7 @@ export function changePathName(node: ItemType, obj: { newName: string; filename:
       for (let j = 0; j < array.length; j++) {
         const ele = array[j]
         logger.info('import-ele: ', ele)
-        array[j] = toKebabCase(ele)
+        array[j] = isCamelCase ? toCameCase(filename) : toKebabCase(ele)
         logger.info('更换import: ', array[j])
       }
     }
@@ -223,34 +238,37 @@ export async function renameFile(node: ItemType) {
 export async function renameCamelCaseFile(node: ItemType) {
   const filename = path.parse(node.fullPath).base
   if (!checkUperCamelFile(filename)) {
-    const suffix = ['.vue']
+    const suffix = ['.vue'] // 这里只重命名vue文件为大驼峰
     const lastName = path.extname(node.fullPath)
     const flag = suffix.some((item) => lastName === item)
     if (flag) {
-      const obj = await replaceName(node.fullPath)
+      const obj = await replaceName(node.fullPath, true)
       // 这里一定要更新node,否则后面找不到路径
-      changePathName(node, obj)
+      changePathName(node, obj, true)
     }
   }
 }
 
 /**
  * 重命名文件夹 CamelCase || PascalCase => kebab-case
- * @param node 节点
+ * @param fullPath '/path/to/myFile.txt'
+ * @return {newName:'my-file.txt','myFile.txt'}
  */
-export async function replaceName(fullPath: string) {
+export async function replaceName(fullPath: string, isCamelCase?: Boolean) {
   const filename = path.parse(fullPath).base
-  const newName = toKebabCase(filename)
+  const newName = isCamelCase ? toCameCase(filename) : toKebabCase(filename)
 
   try {
     const oldPath = fullPath
+    console.log('oldPath: ', oldPath)
+
     const newPath = oldPath.replace(filename, newName)
     const lastName = path.extname(newPath)
     if (!lastName) {
       // 处理目录
-      if (await fs.pathExists(newPath)) {
-        await fs.copy(fullPath, newPath)
-        await fs.rm(fullPath, { recursive: true }) // 删除目录
+      if (fs.existsSync(newPath)) {
+        await fs.copy(oldPath, newPath)
+        await fs.rm(oldPath, { recursive: true }) // 删除目录
         return { newName, filename }
       }
     }

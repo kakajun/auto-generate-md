@@ -3,6 +3,16 @@
   "version": "0.3.15",
   "description": "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths.",
   "keywords": [
+     "fs",
+    "filesystem",
+    "fs.js",
+    "memory-fs",
+    "file",
+    "file system",
+    "mount",
+    "memory",
+     "mock",
+    "in-memory",
     "directory",
     "auto",
     "generate",
@@ -61,7 +71,9 @@
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3",
-    "ts-node-dev":"^2.0.0"
+    "ts-node-dev":"^2.0.0",
+    "memfs":"^4.9.2",
+    "raf-stub":"3.0.0"
   },
   "lint-staged": {
     "*.{ts,tsx,js}": "prettier --write",
