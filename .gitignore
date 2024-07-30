@@ -2,7 +2,7 @@
 node_modules
 /lib
 /es6
-
+codeAndPrompt
 # local env files
 .env.local
 .env.*.local
