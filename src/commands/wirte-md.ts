@@ -105,7 +105,7 @@ export async function getMd(option?: { ignore?: string[]; include?: string[] }) 
  */
 export async function witeCodeAndPrompt(inRootPath: string, data: string, nodes: ItemType[]): Promise<void> {
   const menuSt = '下面是整个工程的目录文件结构\n' + data
-  let content = ''
+  let content = '下面是整个代码内容,其中path:是文件路径,其他是文件内容\n'
   async function find(objs: ItemType[]) {
     for (let index = 0; index < objs.length; index++) {
       const element = objs[index]
