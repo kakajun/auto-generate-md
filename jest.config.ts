@@ -3,7 +3,7 @@ export default {
   testEnvironment: 'node',
   // 指定处理 TypeScript 的转换器
   transform: {
-    '^.+\\.ts$': 'ts-jest',
+    '^.+\\.ts$': 'ts-jest'
     // 'ts-jest': {
     //   useESM: true,
     // },
@@ -18,8 +18,9 @@ export default {
   extensionsToTreatAsEsm: ['.ts'],
   globalSetup: './test/config/jest-global-setup.ts', // 全局
   setupFilesAfterEnv: ['./test/config/jest.setup.ts'],
+  clearMocks: true,
   // 配置 Jest 如何解析模块，特别是对于 ESM
   moduleNameMapper: {
-    '^(\\.{1,2}/.*)\\.js$': '$1',
-  },
-};
+    '^(\\.{1,2}/.*)\\.js$': '$1'
+  }
+}

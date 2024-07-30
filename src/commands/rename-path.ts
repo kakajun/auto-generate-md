@@ -261,7 +261,6 @@ export async function replaceName(fullPath: string, isCamelCase?: Boolean) {
   try {
     const oldPath = fullPath
     console.log('oldPath: ', oldPath)
-
     const newPath = oldPath.replace(filename, newName)
     const lastName = path.extname(newPath)
     if (!lastName) {
@@ -279,7 +278,6 @@ export async function replaceName(fullPath: string, isCamelCase?: Boolean) {
     } else {
       logger.error(`File ${oldPath} does not exist.`)
     }
-
     logger.info(`${filename} is renamed done`)
     return { newName, filename }
   } catch (error) {
