@@ -6,13 +6,9 @@ import { readFile, readdir } from 'fs/promises'
 import { changeImport } from './change-path'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType, OptionType } from '../types'
-// import { env } from 'node-environment'
+
 const rootPath = process.cwd().replace(/\\/g, '/')
-// const isDev = env() === 'development'
-// import { createConsola } from 'consola'
-// const logger = createConsola({
-//   level: 4
-// })
+
 //File filtering -- full name with suffix required  文件过滤--需要全称带后缀
 const ignore = [
   'es6',

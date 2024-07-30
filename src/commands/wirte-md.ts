@@ -1,10 +1,10 @@
 /* 生成md说明文档 */
-import fs from 'fs'
+
 import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import type { ItemType } from '../types'
 import { createConsola } from 'consola'
-
+import { readFile, writeFile } from 'fs/promises'
 const logger = createConsola({
   level: 4
 })
@@ -15,12 +15,11 @@ type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { 
  * @description :Write the result to JS file
  * @param {data} data
  */
-export function wirteMd(data: string, filePath: string): void {
+export async function wirteMd(data: string, filePath: string): Promise<void> {
   const file = path.resolve(rootPath, filePath)
   // 异步写入数据到文件
-  fs.writeFile(file, data, { encoding: 'utf8' }, () => {
-    logger.success('Write successful')
-  })
+  await writeFile(file, data, { encoding: 'utf8' })
+  logger.success('Write successful')
 }
 
 /**
@@ -97,4 +96,33 @@ export async function getMd(option?: { ignore?: string[]; include?: string[] }) 
     // logger.success('🀄️  生成MarkDown完毕 !')
   }
   return { md: md + coutMd, nodes }
+}
+
+/**
+ * @description: 获取代码及结构作为提示
+ * @param {string} data
+ * @param {ItemType} nodes
+ */
+export async function witeCodeAndPrompt(inRootPath: string, data: string, nodes: ItemType[]): Promise<void> {
+  const menuSt = '下面是整个工程的目录文件结构\n' + data
+  let content = ''
+  async function find(objs: ItemType[]) {
+    for (let index = 0; index < objs.length; index++) {
+      const element = objs[index]
+      if (element.children) find(element.children)
+      else {
+        // 文件,读取内容
+        const fileStr = await readFile(element.fullPath, 'utf-8')
+        const file = 'path:' + element.fullPath.replace(inRootPath, '') + '\n' + fileStr + '\n'
+        content = content + file
+      }
+    }
+  }
+  try {
+    await find(nodes)
+  } catch (error) {
+    console.error(error)
+  }
+  await writeFile(`${inRootPath}/codeAndPrompt.md`, menuSt + content, { encoding: 'utf8' })
+  logger.success('🀄️  生成codeAndPrompt.md完毕 !')
 }

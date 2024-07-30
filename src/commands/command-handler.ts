@@ -17,7 +17,7 @@ import { VERSION, PKG_NAME } from '../shared/constant'
 import help from '../../script/help/index'
 import stringToArgs from '../../script/cli'
 import { wirteJsNodes } from './change-path'
-import { getMd } from './wirte-md'
+import { getMd, witeCodeAndPrompt } from './wirte-md'
 import handle from '../../script/cli/handle'
 
 import { createConsola } from 'consola'
@@ -74,7 +74,7 @@ export async function selectCommand() {
   })
 
   actionMap.set('RenameFoldUpperCamelCase', {
-    title: '🎁  统一命名文件为UpperCamelCase',
+    title: '🦄  统一命名文件为UpperCamelCase',
     value: 'RenameFoldKebabCase',
     action: () => renameUpperCamelCaseAction(nodes)
   })
@@ -99,6 +99,12 @@ export async function selectCommand() {
     title: '💫  分类',
     value: 'Classification',
     action: () => witeFileAction(nodes)
+  })
+
+  actionMap.set('codeAndPrompt', {
+    title: '🌈  输出结构及代码',
+    value: 'codeAndPrompt',
+    action: () => witeCodeAndPrompt(rootPath, md, nodes)
   })
 
   actionMap.set('help', {

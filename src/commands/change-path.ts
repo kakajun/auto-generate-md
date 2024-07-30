@@ -11,6 +11,20 @@ const logger = createConsola({
 const rootPath = process.cwd().replace(/\\/g, '/')
 
 /**
+ * 检查当前目录是否为项目根目录。
+ * 根据是否存在 package.json 文件来判断。
+ */
+function isRootDirectory(): boolean {
+  const packageJsonPath = path.join(process.cwd(), 'package.json')
+  try {
+    fs.accessSync(packageJsonPath, fs.constants.R_OK)
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+/**
  * @desc: 递归循环所有文件
 
  * @param {Array} nodes      整个文件的nodes
@@ -21,7 +35,9 @@ export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
       if (ele.children) {
         await getNode(ele.children)
       } else {
-        await writeToFile(ele, true, nochangePath)
+        if (isRootDirectory()) {
+          await writeToFile(ele, true, nochangePath)
+        }
       }
     }
   }
