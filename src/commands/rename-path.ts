@@ -251,7 +251,7 @@ export async function renameCamelCaseFile(node: ItemType) {
 
 /**
  * 重命名文件夹 CamelCase || PascalCase => kebab-case
- * @param fullPath '/path/to/myFile.txt'
+ * @param fullPath  
  * @return {newName:'my-file.txt','myFile.txt'}
  */
 export async function replaceName(fullPath: string, isCamelCase?: Boolean) {
