@@ -7,13 +7,13 @@ on:
     branch: 'master'
 
 jobs:
-  build-and-deploy:
+  test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v2
 
-      - name: Install and Build 🔧
+      - name: Install and test 🔧
         run: |
           yarn install
           npm run test
