@@ -29,14 +29,14 @@ function isRootDirectory(): boolean {
 
  * @param {Array} nodes      整个文件的nodes
  */
-export async function changePath(nodes: ItemType[], nochangePath?: Boolean) {
+export async function changePath(nodes: ItemType[], nochangePath?: Boolean, toAbsoluteAlias?: Boolean) {
   async function getNode(objs: ItemType[]) {
     for (const ele of objs) {
       if (ele.children) {
         await getNode(ele.children)
       } else {
         if (isRootDirectory()) {
-          await writeToFile(ele, true, nochangePath)
+          await writeToFile(ele, true, nochangePath, toAbsoluteAlias)
         }
       }
     }
@@ -105,13 +105,20 @@ export function getImportName(ele: string, dependencies: string[]) {
  * @param {string} ele    找到的行引入
  * @param {string} fullPath  文件的全路径
  */
-export function changeImport(ele: string, fullPath: string, dependencies: string[], nochangePath?: Boolean) {
+export function changeImport(
+  ele: string,
+  fullPath: string,
+  dependencies: string[],
+  nochangePath?: Boolean,
+  toAbsoluteAlias?: Boolean
+) {
   const impName = getImportName(ele, dependencies)
   if (!impName) return null
 
   const absoluteImport = makeSuffix(impName, fullPath)
+  const aliasPath = absoluteImport.replace(rootPath, '@')
   const obj = {
-    impName: nochangePath ? impName : getRelatPath(absoluteImport, fullPath),
+    impName: nochangePath ? impName : toAbsoluteAlias ? aliasPath : getRelatPath(absoluteImport, fullPath),
     filePath: impName,
     absoluteImport
   }
@@ -122,7 +129,12 @@ export function changeImport(ele: string, fullPath: string, dependencies: string
  * @desc:  写文件
  * @param {string} file  目标地址
  */
-export async function writeToFile(node: ItemType, isRelative?: Boolean, nochangePath?: Boolean) {
+export async function writeToFile(
+  node: ItemType,
+  isRelative?: Boolean,
+  nochangePath?: Boolean,
+  toAbsoluteAlias?: Boolean
+) {
   const { fullPath } = node
   const packageJsonPath = path.join(rootPath, 'package.json')
   const dependencies = await getDependencies(packageJsonPath)
@@ -134,7 +146,7 @@ export async function writeToFile(node: ItemType, isRelative?: Boolean, nochange
     // 使用 map() 来处理每一行
     const updatedLines = lines.map((line) => {
       if (line.includes('from') && isRelative) {
-        const obj = changeImport(line, fullPath, dependencies, nochangePath)
+        const obj = changeImport(line, fullPath, dependencies, nochangePath, toAbsoluteAlias)
         if (obj && obj.impName) {
           // 使用模板字符串来增加可读性
           logger.info(`Updating import in node: ${node}`)

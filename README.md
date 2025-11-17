@@ -17,6 +17,7 @@
 🚘 一键更改文件或者文件名,驼峰命名为kable-case
 
 ⛵ 把工程所有引用更改绝对路径为相对路径(方便点击下钻查看文件)
+🔧 支持将相对路径统一转换为基于 '@' 别名的绝对路径
 
 ♨️ 把工程按路由标记分类(对拆分工程很重要)
 
@@ -54,7 +55,7 @@
 2. 作为依赖安装
 > npm i agmd -D
 
-在package.json的scripts 中配置 agmd: npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue   可以在每次启动或打包时,带上命令行来自动更新文档
+在package.json的scripts 中配置 agmd: npx agmd --ignore lib,node_modules,dist --include .js,.ts,.vue [--dry-run] [--silent]   可以在每次启动或打包时,带上命令行来自动更新文档
 
 
 example，是我为演示准备的一些文件，并没有其他用
@@ -63,12 +64,12 @@ example，是我为演示准备的一些文件，并没有其他用
 3. 命令说明
 - 帮助
 - 生成结构树文档
-- 修改为相当路径
-- 修改为绝对路径(暂未实现)
+- 修改为相对路径
+- 修改为绝对路径
 - 补全文件后缀
-- 统一命名文件夹为KebabCase
-- 统一命名文件为KebabCase
-- 记录节点Json
+- 统一命名文件夹为 Kebab-Case
+- 统一命名文件为 Kebab-Case
+- 记录节点 JSON
 - 给需要分类的都打上标记
 - 删除标记
 - 分类
@@ -150,11 +151,13 @@ note: 上面两个方法均可传一个option入参,其格式为:
 5. 支持命令行参数配置, 可以自定义忽略文件和过滤后缀名文件
 6. 命令行解析
 
-控制台命令: agmd--include str--ignore str
+控制台命令: agmd --include <string> --ignore <string> [--dry-run] [--silent]
 
 可选项:
-  --include string  / -i string.......... 包含解析的后缀
-  --ignore string  / -in string........... 忽略文件名
+  --include string  / -in string.......... 包含解析的后缀 (以空格分隔)
+  --ignore string  / -i string........... 忽略文件名或目录 (以空格分隔)
+  --dry-run        / -d..................  预演模式, 不对文件系统进行写入
+  --silent         / -s..................  静默模式, 最小化日志输出
 
 例子:
   --ignore / -i  img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
@@ -164,7 +167,7 @@ note: 上面两个方法均可传一个option入参,其格式为:
 配置中的字符串之间不应有空格
 
 命令行例子:
-$ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
+$ agmd --ignore lib node_modules dist --include .js .ts .vue --dry-run --silent
 
 ### 相关文章
 
@@ -172,7 +175,7 @@ $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 
 ### 写在最后
 
-本工程有26个测试, 大家如果想扩展什么功能, 测试代码跑起来, 很方便, 也欢迎大家克隆本工程然后提交进行PR！
+本工程有36个测试, 大家如果想扩展什么功能, 测试代码跑起来, 很方便, 也欢迎大家克隆本工程然后提交进行PR！
 
 ### 更新记录
 0.1.3
@@ -214,3 +217,9 @@ $ agmd  --ignore lib,node_modules,dist --include .js,.ts,.vue`
 
 0.3.14
 重构代码, 修改打包有esbuild转为tsc编译, 同时修改里面本身为异步操作的fs.readFileSync改为await  readFile ,同时新增部分测试用例使得覆盖率达到85%
+
+0.4.1
+重构代码, 新增功能:
+1. 新增命令行参数 --dry-run / -d 预演模式, 不对文件系统进行写入
+2. 新增命令行参数 --silent / -s 静默模式, 最小化日志输出
+3. 新增命令行参数 --absolute-alias / -a 把工程所有引用文件都加上绝对路径别名(方便点击下钻查看文件)

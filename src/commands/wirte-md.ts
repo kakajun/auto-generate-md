@@ -94,12 +94,10 @@ export async function getMd(option?: { ignore?: string[]; include?: string[] }) 
   const countMdObj = getCountMd(nodes)
   const coutMd = setCountMd(countMdObj)
   logger.success(coutMd)
-  const note = getNote(nodes) // 得到所有note的数组
-  const md = note.join('') + '\n' // 数组转字符串
-  if (md.length > 0) {
-    // logger.success('🀄️  生成MarkDown完毕 !')
-  }
-  return { md: md + coutMd, nodes }
+  const note = getNote(nodes)
+  const md = note.join('') + '\n'
+  const composed = `# 目录结构\n${md}\n## 统计\n${coutMd}`
+  return { md: composed, nodes }
 }
 
 /**

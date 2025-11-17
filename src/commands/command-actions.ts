@@ -52,7 +52,11 @@ export async function changePathAction(nodes: ItemType[]) {
 /**
  * @desc: 修改绝对路径
  */
-export async function changeAbsolutePathAction() {}
+export async function changeAbsolutePathActionRun(nodes: ItemType[]) {
+  await changePath(nodes)
+  // 第二次写入，将相对路径改为使用 @ 别名的绝对路径
+  await changePath(nodes, false, true)
+}
 
 export async function changesuffixAction(nodes: ItemType[], nochangePath: Boolean) {
   checkFold()

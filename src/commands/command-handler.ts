@@ -3,7 +3,7 @@ import prompts from 'prompts'
 import {
   getMdAction,
   changePathAction,
-  changeAbsolutePathAction,
+  changeAbsolutePathActionRun,
   changesuffixAction,
   markFileAction,
   witeFileAction,
@@ -48,7 +48,7 @@ export async function selectCommand() {
   actionMap.set('Change Absolute Path', {
     title: '💎  修改为绝对路径（暂未实现）',
     value: 'Change Absolute Path',
-    action: () => changeAbsolutePathAction()
+    action: () => changeAbsolutePathActionRun(nodes)
   })
   actionMap.set('Completion suffix', {
     title: '💯  补全文件后缀',
