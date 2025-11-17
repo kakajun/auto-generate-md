@@ -10,7 +10,7 @@ import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
 import { getImportName } from './change-path'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 /**
@@ -144,8 +144,12 @@ async function rewriteFile(node: ItemType, isCamelCase?: Boolean) {
     if (writeFlag) {
       const updatedFileContent = lines.join('\n')
       try {
-        await fs.writeFile(node.fullPath, updatedFileContent, { encoding: 'utf8' })
-        logger.success(`Rewrote file successfully: ${node.fullPath}`)
+        if (process.env.AGMD_DRY_RUN === '1') {
+          logger.info(`Dry-run: would rewrite file ${node.fullPath}`)
+        } else {
+          await fs.writeFile(node.fullPath, updatedFileContent, { encoding: 'utf8' })
+          logger.success(`Rewrote file successfully: ${node.fullPath}`)
+        }
       } catch (writeError) {
         logger.error(`Failed to write file: ${node.fullPath}`, writeError)
       }
@@ -266,15 +270,23 @@ export async function replaceName(fullPath: string, isCamelCase?: Boolean) {
     if (!lastName) {
       // 处理目录
       if (fs.existsSync(newPath)) {
-        await fs.copy(oldPath, newPath)
-        await fs.rm(oldPath, { recursive: true }) // 删除目录
+        if (process.env.AGMD_DRY_RUN === '1') {
+          logger.info(`Dry-run: would copy dir ${oldPath} -> ${newPath} and remove ${oldPath}`)
+        } else {
+          await fs.copy(oldPath, newPath)
+          await fs.rm(oldPath, { recursive: true }) // 删除目录
+        }
         return { newName, filename }
       }
     }
     // 处理文件
     if (await fs.pathExists(oldPath)) {
-      await fs.rename(oldPath, newPath)
-      logger.success(`${oldPath} renamed to: ${newPath}`)
+      if (process.env.AGMD_DRY_RUN === '1') {
+        logger.info(`Dry-run: would rename ${oldPath} -> ${newPath}`)
+      } else {
+        await fs.rename(oldPath, newPath)
+        logger.success(`${oldPath} renamed to: ${newPath}`)
+      }
     } else {
       logger.error(`File ${oldPath} does not exist.`)
     }

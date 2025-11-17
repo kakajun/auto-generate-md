@@ -10,7 +10,7 @@ import { getRouterArrs } from './get-router'
 import path from 'path'
 
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')

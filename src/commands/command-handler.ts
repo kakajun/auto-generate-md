@@ -22,7 +22,7 @@ import handle from '../../script/cli/handle'
 
 import { createConsola } from 'consola'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 // 为什么要加process.cwd()的replace 是为了抹平window和linux生成的路径不一样的问题
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -41,13 +41,13 @@ export async function selectCommand() {
     action: () => getMdAction(md)
   })
   actionMap.set('Change Relative Path', {
-    title: '🔑  修改为相当路径',
+    title: '🔑  修改为相对路径',
     value: 'Change Relative Path',
     action: () => changePathAction(nodes)
   })
-  actionMap.set('Change Absolute  Path', {
-    title: '💎  修改为绝对路径(暂未实现)',
-    value: 'Change Absolute  Path',
+  actionMap.set('Change Absolute Path', {
+    title: '💎  修改为绝对路径（暂未实现）',
+    value: 'Change Absolute Path',
     action: () => changeAbsolutePathAction()
   })
   actionMap.set('Completion suffix', {
@@ -57,31 +57,31 @@ export async function selectCommand() {
   })
 
   actionMap.set('RenameFoldKebabCase', {
-    title: '🎁  统一命名文件夹为KebabCase',
+    title: '🎁  统一命名文件夹为 Kebab-Case',
     value: 'RenameFoldKebabCase',
     action: () => renameKebFoldAction(nodes)
   })
-  actionMap.set('RenameFielKebabCase', {
-    title: '🍰  统一命名文件为KebabCase',
-    value: 'RenameFielKebabCase',
+  actionMap.set('RenameFileKebabCase', {
+    title: '🍰  统一命名文件为 Kebab-Case',
+    value: 'RenameFileKebabCase',
     action: () => renameFileAction(nodes)
   })
 
   actionMap.set('RenameFoldCameCase', {
-    title: '🎁  统一命名文件夹为CameCase',
-    value: 'RenameFoldKebabCase',
+    title: '🎁  统一命名文件夹为 CamelCase',
+    value: 'RenameFoldCameCase',
     action: () => renameCamFoldAction(nodes)
   })
 
   actionMap.set('RenameFoldUpperCamelCase', {
-    title: '🦄  统一命名文件为UpperCamelCase',
-    value: 'RenameFoldKebabCase',
+    title: '🦄  统一命名文件为 UpperCamelCase',
+    value: 'RenameFoldUpperCamelCase',
     action: () => renameUpperCamelCaseAction(nodes)
   })
 
-  actionMap.set('Wirte Json Nodes', {
-    title: '🔱  记录节点Json',
-    value: 'Wirte Json Nodes',
+  actionMap.set('Write JSON Nodes', {
+    title: '🔱  记录节点 JSON',
+    value: 'Write JSON Nodes',
     action: () => wirteJsNodes(JSON.stringify(nodes), rootPath + '/readme-file.js')
   })
 

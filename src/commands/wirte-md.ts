@@ -4,9 +4,9 @@ import path from 'path'
 import { getFileNodes, getNote } from './get-file'
 import type { ItemType } from '../types'
 import { createConsola } from 'consola'
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile as nodeWriteFile } from 'fs/promises'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 
@@ -18,8 +18,12 @@ type secoutType = { rowTotleNumber: number; sizeTotleNumber: number; coutObj: { 
 export async function wirteMd(data: string, filePath: string): Promise<void> {
   const file = path.resolve(rootPath, filePath)
   // 异步写入数据到文件
-  await writeFile(file, data, { encoding: 'utf8' })
-  logger.success('Write successful')
+  if (process.env.AGMD_DRY_RUN === '1') {
+    logger.info(`Dry-run: would write file ${file}`)
+  } else {
+    await nodeWriteFile(file, data, { encoding: 'utf8' })
+    logger.success('Write successful')
+  }
 }
 
 /**
@@ -123,6 +127,11 @@ export async function witeCodeAndPrompt(inRootPath: string, data: string, nodes:
   } catch (error) {
     console.error(error)
   }
-  await writeFile(`${inRootPath}/codeAndPrompt.md`, menuSt + content, { encoding: 'utf8' })
-  logger.success('🀄️  生成codeAndPrompt.md完毕 !')
+  const out = `${inRootPath}/codeAndPrompt.md`
+  if (process.env.AGMD_DRY_RUN === '1') {
+    logger.info(`Dry-run: would write file ${out}`)
+  } else {
+    await nodeWriteFile(out, menuSt + content, { encoding: 'utf8' })
+    logger.success('🀄️  生成codeAndPrompt.md完毕 !')
+  }
 }

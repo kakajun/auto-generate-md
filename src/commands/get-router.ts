@@ -4,7 +4,7 @@ import path from 'path'
 import { parseRouterPath, parseComponentPath } from '../utils/router-utils'
 import type { Router, RouterItem } from '../types'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -89,7 +89,8 @@ export async function getRouterArrs(): Promise<RouterItem[] | null> {
   let routers: RouterItem[] | null = null
   try {
     if (await stat(pathName)) {
-      routers = await import(pathName)
+      const mod: any = await import(pathName)
+      routers = (mod && mod.default) ? mod.default : mod
     } else {
       // 如果没有classify.js，则直接找路由
       routers = [

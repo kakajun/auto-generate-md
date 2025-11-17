@@ -13,6 +13,8 @@ export default {
 
   // 设置需要忽略的文件或目录
   testPathIgnorePatterns: ['/node_modules/'],
+  // 忽略编译产物，避免 Haste 命名冲突与不必要扫描
+  modulePathIgnorePatterns: ['<rootDir>/es6', '<rootDir>/lib'],
 
   // 如果使用 ESM，则设置此选项
   extensionsToTreatAsEsm: ['.ts'],

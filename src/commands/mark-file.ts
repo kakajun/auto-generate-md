@@ -5,7 +5,7 @@ import type { ItemType, RouterItem } from '../types'
 import { markWriteFile } from './mark-write-file'
 import { createConsola } from 'consola'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 type Routers = Array<RouterItem>
@@ -70,11 +70,11 @@ export async function setNodeMark(nodes: ItemType[], name: string, path: string)
       const element = node.imports[index]
       // logger.info('依赖文件: ', element)
       // 如果文件存在
-      if (fs.existsSync(path)) {
+      if (fs.existsSync(element)) {
         // 继续递归,直到子文件没有子文件
         await setNodeMark(nodes, name, element)
       } else {
-        logger.error(`文件不存在: ${path}`)
+        logger.error(`文件不存在: ${element}`)
       }
     }
   }
@@ -113,8 +113,12 @@ export async function setmark(file: string, name: string): Promise<void> {
     if (!fileStr.startsWith(mark)) {
       // 在文件内容前添加标记
       fileStr = mark + fileStr
-      await writeFile(file, fileStr)
-      logger.info(`Mark added successfully to: ${file}`)
+      if (process.env.AGMD_DRY_RUN === '1') {
+        logger.info(`Dry-run: would add mark to ${file}`)
+      } else {
+        await writeFile(file, fileStr)
+        logger.info(`Mark added successfully to: ${file}`)
+      }
     }
   } catch (error) {
     // 提供详细的错误信息
@@ -157,8 +161,12 @@ export async function deletMark(file: string, name: string): Promise<string> {
       }
     }
     fileStr = sarr.join('\n')
-    await writeFile(file, fileStr, { encoding: 'utf8' })
-    logger.success('delete mark successful-------' + file)
+    if (process.env.AGMD_DRY_RUN === '1') {
+      logger.info(`Dry-run: would delete mark in ${file}`)
+    } else {
+      await writeFile(file, fileStr, { encoding: 'utf8' })
+      logger.success('delete mark successful-------' + file)
+    }
     return fileStr
   } catch (error) {
     logger.error('删除标记的文件不存在: ', file)

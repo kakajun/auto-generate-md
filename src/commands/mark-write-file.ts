@@ -3,7 +3,7 @@ import type { ItemType } from '../types'
 import fs from 'fs-extra'
 import { createConsola } from 'consola'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 const rootPath = process.cwd().replace(/\\/g, '/')
 
@@ -43,8 +43,12 @@ export async function setDispFileNew(pathN: string, name: string): Promise<void>
   const writeFileName = `${rootPath}/${name}${relative}`
   try {
     if (await fs.pathExists(writeFileName)) return
-    await fs.copy(pathN, writeFileName)
-    logger.success('写入文件success! : ', writeFileName)
+    if (process.env.AGMD_DRY_RUN === '1') {
+      logger.info('Dry-run: would copy file to: ', writeFileName)
+    } else {
+      await fs.copy(pathN, writeFileName)
+      logger.success('写入文件success! : ', writeFileName)
+    }
   } catch (err) {
     logger.error('文件写入失败')
   }

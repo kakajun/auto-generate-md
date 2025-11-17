@@ -5,7 +5,7 @@ import { createConsola } from 'consola'
 import { getDependencies } from '../utils/router-utils'
 import type { ItemType } from '../types'
 const logger = createConsola({
-  level: 4
+  level: process.env.AGMD_SILENT === '1' ? 0 : 4
 })
 
 const rootPath = process.cwd().replace(/\\/g, '/')
@@ -146,8 +146,12 @@ export async function writeToFile(node: ItemType, isRelative?: Boolean, nochange
 
     // 检查是否有任何变化
     if (updatedLines.join('\n') !== fileStr) {
-      await writeFile(fullPath, updatedLines.join('\n'), 'utf-8')
-      logger.success(`Write file successful: ${fullPath}`)
+      if (process.env.AGMD_DRY_RUN === '1') {
+        logger.info(`Dry-run: would write file ${fullPath}`)
+      } else {
+        await writeFile(fullPath, updatedLines.join('\n'), 'utf-8')
+        logger.success(`Write file successful: ${fullPath}`)
+      }
     }
   } catch (error) {
     // 提供更详细的错误信息
@@ -162,6 +166,10 @@ export async function writeToFile(node: ItemType, isRelative?: Boolean, nochange
 export async function wirteJsNodes(data: string, filePath: string): Promise<void> {
   const file = path.resolve(rootPath, filePath)
   const content = `export default ${data}`
-  await writeFile(file, content, { encoding: 'utf8' })
-  logger.success(`Write file successful: ${filePath}`)
+  if (process.env.AGMD_DRY_RUN === '1') {
+    logger.info(`Dry-run: would write file ${filePath}`)
+  } else {
+    await writeFile(file, content, { encoding: 'utf8' })
+    logger.success(`Write file successful: ${filePath}`)
+  }
 }

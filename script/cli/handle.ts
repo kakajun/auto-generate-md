@@ -7,6 +7,8 @@ interface parseType {
   help?: Boolean | undefined
   ignore?: string | undefined
   include?: string | undefined
+  dryRun?: Boolean | undefined
+  silent?: Boolean | undefined
 }
 function handle(settings: parseType) {
   if (settings.help) {
@@ -21,6 +23,12 @@ function handle(settings: parseType) {
   }
   if (settings.include) {
     settings.includes = settings.include.split(' ')
+  }
+  if (settings.dryRun) {
+    process.env.AGMD_DRY_RUN = '1'
+  }
+  if (settings.silent) {
+    process.env.AGMD_SILENT = '1'
   }
   return settings
 }

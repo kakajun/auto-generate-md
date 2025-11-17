@@ -6,10 +6,14 @@ const stringToArgs = (rawArgs: string[]) => {
       '--include': String,
       '--version': Boolean,
       '--help': Boolean,
+      '--dry-run': Boolean,
+      '--silent': Boolean,
       '-h': '--help',
       '-i': '--ignore',
       '-in': '--include',
-      '-v': '--version'
+      '-v': '--version',
+      '-d': '--dry-run',
+      '-s': '--silent'
     },
     {
       argv: rawArgs.slice(2)
@@ -19,7 +23,9 @@ const stringToArgs = (rawArgs: string[]) => {
     help: args['--help'],
     ignore: args['--ignore'],
     include: args['--include'],
-    version: args['--version']
+    version: args['--version'],
+    dryRun: args['--dry-run'],
+    silent: args['--silent']
   }
 }
 
