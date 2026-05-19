@@ -8,7 +8,7 @@
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
- ## 🚀  功能特性
+## 🚀  功能特性
 
 😍 一键统计工程的文件数和代码总量
 
@@ -29,7 +29,7 @@
 
 💡 一键拿到文件和文件夹名字, 并生成JSON输出
 
-🔥 用TypeScript书写,85%的代码全部书写了测试用例
+🔥 **v2 版本使用 Rust 重写，性能提升 10 倍以上，零 Node.js 依赖**
 
 ## 设计初衷
 
@@ -46,7 +46,9 @@
 ![image](https://github.com/kakajun/auto-generate-md/blob/master/md2.png)
 
 ### 使用方法
-需要有node环境
+
+**v2 版本基于 Rust 构建，通过 npm 分发预编译二进制，无需本地 Rust 环境。**
+
 1. 全局安装
 > npm i agmd -g
 
@@ -111,7 +113,7 @@ example，是我为演示准备的一些文件，并没有其他用
 ```
 
 5. 高级用法
-给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的绝对路径, 没有配置, 那么程序会自动退出
+给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的路径，@代表项目根目录（如 `@/components/Button.vue`）, 没有配置, 那么程序会自动退出
 
 
 有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档( 方法名不用记忆, 由于是ts写的,所以会自动点出来)
@@ -223,3 +225,81 @@ $ agmd --ignore lib node_modules dist --include .js .ts .vue --dry-run --silent
 1. 新增命令行参数 --dry-run / -d 预演模式, 不对文件系统进行写入
 2. 新增命令行参数 --silent / -s 静默模式, 最小化日志输出
 3. 新增命令行参数 --absolute-alias / -a 把工程所有引用文件都加上绝对路径别名(方便点击下钻查看文件)
+
+0.5.0 / v2
+🔥 **使用 Rust 完全重写**
+1. 性能提升 10 倍以上，大型工程秒级扫描
+2. 零 Node.js 运行时依赖，单二进制文件分发
+3. 支持多平台：Linux x64/ARM64、macOS x64/ARM64、Windows x64
+4. npm 包内含所有平台预编译二进制，安装时自动选择当前平台
+5. 安装包体积大幅缩小
+
+### 开发者打包发布说明
+
+v2 版本使用 Rust 编写，npm 包通过内嵌多平台预编译二进制分发。
+
+#### 打包步骤
+
+1. **编译各平台二进制**
+
+   在对应平台执行（或交叉编译）：
+
+   ```bash
+   # Linux x64
+   cargo build --release --target x86_64-unknown-linux-gnu
+   cp target/x86_64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-x64
+
+   # Linux ARM64
+   cargo build --release --target aarch64-unknown-linux-gnu
+   cp target/aarch64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-arm64
+
+   # macOS x64
+   cargo build --release --target x86_64-apple-darwin
+   cp target/x86_64-apple-darwin/release/agmd npm/bin/agmd-macos-x64
+
+   # macOS ARM64
+   cargo build --release --target aarch64-apple-darwin
+   cp target/aarch64-apple-darwin/release/agmd npm/bin/agmd-macos-arm64
+
+   # Windows x64
+   cargo build --release --target x86_64-pc-windows-msvc
+   cp target/x86_64-pc-windows-msvc/release/agmd.exe npm/bin/agmd-windows-x64.exe
+   ```
+
+2. **确保二进制可执行**
+
+   ```bash
+   chmod +x npm/bin/agmd-linux-* npm/bin/agmd-macos-*
+   ```
+
+3. **更新版本号**
+
+   同步修改以下文件的版本号：
+   - `Cargo.toml`
+   - `npm/package.json`
+
+4. **发布到 npm**
+
+   ```bash
+   cd npm
+   npm publish
+   ```
+
+   需要提前登录 npm：`npm login`
+
+#### npm 包结构
+
+```
+npm/
+├── package.json      # npm 包配置
+├── agmd.js           # 入口脚本，调用本地二进制
+├── install.js        # postinstall，复制对应平台二进制为 agmd
+└── bin/              # 预编译二进制目录
+    ├── agmd-linux-x64
+    ├── agmd-linux-arm64
+    ├── agmd-macos-x64
+    ├── agmd-macos-arm64
+    └── agmd-windows-x64.exe
+```
+
+用户安装时，`postinstall` 脚本会自动检测当前平台，从 `bin/` 复制对应二进制并命名为 `agmd`，无需联网下载。

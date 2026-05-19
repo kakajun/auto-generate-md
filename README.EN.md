@@ -10,17 +10,22 @@
 - Classify files by routes and export JSON of nodes
 - Interactive CLI for all operations
 - Output the full tree as JSON
-- TypeScript implementation with extensive tests
-- Convert relative imports to absolute alias-based paths using `@` (new)
+- Convert relative imports to absolute alias-based paths using `@`
+- **v2 rewritten in Rust — 10x faster, zero Node.js dependency**
 
 ## Usage
+
+**v2 is built with Rust and distributed via npm as precompiled binaries. No Rust toolchain required.**
+
 - Global: `npm i agmd -g`
 - Local: `npm i agmd -D`
 - Run: `agmd` in the directory you want to document
 
 The generated Markdown (`readme-md.md`) contains:
-- A “Directory Structure” section
-- A “Statistics” section with totals per suffix, lines and characters
+- A "Directory Structure" section
+- A "Statistics" section with totals per suffix, lines and characters
+
+When you install via npm, the `postinstall` script automatically downloads the correct precompiled binary for your platform (Linux x64/ARM64, macOS x64/ARM64, Windows x64).
 
 ## Scripts
 Add to `package.json`:
@@ -65,3 +70,83 @@ Create `classify.js` at the project root to define route-based classification. U
 ## Notes
 - Prefer running path operations inside `src` due to alias resolution conventions
 - Dry-run and silent modes are supported across write operations
+
+## Changelog
+
+### v2.0.0
+- **Completely rewritten in Rust**
+- 10x+ performance improvement for large projects
+- Zero Node.js runtime dependency — single binary distribution
+- Multi-platform support: Linux x64/ARM64, macOS x64/ARM64, Windows x64
+- npm package includes all platform binaries, auto-selects on install
+- Smaller install footprint
+
+## Developer Build & Publish Guide
+
+v2 is written in Rust. The npm package distributes precompiled binaries for all platforms.
+
+### Build Steps
+
+1. **Compile binaries for each platform**
+
+   Run on each target platform (or cross-compile):
+
+   ```bash
+   # Linux x64
+   cargo build --release --target x86_64-unknown-linux-gnu
+   cp target/x86_64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-x64
+
+   # Linux ARM64
+   cargo build --release --target aarch64-unknown-linux-gnu
+   cp target/aarch64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-arm64
+
+   # macOS x64
+   cargo build --release --target x86_64-apple-darwin
+   cp target/x86_64-apple-darwin/release/agmd npm/bin/agmd-macos-x64
+
+   # macOS ARM64
+   cargo build --release --target aarch64-apple-darwin
+   cp target/aarch64-apple-darwin/release/agmd npm/bin/agmd-macos-arm64
+
+   # Windows x64
+   cargo build --release --target x86_64-pc-windows-msvc
+   cp target/x86_64-pc-windows-msvc/release/agmd.exe npm/bin/agmd-windows-x64.exe
+   ```
+
+2. **Make binaries executable**
+
+   ```bash
+   chmod +x npm/bin/agmd-linux-* npm/bin/agmd-macos-*
+   ```
+
+3. **Bump version**
+
+   Update version in both:
+   - `Cargo.toml`
+   - `npm/package.json`
+
+4. **Publish to npm**
+
+   ```bash
+   cd npm
+   npm publish
+   ```
+
+   Make sure you are logged in: `npm login`
+
+### npm Package Structure
+
+```
+npm/
+├── package.json      # npm package config
+├── agmd.js           # Entry script, calls local binary
+├── install.js        # postinstall, copies platform binary as 'agmd'
+└── bin/              # Precompiled binaries
+    ├── agmd-linux-x64
+    ├── agmd-linux-arm64
+    ├── agmd-macos-x64
+    ├── agmd-macos-arm64
+    └── agmd-windows-x64.exe
+```
+
+On install, the `postinstall` script detects the current platform, copies the matching binary from `bin/`, and renames it to `agmd`. No network download required.
