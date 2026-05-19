@@ -143,7 +143,12 @@ pub fn change_import(
     };
 
     let final_name = if no_change_path {
-        imp_name.clone()
+        // 补全后缀模式：保持原始路径结构，但补全缺失的后缀
+        if imp_name.contains('@') {
+            alias_path
+        } else {
+            get_relative_path(&absolute_import, full_path)
+        }
     } else if to_absolute_alias {
         alias_path
     } else {

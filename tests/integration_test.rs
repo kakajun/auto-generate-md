@@ -740,3 +740,70 @@ fn test_alias_path_to_relative() {
         new_content
     );
 }
+
+/// 端到端测试：补全文件后缀功能
+#[test]
+fn test_change_suffix_action() {
+    use agmd::change_path::change_path_sync;
+    use agmd::types::FileNode;
+
+    let temp_dir = TempDir::new().unwrap();
+    let root = temp_dir.path();
+
+    // 创建目录结构
+    let src_dir = root.join("src");
+    fs::create_dir(&src_dir).unwrap();
+    let views_dir = src_dir.join("views");
+    fs::create_dir(&views_dir).unwrap();
+    let components_dir = src_dir.join("components");
+    fs::create_dir(&components_dir).unwrap();
+
+    // 创建 Page.vue，包含无后缀 import（相对路径）
+    let page_vue = views_dir.join("Page.vue");
+    let original_content = "<script>\nimport editorImage from '../components/editorImage'\n\nexport default {\n  name: 'page',\n}\n</script>\n";
+    fs::write(&page_vue, original_content).unwrap();
+
+    // 创建 editorImage.vue
+    let editor_image_vue = components_dir.join("editorImage.vue");
+    fs::write(&editor_image_vue, "<template><div>Image Editor</div></template>\n").unwrap();
+
+    // 创建 package.json（空依赖）
+    fs::write(root.join("package.json"), "{}").unwrap();
+
+    // 创建 FileNode
+    let mut nodes = vec![FileNode {
+        name: "Page.vue".to_string(),
+        copyed: None,
+        is_dir: false,
+        level: 0,
+        note: String::new(),
+        size: None,
+        suffix: None,
+        row_size: None,
+        full_path: page_vue.to_string_lossy().to_string(),
+        belong_to: vec![],
+        imports: vec![],
+        children: None,
+    }];
+
+    // 执行 change_path_sync（no_change_path = true，补全后缀）
+    let result = change_path_sync(&mut nodes, root, true, false, false);
+    assert!(result.is_ok(), "补全后缀应该成功");
+
+    // 读取修改后的文件内容
+    let new_content = fs::read_to_string(&page_vue).unwrap();
+    println!("原始内容:\n{}", original_content);
+    println!("修改后内容:\n{}", new_content);
+
+    // 关键断言：../components/editorImage 应该补全为 ../components/editorImage.vue
+    assert!(
+        new_content.contains("../components/editorImage.vue"),
+        "文件内容应该包含 '../components/editorImage.vue'，但实际内容:\n{}",
+        new_content
+    );
+    assert!(
+        !new_content.contains("../components/editorImage'"),
+        "文件内容不应该再包含 '../components/editorImage'，但实际内容:\n{}",
+        new_content
+    );
+}
