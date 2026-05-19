@@ -50,7 +50,7 @@ fn get_imports(lines: &[&str], full_path: &Path, dependencies: &[String], root_p
 /// 将 @ 路径解析为 src 目录下的绝对路径
 pub fn resolve_alias_path(file_path: &str, root_path: &Path) -> String {
     let src_path = root_path.join("src");
-    file_path.replace('@', &src_path.to_string_lossy())
+    file_path.replace('@', &src_path.to_string_lossy().replace('\\', "/"))
 }
 
 /// 补全文件后缀
@@ -59,24 +59,32 @@ pub fn make_suffix(file_path: &str, full_path: &Path, root_path: &Path) -> Strin
         resolve_alias_path(file_path, root_path)
     } else {
         let dir = full_path.parent().unwrap_or(Path::new(""));
-        dir.join(file_path)
+        let joined = dir.join(file_path);
+        joined
             .canonicalize()
-            .unwrap_or_else(|_| dir.join(file_path))
+            .unwrap_or(joined)
             .to_string_lossy()
             .to_string()
     };
 
-    let path_obj = Path::new(&absolute_import);
+    // 清理 Windows UNC 路径前缀 \\?\
+    let cleaned = if absolute_import.starts_with(r"\\?\") {
+        absolute_import[4..].to_string()
+    } else {
+        absolute_import
+    };
+
+    let path_obj = Path::new(&cleaned);
     if path_obj.extension().is_none() {
         let suffixes = [".ts", ".vue", ".tsx", ".js", "/index.js", "/index.vue"];
         for suffix in &suffixes {
-            let test_path = format!("{}{}", absolute_import, suffix);
+            let test_path = format!("{}{}", cleaned, suffix);
             if Path::new(&test_path).exists() {
                 return test_path.replace('\\', "/");
             }
         }
     }
-    absolute_import.replace('\\', "/")
+    cleaned.replace('\\', "/")
 }
 
 /// 获取相对路径
@@ -113,9 +121,26 @@ pub fn change_import(
     let absolute_import = make_suffix(&imp_name, full_path, root_path);
 
     // 计算 @ 别名路径：将绝对路径中的 {root}/src 替换为 @
+    // 注意：Windows 路径分隔符是 \，需要统一替换为 / 后再匹配
+    let normalized_abs = absolute_import.replace('\\', "/");
     let src_path = root_path.join("src");
-    let src_str = src_path.to_string_lossy().to_string();
-    let alias_path = absolute_import.replace(&src_str, "@");
+    let src_str = src_path.to_string_lossy().to_string().replace('\\', "/");
+    let alias_path = normalized_abs.replace(&src_str, "@").replace("/./", "/");
+    // 清理 .. 路径（如 @/views/../charts → @/charts）
+    let alias_path = if alias_path.contains("/../") {
+        let parts: Vec<&str> = alias_path.split('/').collect();
+        let mut result = Vec::new();
+        for part in &parts {
+            if *part == ".." && !result.is_empty() {
+                result.pop();
+            } else {
+                result.push(*part);
+            }
+        }
+        result.join("/")
+    } else {
+        alias_path
+    };
 
     let final_name = if no_change_path {
         imp_name.clone()

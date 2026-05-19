@@ -238,7 +238,74 @@ $ agmd --ignore lib node_modules dist --include .js .ts .vue --dry-run --silent
 
 v2 版本使用 Rust 编写，npm 包通过内嵌多平台预编译二进制分发。
 
-#### 打包步骤
+#### 本地开发环境搭建（Windows）
+
+如果你需要在 Windows 本地编译和测试，按以下步骤安装 Rust 环境：
+
+1. **创建目录**（建议非 C 盘）
+   ```powershell
+   New-Item -ItemType Directory -Force -Path E:\rust\cargo, E:\rust\rustup, E:\mingw
+   ```
+
+2. **下载并安装 Rust**
+   ```powershell
+   $env:CARGO_HOME='E:\rust\cargo'
+   $env:RUSTUP_HOME='E:\rust\rustup'
+   Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile E:\rustup-init.exe
+   E:\rustup-init.exe -y --default-toolchain stable
+   ```
+
+3. **下载 MinGW-w64（GNU 工具链）**
+   ```powershell
+   Invoke-WebRequest -Uri https://github.com/brechtsanders/winlibs_mingw/releases/download/13.2.0posix-17.0.6-11.0.1-ucrt-r5/winlibs-x86_64-posix-seh-gcc-13.2.0-llvm-17.0.6-mingw-w64ucrt-11.0.1-r5.zip -OutFile E:\mingw.zip
+   Expand-Archive -Path E:\mingw.zip -DestinationPath E:\mingw -Force
+   ```
+
+4. **添加环境变量**
+
+   在系统环境变量中添加：
+   - `CARGO_HOME` = `E:\rust\cargo`
+   - `RUSTUP_HOME` = `E:\rust\rustup`
+   - `Path` 追加 `E:\rust\cargo\bin;E:\mingw\mingw64\bin`
+
+5. **安装 GNU 目标并切换默认工具链**
+   ```powershell
+   rustup target add x86_64-pc-windows-gnu
+   rustup toolchain install stable-x86_64-pc-windows-gnu
+   rustup default stable-x86_64-pc-windows-gnu
+   ```
+
+6. **验证安装**
+   ```powershell
+   rustc --version
+   cargo --version
+   gcc --version
+   ```
+
+#### 运行测试
+
+```powershell
+# 进入项目目录
+cd e:\git\auto-generate-md
+
+# 运行所有测试
+cargo test
+
+# 运行单个测试（带输出）
+cargo test test_write_to_file_sync_replacement_logic -- --nocapture
+```
+
+#### 打包 Windows 版本
+
+```powershell
+# 编译 release 版本
+cargo build --release --target x86_64-pc-windows-gnu
+
+# 复制到 npm/bin 目录
+Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe npm\bin\agmd-windows-x64.exe -Force
+```
+
+#### 打包步骤（全平台）
 
 1. **编译各平台二进制**
 
@@ -261,9 +328,13 @@ v2 版本使用 Rust 编写，npm 包通过内嵌多平台预编译二进制分�
    cargo build --release --target aarch64-apple-darwin
    cp target/aarch64-apple-darwin/release/agmd npm/bin/agmd-macos-arm64
 
-   # Windows x64
+   # Windows x64（MSVC 工具链，需安装 Visual Studio）
    cargo build --release --target x86_64-pc-windows-msvc
    cp target/x86_64-pc-windows-msvc/release/agmd.exe npm/bin/agmd-windows-x64.exe
+
+   # Windows x64（GNU 工具链，无需 Visual Studio）
+   cargo build --release --target x86_64-pc-windows-gnu
+   cp target/x86_64-pc-windows-gnu/release/agmd.exe npm/bin/agmd-windows-x64.exe
    ```
 
 2. **确保二进制可执行**

@@ -1,10 +1,11 @@
-use crate::get_file::change_import;
+use crate::get_file::{change_import, make_suffix};
 use crate::types::FileNode;
-use crate::utils::get_dependencies;
+use crate::utils::{get_dependencies, get_import_name};
 use anyhow::Result;
 use std::path::Path;
 
-fn change_path_sync(
+/// 递归循环所有文件，修改 import 路径（同步版本，供测试调用）
+pub fn change_path_sync(
     nodes: &mut [FileNode],
     root_path: &Path,
     no_change_path: bool,
@@ -53,6 +54,12 @@ fn write_to_file_sync(
         .iter()
         .map(|line| {
             if line.contains("from") {
+                // 跳过已经是绝对路径别名格式的 import（以 @ 或 // 开头）
+                if let Some(imp) = get_import_name(line, &dependencies) {
+                    if imp.starts_with("@") || imp.starts_with("//") {
+                        return line.to_string();
+                    }
+                }
                 if let Some(obj) = change_import(
                     line,
                     full_path,
@@ -61,10 +68,23 @@ fn write_to_file_sync(
                     no_change_path,
                     to_absolute_alias,
                 ) {
-                    if obj.imp_name != obj.file_path {
+                    // 安全检查：如果生成的路径包含 //?/ 或看起来是错误拼接的路径，跳过
+                    if obj.imp_name.contains("//?/") || obj.imp_name.contains("///") {
+                        println!("Skipping invalid path in node: {}", node.full_path);
+                        return line.to_string();
+                    }
+                    // 尝试替换原始路径
+                    if line.contains(&obj.file_path) {
                         println!("Updating import in node: {}", node.full_path);
                         updated = true;
                         return line.replace(&obj.file_path, &obj.imp_name);
+                    }
+                    // 如果原始路径不匹配，尝试 make_suffix 补全后的路径
+                    let full_original_path = make_suffix(&obj.file_path, full_path, root_path);
+                    if line.contains(&full_original_path) {
+                        println!("Updating import (with suffix) in node: {}", node.full_path);
+                        updated = true;
+                        return line.replace(&full_original_path, &obj.imp_name);
                     }
                 }
             }

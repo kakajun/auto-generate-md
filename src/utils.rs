@@ -114,10 +114,19 @@ pub fn check_upper_camel_file(file_name: &str) -> bool {
 /// 获取 import 名称
 pub fn get_import_name(line: &str, dependencies: &[String]) -> Option<String> {
     let is_dep = dependencies.iter().any(|dep| line.contains(dep));
+    // 排除插件依赖、无斜杠的路径（如 'vue'）、注释行
     if is_dep || !line.contains('/') || line.starts_with("//") {
         return None;
     }
-    IMPORT_RE.captures(line).map(|cap| cap[1].to_string())
+    let result = IMPORT_RE.captures(line).map(|cap| cap[1].to_string());
+    // 排除已经是绝对路径的情况（以 // 开头，如 //?/E:/...）
+    // 同时排除包含 # 或其他非路径符号的路径
+    if let Some(ref path) = result {
+        if path.starts_with("//") || path.contains('#') || path.contains(' ') {
+            return None;
+        }
+    }
+    result
 }
 
 /// 默认忽略列表

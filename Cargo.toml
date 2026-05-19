@@ -29,3 +29,6 @@ walkdir = "2.5"
 pathdiff = "0.2"
 convert_case = "0.7"
 lazy_static = "1.5"
+
+[dev-dependencies]
+tempfile = "3"
