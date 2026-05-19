@@ -15,18 +15,19 @@ pub async fn get_md_action(md: &str, root_path: &Path, dry_run: bool) -> Result<
     Ok(())
 }
 
-/// 检查当前目录是否为 src 或 pages
+/// 检查当前目录是否为 src、pages，或包含 src/pages 的项目根目录
 fn check_fold() -> Result<()> {
     let current = std::env::current_dir()?;
     let fold_name = current.file_name().and_then(|s| s.to_str()).unwrap_or("");
-    if fold_name == "pages" {
+    if fold_name == "pages" || fold_name == "src" {
         return Ok(());
     }
-    if fold_name != "src" {
-        eprintln!("changePath需要在src目录下运行命令!");
-        std::process::exit(1);
+    // 允许在项目根目录执行（当前目录下存在 src 或 pages 子目录）
+    if current.join("src").is_dir() || current.join("pages").is_dir() {
+        return Ok(());
     }
-    Ok(())
+    eprintln!("changePath需要在src目录、pages目录或项目根目录下运行命令!");
+    std::process::exit(1);
 }
 
 /// 修改为相对路径

@@ -54,9 +54,14 @@ fn write_to_file_sync(
         .iter()
         .map(|line| {
             if line.contains("from") {
-                // 跳过已经是绝对路径别名格式的 import（以 @ 或 // 开头）
+                // 跳过 // 开头的非法路径（如 UNC 路径）
                 if let Some(imp) = get_import_name(line, &dependencies) {
-                    if imp.starts_with("@") || imp.starts_with("//") {
+                    if imp.starts_with("//") {
+                        return line.to_string();
+                    }
+                    // 转绝对路径（@ 别名）时，跳过已经是 @ 的路径
+                    // 转相对路径时，@ 路径也需要转换
+                    if to_absolute_alias && imp.starts_with("@") {
                         return line.to_string();
                     }
                 }

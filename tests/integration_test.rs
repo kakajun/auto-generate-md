@@ -605,3 +605,138 @@ fn test_second_pass_with_suffix() {
         after_alias
     );
 }
+
+/// 端到端测试：在项目根目录（与 src 平级）执行 change_path_action 转相对路径
+#[test]
+fn test_change_path_action_from_project_root() {
+    use agmd::change_path::change_path_sync;
+    use agmd::types::FileNode;
+
+    let temp_dir = TempDir::new().unwrap();
+    let root = temp_dir.path();
+
+    // 创建目录结构：项目根目录下有 src/components/
+    let src_dir = root.join("src");
+    fs::create_dir(&src_dir).unwrap();
+    let components_dir = src_dir.join("components");
+    fs::create_dir(&components_dir).unwrap();
+
+    // 创建 TinyMce.vue，包含同级目录无后缀的 import
+    let tinymce_vue = components_dir.join("TinyMce.vue");
+    let original_content = "<script>\nimport editorImage from './editorImage'\n\nexport default {\n  name: 'tinymce',\n}\n</script>\n";
+    fs::write(&tinymce_vue, original_content).unwrap();
+
+    // 创建 editorImage.vue
+    let editor_image_vue = components_dir.join("editorImage.vue");
+    fs::write(&editor_image_vue, "<template><div>Image Editor</div></template>\n").unwrap();
+
+    // 创建 package.json（空依赖）
+    fs::write(root.join("package.json"), "{}").unwrap();
+
+    // 创建 FileNode
+    let mut nodes = vec![FileNode {
+        name: "TinyMce.vue".to_string(),
+        copyed: None,
+        is_dir: false,
+        level: 0,
+        note: String::new(),
+        size: None,
+        suffix: None,
+        row_size: None,
+        full_path: tinymce_vue.to_string_lossy().to_string(),
+        belong_to: vec![],
+        imports: vec![],
+        children: None,
+    }];
+
+    // 模拟在项目根目录执行：切换工作目录到 root（包含 src 子目录）
+    let original_dir = std::env::current_dir().unwrap();
+    std::env::set_current_dir(&root).unwrap();
+
+    // 执行 change_path_sync（to_absolute_alias = false，转为相对路径）
+    let result = change_path_sync(&mut nodes, root, false, false, false);
+
+    // 恢复工作目录
+    std::env::set_current_dir(&original_dir).unwrap();
+
+    assert!(result.is_ok(), "在项目根目录执行应该成功");
+
+    // 读取修改后的文件内容
+    let new_content = fs::read_to_string(&tinymce_vue).unwrap();
+    println!("原始内容:\n{}", original_content);
+    println!("修改后内容:\n{}", new_content);
+
+    // 关键断言：import 路径应该被补全后缀（转为相对路径）
+    assert!(
+        new_content.contains("./editorImage.vue"),
+        "文件内容应该包含 './editorImage.vue'，但实际内容:\n{}",
+        new_content
+    );
+}
+
+/// 端到端测试：@ 别名路径转相对路径
+#[test]
+fn test_alias_path_to_relative() {
+    use agmd::change_path::change_path_sync;
+    use agmd::types::FileNode;
+
+    let temp_dir = TempDir::new().unwrap();
+    let root = temp_dir.path();
+
+    // 创建目录结构：src/views/Page.vue 引用 @/components/editorImage
+    let src_dir = root.join("src");
+    fs::create_dir(&src_dir).unwrap();
+    let views_dir = src_dir.join("views");
+    fs::create_dir(&views_dir).unwrap();
+    let components_dir = src_dir.join("components");
+    fs::create_dir(&components_dir).unwrap();
+
+    // 创建 Page.vue，包含 @ 别名 import
+    let page_vue = views_dir.join("Page.vue");
+    let original_content = "<script>\nimport editorImage from '@/components/editorImage'\n\nexport default {\n  name: 'page',\n}\n</script>\n";
+    fs::write(&page_vue, original_content).unwrap();
+
+    // 创建 editorImage.vue
+    let editor_image_vue = components_dir.join("editorImage.vue");
+    fs::write(&editor_image_vue, "<template><div>Image Editor</div></template>\n").unwrap();
+
+    // 创建 package.json（空依赖）
+    fs::write(root.join("package.json"), "{}").unwrap();
+
+    // 创建 FileNode
+    let mut nodes = vec![FileNode {
+        name: "Page.vue".to_string(),
+        copyed: None,
+        is_dir: false,
+        level: 0,
+        note: String::new(),
+        size: None,
+        suffix: None,
+        row_size: None,
+        full_path: page_vue.to_string_lossy().to_string(),
+        belong_to: vec![],
+        imports: vec![],
+        children: None,
+    }];
+
+    // 执行 change_path_sync（to_absolute_alias = false，转为相对路径）
+    let result = change_path_sync(&mut nodes, root, false, false, false);
+    assert!(result.is_ok(), "@ 别名转相对路径应该成功");
+
+    // 读取修改后的文件内容
+    let new_content = fs::read_to_string(&page_vue).unwrap();
+    println!("原始内容:\n{}", original_content);
+    println!("修改后内容:\n{}", new_content);
+
+    // 关键断言：@/components/editorImage 应该转为 ../components/editorImage.vue
+    assert!(
+        new_content.contains("../components/editorImage.vue"),
+        "文件内容应该包含 '../components/editorImage.vue'，但实际内容:\n{}",
+        new_content
+    );
+    assert!(
+        !new_content.contains("@/components/editorImage"),
+        "文件内容不应该再包含 '@/components/editorImage'，但实际内容:\n{}",
+        new_content
+    );
+}

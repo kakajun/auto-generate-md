@@ -7,7 +7,7 @@ use std::path::Path;
 async fn main() -> anyhow::Result<()> {
     let root_path = Path::new("E:/cwd/front1.5");
     let options = Options::default();
-    let (md, mut nodes) = get_md(Some(&options), &root_path).await?;
+    let (_md, mut nodes) = get_md(Some(&options), &root_path).await?;
 
     eprintln!("找到 {} 个文件节点", nodes.len());
 
