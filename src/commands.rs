@@ -1,4 +1,4 @@
-use crate::change_path::{change_path, write_js_nodes};
+use crate::change_path::{change_path, change_path_sync, write_js_nodes};
 use crate::get_router::get_router_arrs;
 use crate::mark_file::{delete_mark_all, mark_file};
 use crate::mark_write_file::write_mark_file;
@@ -38,8 +38,8 @@ pub async fn change_path_action(nodes: &mut [FileNode], root_path: &Path, dry_ru
 
 /// 修改为绝对路径（@ 别名）
 pub async fn change_absolute_path_action(nodes: &mut [FileNode], root_path: &Path, dry_run: bool) -> Result<()> {
-    change_path(nodes, root_path, false, false, dry_run).await?;
-    change_path(nodes, root_path, false, true, dry_run).await?;
+    change_path_sync(nodes, root_path, false, false, dry_run)?;
+    change_path_sync(nodes, root_path, false, true, dry_run)?;
     Ok(())
 }
 

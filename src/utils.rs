@@ -113,9 +113,8 @@ pub fn check_upper_camel_file(file_name: &str) -> bool {
 
 /// 获取 import 名称
 pub fn get_import_name(line: &str, dependencies: &[String]) -> Option<String> {
-    let is_dep = dependencies.iter().any(|dep| line.contains(dep));
-    // 排除插件依赖、无斜杠的路径（如 'vue'）、注释行
-    if is_dep || !line.contains('/') || line.starts_with("//") {
+    // 排除无斜杠的路径（如 'vue'）、注释行
+    if !line.contains('/') || line.starts_with("//") {
         return None;
     }
     let result = IMPORT_RE.captures(line).map(|cap| cap[1].to_string());
@@ -124,6 +123,17 @@ pub fn get_import_name(line: &str, dependencies: &[String]) -> Option<String> {
     if let Some(ref path) = result {
         if path.starts_with("//") || path.contains('#') || path.contains(' ') {
             return None;
+        }
+        // 检查是否是依赖包导入（精确匹配，不是子串匹配）
+        // 依赖包导入通常没有斜杠或只有一层路径（如 'vue' 或 'element-ui/lib/button'）
+        // 而相对路径总是以 ./ 或 ../ 开头
+        if !path.starts_with("./") && !path.starts_with("../") {
+            // 可能是依赖包导入，检查是否匹配已知的依赖包名
+            // 只匹配路径的第一段作为包名
+            let first_segment = path.split('/').next().unwrap_or(path);
+            if dependencies.iter().any(|dep| dep == first_segment) {
+                return None;
+            }
         }
     }
     result

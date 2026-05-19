@@ -544,3 +544,64 @@ fn test_user_screenshot_two_passes() {
         after_alias
     );
 }
+
+/// 端到端测试：模拟第一次调用后已有后缀，第二次调用转 @ 别名
+#[test]
+fn test_second_pass_with_suffix() {
+    use agmd::change_path::change_path_sync;
+    use agmd::types::FileNode;
+
+    let temp_dir = TempDir::new().unwrap();
+    let root = temp_dir.path();
+
+    // 创建目录结构
+    let src_dir = root.join("src");
+    fs::create_dir(&src_dir).unwrap();
+    let components_dir = src_dir.join("components");
+    fs::create_dir(&components_dir).unwrap();
+    let tinymce_dir = components_dir.join("Tinymce");
+    fs::create_dir(&tinymce_dir).unwrap();
+    let tinymce_components_dir = tinymce_dir.join("components");
+    fs::create_dir(&tinymce_components_dir).unwrap();
+
+    // 创建 index.vue，已经带有 .vue 后缀（模拟第一次调用后的状态）
+    let index_vue = tinymce_dir.join("index.vue");
+    let original_content = "<script>\nimport editorImage from './components/editorImage.vue'\n\nexport default {\n  name: 'tinymce',\n}\n</script>\n";
+    fs::write(&index_vue, original_content).unwrap();
+
+    // 创建 editorImage.vue
+    let editor_image_vue = tinymce_components_dir.join("editorImage.vue");
+    fs::write(&editor_image_vue, "<template><div>Image Editor</div></template>\n").unwrap();
+
+    // 创建 package.json
+    fs::write(root.join("package.json"), "{}").unwrap();
+
+    // 创建 FileNode
+    let mut nodes = vec![FileNode {
+        name: "index.vue".to_string(),
+        copyed: None,
+        is_dir: false,
+        level: 0,
+        note: String::new(),
+        size: None,
+        suffix: None,
+        row_size: None,
+        full_path: index_vue.to_string_lossy().to_string(),
+        belong_to: vec![],
+        imports: vec![],
+        children: None,
+    }];
+
+    // 直接调用第二次：转为 @ 别名（已有后缀）
+    let result = change_path_sync(&mut nodes, root, false, true, false);
+    assert!(result.is_ok());
+    let after_alias = fs::read_to_string(&index_vue).unwrap();
+    println!("已有后缀，直接转 @ 别名:\n{}", after_alias);
+
+    // 关键断言
+    assert!(
+        after_alias.contains("@/components/Tinymce/components/editorImage.vue"),
+        "最终内容应该包含 '@/components/Tinymce/components/editorImage.vue'，但实际内容:\n{}",
+        after_alias
+    );
+}
