@@ -111,8 +111,11 @@ pub fn change_import(
 ) -> Option<ImportInfo> {
     let imp_name = get_import_name(line, dependencies)?;
     let absolute_import = make_suffix(&imp_name, full_path, root_path);
-    let root_str = root_path.to_string_lossy().to_string();
-    let alias_path = absolute_import.replace(&root_str, "@");
+
+    // 计算 @ 别名路径：将绝对路径中的 {root}/src 替换为 @
+    let src_path = root_path.join("src");
+    let src_str = src_path.to_string_lossy().to_string();
+    let alias_path = absolute_import.replace(&src_str, "@");
 
     let final_name = if no_change_path {
         imp_name.clone()

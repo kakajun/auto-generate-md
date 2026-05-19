@@ -3,7 +3,7 @@ use agmd::types::Options;
 use std::path::Path;
 
 /// 集成测试：扫描 fixtures 目录，验证文件节点生成
-#[tokio::test]
+#[tokio::test(flavor = "multi_thread", worker_threads = 2)]
 async fn test_get_file_nodes_basic() {
     let dir = Path::new("tests/fixtures/sample-project");
     let mut nodes = Vec::new();
