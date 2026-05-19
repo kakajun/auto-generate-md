@@ -2,13 +2,19 @@ use crate::types::{FileNode, RouterItem};
 use anyhow::Result;
 use std::path::Path;
 
+/// 将 @ 路径解析为 src 目录下的绝对路径
+fn resolve_alias_path(path_n: &str, root_path: &Path) -> String {
+    let src_path = root_path.join("src");
+    path_n.replace('@', &src_path.to_string_lossy())
+}
+
 /// 标记文件主程序
 pub async fn mark_file(nodes: &mut [FileNode], routers: &[RouterItem], root_path: &Path, dry_run: bool) -> Result<()> {
     for ele in routers {
         for obj in &ele.router {
             let path_n = &obj.component;
             println!("准备处理{}", obj.path);
-            let absolute_path = path_n.replace('@', &root_path.to_string_lossy());
+            let absolute_path = resolve_alias_path(path_n, root_path);
             tokio::task::block_in_place(|| {
                 set_node_mark_sync(nodes, &ele.name, &absolute_path, root_path, dry_run)
             })?;

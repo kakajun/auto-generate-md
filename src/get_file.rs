@@ -47,10 +47,16 @@ fn get_imports(lines: &[&str], full_path: &Path, dependencies: &[String], root_p
     Ok(imports)
 }
 
+/// 将 @ 路径解析为 src 目录下的绝对路径
+pub fn resolve_alias_path(file_path: &str, root_path: &Path) -> String {
+    let src_path = root_path.join("src");
+    file_path.replace('@', &src_path.to_string_lossy())
+}
+
 /// 补全文件后缀
 pub fn make_suffix(file_path: &str, full_path: &Path, root_path: &Path) -> String {
     let absolute_import = if file_path.contains('@') {
-        file_path.replace('@', root_path.to_str().unwrap_or(""))
+        resolve_alias_path(file_path, root_path)
     } else {
         let dir = full_path.parent().unwrap_or(Path::new(""));
         dir.join(file_path)
