@@ -61,11 +61,24 @@ Example:
 ## Advanced
 Create `classify.js` at the project root to define route-based classification. Use `@` alias paths in the config. If missing, the tool scans `router/` automatically.
 
-## API
-- `getFileNodes(option?)` Get detailed file info
-- `getMd(option?)` Get composed Markdown string and nodes
+## Rust Library API
 
-`option: { ignore?: string[]; include?: string[] }`
+```rust
+use agmd::{get_file_nodes_api, get_md_api, types::Options};
+use std::path::Path;
+
+let option = Options {
+    ignore: Some(vec!["node_modules".to_string()]),
+    include: Some(vec![".rs".to_string()]),
+    ..Default::default()
+};
+
+// Get file node tree
+let nodes = get_file_nodes_api(Path::new("./src"), Some(&option)).await?;
+
+// Get Markdown output
+let (md, nodes) = get_md_api(Some(&option), Path::new(".")).await?;
+```
 
 ## Notes
 - Prefer running path operations inside `src` due to alias resolution conventions
@@ -94,41 +107,40 @@ v2 is written in Rust. The npm package distributes precompiled binaries for all 
    ```bash
    # Linux x64
    cargo build --release --target x86_64-unknown-linux-gnu
-   cp target/x86_64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-x64
+   cp target/x86_64-unknown-linux-gnu/release/agmd bin/agmd-linux-x64
 
    # Linux ARM64
    cargo build --release --target aarch64-unknown-linux-gnu
-   cp target/aarch64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-arm64
+   cp target/aarch64-unknown-linux-gnu/release/agmd bin/agmd-linux-arm64
 
    # macOS x64
    cargo build --release --target x86_64-apple-darwin
-   cp target/x86_64-apple-darwin/release/agmd npm/bin/agmd-macos-x64
+   cp target/x86_64-apple-darwin/release/agmd bin/agmd-macos-x64
 
    # macOS ARM64
    cargo build --release --target aarch64-apple-darwin
-   cp target/aarch64-apple-darwin/release/agmd npm/bin/agmd-macos-arm64
+   cp target/aarch64-apple-darwin/release/agmd bin/agmd-macos-arm64
 
    # Windows x64
    cargo build --release --target x86_64-pc-windows-msvc
-   cp target/x86_64-pc-windows-msvc/release/agmd.exe npm/bin/agmd-windows-x64.exe
+   cp target/x86_64-pc-windows-msvc/release/agmd.exe bin/agmd-windows-x64.exe
    ```
 
 2. **Make binaries executable**
 
    ```bash
-   chmod +x npm/bin/agmd-linux-* npm/bin/agmd-macos-*
+   chmod +x bin/agmd-linux-* bin/agmd-macos-*
    ```
 
 3. **Bump version**
 
    Update version in both:
    - `Cargo.toml`
-   - `npm/package.json`
+   - `package.json`
 
 4. **Publish to npm**
 
    ```bash
-   cd npm
    npm publish
    ```
 
@@ -137,16 +149,16 @@ v2 is written in Rust. The npm package distributes precompiled binaries for all 
 ### npm Package Structure
 
 ```
-npm/
 ├── package.json      # npm package config
-├── agmd.js           # Entry script, calls local binary
+├── agmd.js           # Entry script, detects platform and spawns binary
 ├── install.js        # postinstall, copies platform binary as 'agmd'
-└── bin/              # Precompiled binaries
-    ├── agmd-linux-x64
-    ├── agmd-linux-arm64
-    ├── agmd-macos-x64
-    ├── agmd-macos-arm64
-    └── agmd-windows-x64.exe
+├── bin/              # Precompiled binaries
+│   ├── agmd-linux-x64
+│   ├── agmd-linux-arm64
+│   ├── agmd-macos-x64
+│   ├── agmd-macos-arm64
+│   └── agmd-windows-x64.exe
+└── ...
 ```
 
 On install, the `postinstall` script detects the current platform, copies the matching binary from `bin/`, and renames it to `agmd`. No network download required.

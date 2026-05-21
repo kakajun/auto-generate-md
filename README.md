@@ -40,10 +40,10 @@
 
 ### 操作界面
 
-![image](https://github.com/kakajun/auto-generate-md/blob/master/md3.png)
+![image](https://github.com/kakajun/auto-generate-md/blob/master/imgs/md3.jpg)
 ### 案例
 
-![image](https://github.com/kakajun/auto-generate-md/blob/master/md2.png)
+![image](https://github.com/kakajun/auto-generate-md/blob/master/imgs/md2.png)
 
 ### 使用方法
 
@@ -77,56 +77,55 @@ example，是我为演示准备的一些文件，并没有其他用
 - 分类
 
 
-4. 代码结构说明(由本插件agmd生成)
+4. 代码结构说明
 ```
-├── bin
-│ └── bin.js
-├── lib
-│ ├── commands
-│ │ ├── get-file.d.ts
-│ │ └── wirte-md.d.ts
-│ ├── index.cjs.js
-│ ├── index.d.ts
-│ └── index.esm.js
-├── script
-│ ├── cli
-│ │ ├── handle.ts
-│ │ └── index.ts
-│ ├── help
-│ │ └── index.ts
-├── src
-│ ├── commands
-│ │ ├── agmd.ts
-│ │ ├── base.ts            /* 界面命令注册在这里 */
-│ │ ├── change-path.ts            /* 整个文件主要把绝对路径修改为相对路径 */
-│ │ ├── get-file.ts            /* 获取文件相关方法 */
-│ │ ├── mark-file.ts
-│ │ ├── mark-write-file.ts
-│ │ └── wirte-md.ts            /* 生成md说明文档 */
-│ ├── shared
-│ │ ├── constant.ts
-│ ├── bin.ts
-│ └── index.ts            /* 这里抛出一些高级操作方法 */
-├── test
-│ └── index.js
-└── unuse
+├── src/
+│   ├── main.rs              # CLI 入口：解析参数 + 交互菜单
+│   ├── lib.rs               # 库入口：公开 API
+│   ├── cli.rs               # clap 命令行参数定义
+│   ├── types.rs             # 核心数据结构
+│   ├── commands.rs          # 高层动作分发（对应菜单每一项）
+│   ├── get_file.rs          # 递归扫描、提取注释/大小/import
+│   ├── write_md.rs          # 生成 Markdown、统计输出
+│   ├── change_path.rs       # 批量重写 import 路径
+│   ├── rename_path.rs       # 批量重命名文件/文件夹
+│   ├── get_router.rs        # 解析路由配置
+│   ├── mark_file.rs         # 按路由给文件打标记
+│   ├── mark_write_file.rs   # 按标记分类复制文件
+│   └── bin/                 # 开发调试脚本
+├── tests/                   # 集成测试与单元测试
+├── bin/                     # 预编译二进制（多平台分发）
+├── Cargo.toml               # Rust 包配置
+├── package.json             # npm 包配置
+├── agmd.js                  # Node 入口：检测平台并 spawn 二进制
+├── install.js               # postinstall：复制对应平台二进制
+└── classify.js              # 路由分类配置示例
 ```
 
 5. 高级用法
 给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的路径，@代表项目根目录（如 `@/components/Button.vue`）, 没有配置, 那么程序会自动退出
 
 
-有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档( 方法名不用记忆, 由于是ts写的,所以会自动点出来)
->const agmd = require('agmd')
+#### Rust 库 API
 
-es中:
- >import agmd from 'agmd'
+本项目同时提供 Rust 库，暴露两个异步 API：
 
-- 其中 agmd.getFileNodes() 可以获得具体文件相关的信息, 该函数可传一个参数
+```rust
+use agmd::{get_file_nodes_api, get_md_api, types::Options};
+use std::path::Path;
 
-- agmd.getMd() 得到最终输出的信息
-note: 上面两个方法均可传一个option入参,其格式为:
-  option: { ignore: string[] | undefined; include: string[] | undefined }
+let option = Options {
+    ignore: Some(vec!["node_modules".to_string()]),
+    include: Some(vec![".rs".to_string()]),
+    ..Default::default()
+};
+
+// 获取文件节点树
+let nodes = get_file_nodes_api(Path::new("./src"), Some(&option)).await?;
+
+// 获取 Markdown 输出
+let (md, nodes) = get_md_api(Some(&option), Path::new(".")).await?;
+```
 #### 命令行参数说明
 1. 使用agmd -h 来查看帮助
 2. 可以带上 --ignore 忽略输出文件或文件夹, 默认为: img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
@@ -301,8 +300,8 @@ cargo test test_write_to_file_sync_replacement_logic -- --nocapture
 # 编译 release 版本
 cargo build --release --target x86_64-pc-windows-gnu
 
-# 复制到 npm/bin 目录
-Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe npm\bin\agmd-windows-x64.exe -Force
+# 复制到 bin 目录
+Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe bin\agmd-windows-x64.exe -Force
 ```
 
 #### 打包步骤（全平台）
@@ -314,45 +313,44 @@ Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe npm\bin\agmd-windows-x64
    ```bash
    # Linux x64
    cargo build --release --target x86_64-unknown-linux-gnu
-   cp target/x86_64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-x64
+   cp target/x86_64-unknown-linux-gnu/release/agmd bin/agmd-linux-x64
 
    # Linux ARM64
    cargo build --release --target aarch64-unknown-linux-gnu
-   cp target/aarch64-unknown-linux-gnu/release/agmd npm/bin/agmd-linux-arm64
+   cp target/aarch64-unknown-linux-gnu/release/agmd bin/agmd-linux-arm64
 
    # macOS x64
    cargo build --release --target x86_64-apple-darwin
-   cp target/x86_64-apple-darwin/release/agmd npm/bin/agmd-macos-x64
+   cp target/x86_64-apple-darwin/release/agmd bin/agmd-macos-x64
 
    # macOS ARM64
    cargo build --release --target aarch64-apple-darwin
-   cp target/aarch64-apple-darwin/release/agmd npm/bin/agmd-macos-arm64
+   cp target/aarch64-apple-darwin/release/agmd bin/agmd-macos-arm64
 
    # Windows x64（MSVC 工具链，需安装 Visual Studio）
    cargo build --release --target x86_64-pc-windows-msvc
-   cp target/x86_64-pc-windows-msvc/release/agmd.exe npm/bin/agmd-windows-x64.exe
+   cp target/x86_64-pc-windows-msvc/release/agmd.exe bin/agmd-windows-x64.exe
 
    # Windows x64（GNU 工具链，无需 Visual Studio）
    cargo build --release --target x86_64-pc-windows-gnu
-   cp target/x86_64-pc-windows-gnu/release/agmd.exe npm/bin/agmd-windows-x64.exe
+   cp target/x86_64-pc-windows-gnu/release/agmd.exe bin/agmd-windows-x64.exe
    ```
 
 2. **确保二进制可执行**
 
    ```bash
-   chmod +x npm/bin/agmd-linux-* npm/bin/agmd-macos-*
+   chmod +x bin/agmd-linux-* bin/agmd-macos-*
    ```
 
 3. **更新版本号**
 
    同步修改以下文件的版本号：
    - `Cargo.toml`
-   - `npm/package.json`
+   - `package.json`
 
 4. **发布到 npm**
 
    ```bash
-   cd npm
    npm publish
    ```
 
@@ -361,16 +359,16 @@ Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe npm\bin\agmd-windows-x64
 #### npm 包结构
 
 ```
-npm/
 ├── package.json      # npm 包配置
-├── agmd.js           # 入口脚本，调用本地二进制
+├── agmd.js           # 入口脚本，检测平台并 spawn 二进制
 ├── install.js        # postinstall，复制对应平台二进制为 agmd
-└── bin/              # 预编译二进制目录
-    ├── agmd-linux-x64
-    ├── agmd-linux-arm64
-    ├── agmd-macos-x64
-    ├── agmd-macos-arm64
-    └── agmd-windows-x64.exe
+├── bin/              # 预编译二进制目录
+│   ├── agmd-linux-x64
+│   ├── agmd-linux-arm64
+│   ├── agmd-macos-x64
+│   ├── agmd-macos-arm64
+│   └── agmd-windows-x64.exe
+└── ...
 ```
 
 用户安装时，`postinstall` 脚本会自动检测当前平台，从 `bin/` 复制对应二进制并命名为 `agmd`，无需联网下载。
