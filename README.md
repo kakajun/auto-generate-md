@@ -8,7 +8,7 @@
 
 简体中文 | [English](https://github.com/kakajun/auto-generate-md/blob/master/README.EN.md)
 
- ## 🚀  功能特性
+## 🚀  功能特性
 
 😍 一键统计工程的文件数和代码总量
 
@@ -29,7 +29,7 @@
 
 💡 一键拿到文件和文件夹名字, 并生成JSON输出
 
-🔥 用TypeScript书写,85%的代码全部书写了测试用例
+🔥 **v2 版本使用 Rust 重写，性能提升 10 倍以上，零 Node.js 依赖**
 
 ## 设计初衷
 
@@ -40,13 +40,15 @@
 
 ### 操作界面
 
-![image](https://github.com/kakajun/auto-generate-md/blob/master/md3.png)
+![image](https://github.com/kakajun/auto-generate-md/blob/master/imgs/md3.jpg)
 ### 案例
 
-![image](https://github.com/kakajun/auto-generate-md/blob/master/md2.png)
+![image](https://github.com/kakajun/auto-generate-md/blob/master/imgs/md2.png)
 
 ### 使用方法
-需要有node环境
+
+**v2 版本基于 Rust 构建，通过 npm 分发预编译二进制，无需本地 Rust 环境。**
+
 1. 全局安装
 > npm i agmd -g
 
@@ -75,56 +77,55 @@ example，是我为演示准备的一些文件，并没有其他用
 - 分类
 
 
-4. 代码结构说明(由本插件agmd生成)
+4. 代码结构说明
 ```
-├── bin
-│ └── bin.js
-├── lib
-│ ├── commands
-│ │ ├── get-file.d.ts
-│ │ └── wirte-md.d.ts
-│ ├── index.cjs.js
-│ ├── index.d.ts
-│ └── index.esm.js
-├── script
-│ ├── cli
-│ │ ├── handle.ts
-│ │ └── index.ts
-│ ├── help
-│ │ └── index.ts
-├── src
-│ ├── commands
-│ │ ├── agmd.ts
-│ │ ├── base.ts            /* 界面命令注册在这里 */
-│ │ ├── change-path.ts            /* 整个文件主要把绝对路径修改为相对路径 */
-│ │ ├── get-file.ts            /* 获取文件相关方法 */
-│ │ ├── mark-file.ts
-│ │ ├── mark-write-file.ts
-│ │ └── wirte-md.ts            /* 生成md说明文档 */
-│ ├── shared
-│ │ ├── constant.ts
-│ ├── bin.ts
-│ └── index.ts            /* 这里抛出一些高级操作方法 */
-├── test
-│ └── index.js
-└── unuse
+├── src/
+│   ├── main.rs              # CLI 入口：解析参数 + 交互菜单
+│   ├── lib.rs               # 库入口：公开 API
+│   ├── cli.rs               # clap 命令行参数定义
+│   ├── types.rs             # 核心数据结构
+│   ├── commands.rs          # 高层动作分发（对应菜单每一项）
+│   ├── get_file.rs          # 递归扫描、提取注释/大小/import
+│   ├── write_md.rs          # 生成 Markdown、统计输出
+│   ├── change_path.rs       # 批量重写 import 路径
+│   ├── rename_path.rs       # 批量重命名文件/文件夹
+│   ├── get_router.rs        # 解析路由配置
+│   ├── mark_file.rs         # 按路由给文件打标记
+│   ├── mark_write_file.rs   # 按标记分类复制文件
+│   └── bin/                 # 开发调试脚本
+├── tests/                   # 集成测试与单元测试
+├── bin/                     # 预编译二进制（多平台分发）
+├── Cargo.toml               # Rust 包配置
+├── package.json             # npm 包配置
+├── agmd.js                  # Node 入口：检测平台并 spawn 二进制
+├── install.js               # postinstall：复制对应平台二进制
+└── classify.js              # 路由分类配置示例
 ```
 
 5. 高级用法
-给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的绝对路径, 没有配置, 那么程序会自动退出
+给文件打标记分类, 需要在src的同级目录下, 设置一个文件叫classify.js, 从里面读取需要配置的信息, 注意路径一定是带@符号的路径，@代表项目根目录（如 `@/components/Button.vue`）, 没有配置, 那么程序会自动退出
 
 
-有些需要把自动生成的文档插入到某个自动生成的 md 当中, 该插件导出了自动生成的 md 数据方法, 还有`getFileNodes`获得所有文件的具体信息, 可以 DIY 做出不同的文档( 方法名不用记忆, 由于是ts写的,所以会自动点出来)
->const agmd = require('agmd')
+#### Rust 库 API
 
-es中:
- >import agmd from 'agmd'
+本项目同时提供 Rust 库，暴露两个异步 API：
 
-- 其中 agmd.getFileNodes() 可以获得具体文件相关的信息, 该函数可传一个参数
+```rust
+use agmd::{get_file_nodes_api, get_md_api, types::Options};
+use std::path::Path;
 
-- agmd.getMd() 得到最终输出的信息
-note: 上面两个方法均可传一个option入参,其格式为:
-  option: { ignore: string[] | undefined; include: string[] | undefined }
+let option = Options {
+    ignore: Some(vec!["node_modules".to_string()]),
+    include: Some(vec![".rs".to_string()]),
+    ..Default::default()
+};
+
+// 获取文件节点树
+let nodes = get_file_nodes_api(Path::new("./src"), Some(&option)).await?;
+
+// 获取 Markdown 输出
+let (md, nodes) = get_md_api(Some(&option), Path::new(".")).await?;
+```
 #### 命令行参数说明
 1. 使用agmd -h 来查看帮助
 2. 可以带上 --ignore 忽略输出文件或文件夹, 默认为: img,styles,node_modules,LICENSE,.git,.github,dist,.husky,.vscode,readme-file.js,readme-md.js
@@ -223,3 +224,151 @@ $ agmd --ignore lib node_modules dist --include .js .ts .vue --dry-run --silent
 1. 新增命令行参数 --dry-run / -d 预演模式, 不对文件系统进行写入
 2. 新增命令行参数 --silent / -s 静默模式, 最小化日志输出
 3. 新增命令行参数 --absolute-alias / -a 把工程所有引用文件都加上绝对路径别名(方便点击下钻查看文件)
+
+0.5.0 / v2
+🔥 **使用 Rust 完全重写**
+1. 性能提升 10 倍以上，大型工程秒级扫描
+2. 零 Node.js 运行时依赖，单二进制文件分发
+3. 支持多平台：Linux x64/ARM64、macOS x64/ARM64、Windows x64
+4. npm 包内含所有平台预编译二进制，安装时自动选择当前平台
+5. 安装包体积大幅缩小
+
+### 开发者打包发布说明
+
+v2 版本使用 Rust 编写，npm 包通过内嵌多平台预编译二进制分发。
+
+#### 本地开发环境搭建（Windows）
+
+如果你需要在 Windows 本地编译和测试，按以下步骤安装 Rust 环境：
+
+1. **创建目录**（建议非 C 盘）
+   ```powershell
+   New-Item -ItemType Directory -Force -Path E:\rust\cargo, E:\rust\rustup, E:\mingw
+   ```
+
+2. **下载并安装 Rust**
+   ```powershell
+   $env:CARGO_HOME='E:\rust\cargo'
+   $env:RUSTUP_HOME='E:\rust\rustup'
+   Invoke-WebRequest -Uri https://win.rustup.rs/x86_64 -OutFile E:\rustup-init.exe
+   E:\rustup-init.exe -y --default-toolchain stable
+   ```
+
+3. **下载 MinGW-w64（GNU 工具链）**
+   ```powershell
+   Invoke-WebRequest -Uri https://github.com/brechtsanders/winlibs_mingw/releases/download/13.2.0posix-17.0.6-11.0.1-ucrt-r5/winlibs-x86_64-posix-seh-gcc-13.2.0-llvm-17.0.6-mingw-w64ucrt-11.0.1-r5.zip -OutFile E:\mingw.zip
+   Expand-Archive -Path E:\mingw.zip -DestinationPath E:\mingw -Force
+   ```
+
+4. **添加环境变量**
+
+   在系统环境变量中添加：
+   - `CARGO_HOME` = `E:\rust\cargo`
+   - `RUSTUP_HOME` = `E:\rust\rustup`
+   - `Path` 追加 `E:\rust\cargo\bin;E:\mingw\mingw64\bin`
+
+5. **安装 GNU 目标并切换默认工具链**
+   ```powershell
+   rustup target add x86_64-pc-windows-gnu
+   rustup toolchain install stable-x86_64-pc-windows-gnu
+   rustup default stable-x86_64-pc-windows-gnu
+   ```
+
+6. **验证安装**
+   ```powershell
+   rustc --version
+   cargo --version
+   gcc --version
+   ```
+
+#### 运行测试
+
+```powershell
+# 进入项目目录
+cd e:\git\auto-generate-md
+
+# 运行所有测试
+cargo test
+
+# 运行单个测试（带输出）
+cargo test test_write_to_file_sync_replacement_logic -- --nocapture
+```
+
+#### 打包 Windows 版本
+
+```powershell
+# 编译 release 版本
+cargo build --release --target x86_64-pc-windows-gnu
+
+# 复制到 bin 目录
+Copy-Item target\x86_64-pc-windows-gnu\release\agmd.exe bin\agmd-windows-x64.exe -Force
+```
+
+#### 打包步骤（全平台）
+
+1. **编译各平台二进制**
+
+   在对应平台执行（或交叉编译）：
+
+   ```bash
+   # Linux x64
+   cargo build --release --target x86_64-unknown-linux-gnu
+   cp target/x86_64-unknown-linux-gnu/release/agmd bin/agmd-linux-x64
+
+   # Linux ARM64
+   cargo build --release --target aarch64-unknown-linux-gnu
+   cp target/aarch64-unknown-linux-gnu/release/agmd bin/agmd-linux-arm64
+
+   # macOS x64
+   cargo build --release --target x86_64-apple-darwin
+   cp target/x86_64-apple-darwin/release/agmd bin/agmd-macos-x64
+
+   # macOS ARM64
+   cargo build --release --target aarch64-apple-darwin
+   cp target/aarch64-apple-darwin/release/agmd bin/agmd-macos-arm64
+
+   # Windows x64（MSVC 工具链，需安装 Visual Studio）
+   cargo build --release --target x86_64-pc-windows-msvc
+   cp target/x86_64-pc-windows-msvc/release/agmd.exe bin/agmd-windows-x64.exe
+
+   # Windows x64（GNU 工具链，无需 Visual Studio）
+   cargo build --release --target x86_64-pc-windows-gnu
+   cp target/x86_64-pc-windows-gnu/release/agmd.exe bin/agmd-windows-x64.exe
+   ```
+
+2. **确保二进制可执行**
+
+   ```bash
+   chmod +x bin/agmd-linux-* bin/agmd-macos-*
+   ```
+
+3. **更新版本号**
+
+   同步修改以下文件的版本号：
+   - `Cargo.toml`
+   - `package.json`
+
+4. **发布到 npm**
+
+   ```bash
+   npm publish
+   ```
+
+   需要提前登录 npm：`npm login`
+
+#### npm 包结构
+
+```
+├── package.json      # npm 包配置
+├── agmd.js           # 入口脚本，检测平台并 spawn 二进制
+├── install.js        # postinstall，复制对应平台二进制为 agmd
+├── bin/              # 预编译二进制目录
+│   ├── agmd-linux-x64
+│   ├── agmd-linux-arm64
+│   ├── agmd-macos-x64
+│   ├── agmd-macos-arm64
+│   └── agmd-windows-x64.exe
+└── ...
+```
+
+用户安装时，`postinstall` 脚本会自动检测当前平台，从 `bin/` 复制对应二进制并命名为 `agmd`，无需联网下载。

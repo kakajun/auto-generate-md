@@ -1,0 +1,34 @@
+[package]
+name = "agmd"
+version = "1.0.1"
+edition = "2024"
+description = "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths."
+authors = ["kakajun <253495832@qq.com>"]
+license = "MIT"
+repository = "https://github.com/kakajun/auto-generate-md"
+keywords = ["filesystem", "markdown", "directory", "auto-generate", "classification"]
+
+[[bin]]
+name = "agmd"
+path = "src/main.rs"
+
+[lib]
+name = "agmd"
+path = "src/lib.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.40", features = ["full"] }
+regex = "1.11"
+console = "0.15"
+dialoguer = "0.11"
+anyhow = "1.0"
+walkdir = "2.5"
+pathdiff = "0.2"
+convert_case = "0.7"
+lazy_static = "1.5"
+
+[dev-dependencies]
+tempfile = "3"

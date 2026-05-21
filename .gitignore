@@ -2,6 +2,8 @@
 node_modules
 /lib
 /es6
+/dist
+agmd-v2-linux-x64.tar.gz
 codeAndPrompt
 # local env files
 .env.local
@@ -28,3 +30,12 @@ readme-md.md
 readme-file.js
 /demo
 yarn.lock
+
+
+# Added by cargo
+/target
+Cargo.lock
+
+# npm binary distribution
+/bin
+*.exe
