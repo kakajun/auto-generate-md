@@ -31,7 +31,13 @@ async fn main() -> Result<()> {
 
     let root_path = env::current_dir()?;
 
-    let (md, mut nodes) = get_md(Some(&options), &root_path).await?;
+    let option_ref = if args.ignore.is_none() && args.include.is_none() {
+        None
+    } else {
+        Some(&options)
+    };
+
+    let (md, mut nodes) = get_md(option_ref, &root_path).await?;
 
     let items = vec![
         "📅  生成结构树文档",
