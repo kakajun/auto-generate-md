@@ -1,5 +1,5 @@
 use crate::types::{FileNode, RenameInfo};
-use crate::utils::{check_camel_file, check_upper_camel_file, to_camel_case, to_kebab_case, get_dependencies, get_import_name};
+use crate::utils::{check_camel_file, to_camel_case, to_kebab_case, get_dependencies, get_import_name};
 use anyhow::Result;
 use std::path::Path;
 
@@ -82,7 +82,7 @@ fn rewrite_file_sync(node: &mut FileNode, root_path: &Path, is_camel_case: bool,
                     .unwrap_or(&import_module_name);
 
                 if is_camel_case {
-                    if check_upper_camel_file(name) {
+                    if to_camel_case(name) != name {
                         let new_name = to_camel_case(name);
                         let parts: Vec<&str> = line.split("from").collect();
                         if parts.len() == 2 {
@@ -115,19 +115,6 @@ fn rewrite_file_sync(node: &mut FileNode, root_path: &Path, is_camel_case: bool,
     Ok(())
 }
 
-/// 判断两个路径在大小写不敏感情况下是否指向同一位置（用于 Windows）
-fn is_same_path_ignore_case(a: &Path, b: &Path) -> bool {
-    let a_components: Vec<_> = a.components().collect();
-    let b_components: Vec<_> = b.components().collect();
-    if a_components.len() != b_components.len() {
-        return false;
-    }
-    a_components.iter().zip(b_components.iter()).all(|(ac, bc)| {
-        ac.as_os_str().to_string_lossy().to_lowercase()
-            == bc.as_os_str().to_string_lossy().to_lowercase()
-    })
-}
-
 /// 重命名单个文件夹
 fn rename_fold_sync(node: &mut FileNode, is_camel_case: bool, dry_run: bool) -> Result<()> {
     let filename = std::path::Path::new(&node.full_path)
@@ -135,8 +122,13 @@ fn rename_fold_sync(node: &mut FileNode, is_camel_case: bool, dry_run: bool) -> 
         .and_then(|s| s.to_str())
         .unwrap_or(&node.name);
 
+    // 保留约定俗成的目录名，避免破坏项目结构
+    if filename == "src" || filename == "dist" || filename == "node_modules" || filename == ".git" {
+        return Ok(());
+    }
+
     let should_rename = if is_camel_case {
-        check_upper_camel_file(filename)
+        to_camel_case(filename) != filename
     } else {
         check_camel_file(filename)
     };
@@ -227,7 +219,7 @@ fn rename_camel_case_file_sync(node: &mut FileNode, dry_run: bool) -> Result<()>
         .and_then(|s| s.to_str())
         .unwrap_or(&node.name);
 
-    if !check_upper_camel_file(filename) {
+    if to_camel_case(filename) != filename {
         let suffixes = [".vue"];
         let last_name = std::path::Path::new(&node.full_path)
             .extension()
@@ -272,17 +264,14 @@ fn replace_name_sync(full_path: &str, is_camel_case: bool, dry_run: bool) -> Res
     let old_path = std::path::Path::new(full_path);
     let new_path = old_path.with_file_name(&new_name);
 
-    // 如果新旧路径在大小写不敏感情况下相同（如 Windows 上的 Home -> home），直接跳过
-    if is_same_path_ignore_case(old_path, &new_path) {
-        println!("Skipping rename: {} and {} are the same path (case-insensitive)", old_path.display(), new_path.display());
-        return Ok(RenameInfo {
-            new_name: filename.to_string(),
-            old_name: filename.to_string(),
-        });
-    }
+    // 判断是否只是大小写改变（如 js -> Js）
+    // 在 Windows 大小写不敏感文件系统上，仅大小写不同的路径会被 exists() 视为已存在，
+    // 此时若走 copy-merge 会导致复制到自身并删除源目录，必须特殊处理
+    let is_case_change_only = filename.to_lowercase() == new_name.to_lowercase();
 
     if old_path.is_dir() {
-        if new_path.exists() {
+        // 当 new_path 在大小写不敏感下已存在且并非仅大小写改变时，才走 copy-merge
+        if new_path.exists() && !is_case_change_only {
             if dry_run {
                 println!("Dry-run: would copy dir {} -> {} and remove {}", old_path.display(), new_path.display(), old_path.display());
             } else {
@@ -298,12 +287,42 @@ fn replace_name_sync(full_path: &str, is_camel_case: bool, dry_run: bool) -> Res
                         println!("{} renamed to: {}", old_path.display(), new_path.display());
                     }
                     Err(e) => {
-                        eprintln!("Direct rename failed for {}: {}, trying copy-merge...", old_path.display(), e);
-                        copy_dir_all_sync(old_path, &new_path)?;
-                        if let Err(remove_err) = std::fs::remove_dir_all(old_path) {
-                            eprintln!("Warning: could not remove old directory {} after copy-merge: {}", old_path.display(), remove_err);
+                        if is_case_change_only {
+                            // Windows 大小写不敏感文件系统上，仅大小写不同的重命名
+                            // 需要借助临时中间名绕开系统限制：old -> temp -> new
+                            let temp_name = format!("{}-agmd-temp", filename);
+                            let temp_path = old_path.with_file_name(&temp_name);
+                            match std::fs::rename(old_path, &temp_path) {
+                                Ok(_) => {
+                                    match std::fs::rename(&temp_path, &new_path) {
+                                        Ok(_) => {
+                                            println!("{} renamed to: {} (via temp)", old_path.display(), new_path.display());
+                                        }
+                                        Err(e2) => {
+                                            // 尝试回滚
+                                            let _ = std::fs::rename(&temp_path, old_path);
+                                            return Err(anyhow::anyhow!(
+                                                "无法重命名目录 '{}': 临时重命名成功但无法完成最终重命名。原始错误: {}；二次错误: {}",
+                                                old_path.display(), e, e2
+                                            ));
+                                        }
+                                    }
+                                }
+                                Err(e2) => {
+                                    return Err(anyhow::anyhow!(
+                                        "无法重命名目录 '{}': Windows 上该目录中有文件被其他进程占用，仅大小写不同的重命名需要先释放文件句柄。请关闭 IDE 或文件浏览器后重试。原始错误: {}；临时重命名错误: {}",
+                                        old_path.display(), e, e2
+                                    ));
+                                }
+                            }
+                        } else {
+                            eprintln!("Direct rename failed for {}: {}, trying copy-merge...", old_path.display(), e);
+                            copy_dir_all_sync(old_path, &new_path)?;
+                            if let Err(remove_err) = std::fs::remove_dir_all(old_path) {
+                                eprintln!("Warning: could not remove old directory {} after copy-merge: {}", old_path.display(), remove_err);
+                            }
+                            println!("{} copy-merged to: {}", old_path.display(), new_path.display());
                         }
-                        println!("{} copy-merged to: {}", old_path.display(), new_path.display());
                     }
                 }
             }
