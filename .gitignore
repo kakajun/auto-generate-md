@@ -37,5 +37,5 @@ yarn.lock
 Cargo.lock
 
 # npm binary distribution
-/npm/bin/
+/bin
 *.exe

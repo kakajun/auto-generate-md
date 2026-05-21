@@ -1,21 +1,38 @@
 {
   "name": "agmd",
-  "version": "0.5.0",
+  "version": "1.0.0-beta.0",
   "description": "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths.",
   "keywords": [
+    "fs",
     "filesystem",
-    "markdown",
+    "file",
+    "file system",
     "directory",
-    "auto-generate",
-    "classification"
+    "auto",
+    "generate",
+    "relative path",
+    "md",
+    "classification",
+    "markdown",
+    "cli",
+    "rust"
   ],
+  "main": "agmd.js",
   "bin": {
-    "agmd": "npm/agmd.js"
+    "agmd": "agmd.js"
   },
   "scripts": {
     "build": "cargo build --release",
-    "agmd": "agmd --ignore lib,node_modules,dist --include .js,.ts,.vue"
+    "test": "cargo test",
+    "release": "node release.js"
   },
+  "files": [
+    "agmd.js",
+    "install.js",
+    "bin/",
+    "package.json",
+    "AGENTS.md"
+  ],
   "author": "kakajun <253495832@qq.com>",
   "repository": {
     "type": "git",

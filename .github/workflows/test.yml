@@ -2,18 +2,19 @@ name: test
 
 on:
   push:
-    branch: 'master'
+    branches: ['master']
   pull_request:
-    branch: 'master'
+    branches: ['master']
 
 jobs:
   test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 🛎️
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Install and test 🔧
-        run: |
-          yarn install
-          npm run test
+      - name: Set up Rust 🔧
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Run tests
+        run: cargo test
