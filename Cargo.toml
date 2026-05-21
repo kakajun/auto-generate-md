@@ -1,6 +1,6 @@
 [package]
 name = "agmd"
-version = "1.0.0-beta.0"
+version = "1.0.1"
 edition = "2024"
 description = "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths."
 authors = ["kakajun <253495832@qq.com>"]

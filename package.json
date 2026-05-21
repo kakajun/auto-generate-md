@@ -1,6 +1,6 @@
 {
   "name": "agmd",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.1",
   "description": "Automatically generate a directory structure for any file or folder, create Markdown documentation for nodes, classify engineering documents, and convert absolute paths to relative paths.",
   "keywords": [
     "fs",
